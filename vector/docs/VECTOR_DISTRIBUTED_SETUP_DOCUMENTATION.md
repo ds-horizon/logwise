@@ -4,14 +4,18 @@ This comprehensive guide covers setting up Vector.dev on a machine, configuring 
 
 ## 📋 Table of Contents
 
-1. [Introduction to Vector.dev](#introduction-to-vectordev)
-2. [Installation](#installation)
-3. [Basic Configuration](#basic-configuration)
-4. [vector.toml Structure](#vectortoml-structure)
-5. [Distributed Setup (Vector + Kafka on Separate Machines)](#distributed-setup-vector--kafka-on-separate-machines)
-6. [Production Considerations](#production-considerations)
-7. [Troubleshooting](#troubleshooting)
+1. [Introduction to Vector.dev](#intro)
+2. [Installation](#install)
+3. [Protocol Buffers Setup](#protobuf)
+4. [Basic Configuration](#config)
+5. [vector.toml Structure](#toml)
+6. [Distributed Setup (Vector + Kafka on Separate Machines)](#distributed)
+7. [Production Considerations](#production)
+8. [Troubleshooting](#troubleshoot)
+9. [Additional Resources](#resources)
+10. [Support](#support)
 
+<a id="intro"></a>
 ## 🌟 Introduction to Vector.dev
 
 Vector is a high-performance, end-to-end (E2E) observability data pipeline that puts you in control of your observability data. It's built in Rust for maximum performance and reliability.
@@ -27,6 +31,7 @@ Vector version with protobuf codec support is required. **Versions ≥ 0.45.0** 
 - ✅ **Production Ready**: Robust error handling and monitoring
 - ✅ **Protocol Support**: OpenTelemetry, syslog, JSON, and more
 
+<a id="install"></a>
 ## 🛠️ Installation
 
 ### Option 1: Docker (Recommended for Development)
@@ -121,6 +126,7 @@ vector --version
 - Use Docker with specific version tag
 - Or download binary directly from [Vector releases](https://github.com/vectordotdev/vector/releases)
 
+<a id="protobuf"></a>
 ## 🔧 Protocol Buffers Setup (Required for Kafka Integration)
 
 Since this configuration uses protobuf codec for efficient Kafka message serialization, you need to set up the necessary files.
@@ -197,6 +203,7 @@ message VectorLogs {
 }
 ```
 
+<a id="config"></a>
 ## ⚙️ Basic Configuration
 
 ### 1. File Setup and Directory Structure
@@ -321,6 +328,7 @@ docker run -d \
   timberio/vector:0.45.0-distroless-libc
 ```
 
+<a id="toml"></a>
 ## 📝 vector.toml Structure
 
 The `vector.toml` file is the main configuration file for Vector. Here's a comprehensive breakdown:
@@ -369,6 +377,7 @@ Key configuration points:
 - **Protobuf codec**: Requires Vector ≥ 0.45.0 and the `.desc` file
 - **Buffer configuration**: Adjust based on throughput requirements
 
+<a id="distributed"></a>
 ## 🏢 Distributed Setup (Vector + Kafka on Separate Machines)
 
 When Vector and Kafka run on separate machines, you need to modify the configuration for network connectivity, security, and reliability.
@@ -518,6 +527,7 @@ telnet kafka-broker2.example.com 9092
 kafka-topics --bootstrap-server kafka-broker1.example.com:9092 --list
 ```
 
+<a id="production"></a>
 ## 🔒 Production Considerations
 
 ### Security
@@ -547,6 +557,7 @@ journalctl -u vector -f
 journalctl -u vector | grep -i kafka
 ```
 
+<a id="troubleshoot"></a>
 ## 🔧 Troubleshooting
 
 ### Common Issues and Solutions
@@ -764,6 +775,7 @@ vector validate /etc/vector/vector.toml
 vector test /etc/vector/vector.toml
 ```
 
+<a id="resources"></a>
 ## 📚 Additional Resources
 
 - [Vector.dev Official Documentation](https://vector.dev/docs/)
@@ -771,6 +783,7 @@ vector test /etc/vector/vector.toml
 - [Kafka Sink Configuration](https://vector.dev/docs/reference/configuration/sinks/kafka/)
 - [OpenTelemetry Source Configuration](https://vector.dev/docs/reference/configuration/sources/opentelemetry/)
 
+<a id="support"></a>
 ## 🤝 Support
 
 For issues and questions:
