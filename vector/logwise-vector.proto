@@ -8,4 +8,5 @@ message VectorLogs {
   string message = 3;
   string log_level = 4;
   string timestamp = 5;
+  string type = 6;
 }
