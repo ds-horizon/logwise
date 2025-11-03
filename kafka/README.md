@@ -6,19 +6,19 @@ Kafka setup guide for the Logwise log-central system. In our architecture, Vecto
 
 Kafka serves as the message streaming platform for high-throughput log data. Vector automatically creates topics when sending logs to Kafka. This guide covers the essential configuration needed.
 
-**Important**: We require **Zookeeper-based Kafka** (not KRaft mode) because we use Kafka Manager APIs for metrics, which require Zookeeper.
+**Important**: We require **Zookeeper-based Kafka** because we use Kafka Manager APIs for metrics, which require Zookeeper.
 
 ## Installation
 
 ### Prerequisites
 
 - Java 8 or higher
-- Zookeeper (required - not KRaft mode)
+- Zookeeper
 
 ### Installation Steps
 
 1. **Download Kafka**
-   - Download a Zookeeper-compatible Kafka version (not KRaft-only)
+   - Download a Zookeeper-compatible Kafka version
    - Extract the archive
 
 2. **Install Zookeeper**
@@ -174,4 +174,4 @@ zkCli.sh -server localhost:2181 ls /brokers/ids
 
 **Topics have wrong partition count**: Check `num.partitions` setting and restart Kafka. Note that partitions can only be increased, never decreased.
 
-**Kafka Manager cannot connect**: Verify Kafka is in Zookeeper mode (not KRaft) and Zookeeper is running and accessible.
+**Kafka Manager cannot connect**: Verify Kafka is in Zookeeper mode and Zookeeper is running and accessible.
