@@ -166,8 +166,14 @@ zkCli.sh -server localhost:2181 ls /brokers/ids
 
 ## Troubleshooting
 
-**Vector cannot send logs**: Ensure `auto.create.topics.enable=true` is set in Kafka configuration bad restart Kafka.
+**Vector cannot send logs**: Ensure `auto.create.topics.enable=true` is set in Kafka configuration and restart Kafka.
 
 **Topics have wrong partition count**: Check `num.partitions` setting and restart Kafka. Note that partitions can only be increased, never decreased.
 
 **Kafka Manager cannot connect**: Verify Kafka is in Zookeeper mode and Zookeeper is running and accessible.
+
+## Related Documentation
+
+- [Vector Setup](/components/vector) - Vector configuration
+- [Kafka Manager Setup](/components/kafka-manager) - Kafka Manager configuration
+

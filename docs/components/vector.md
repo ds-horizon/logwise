@@ -175,11 +175,12 @@ kcat -b <YOUR_KAFKA_ADDRESS> -L
 ## References 
 
 ### Files
-- **[`vector.toml`](vector.toml)** - Production ready Vector pipeline configuration
-- **[`logwise-vector.proto`](logwise-vector.proto)** - Production ready Protobuf schema defining log message structure
+- **[`vector.toml`](https://github.com/ds-horizon/logwise/blob/main/vector/vector.toml)** - Production ready Vector pipeline configuration
+- **[`logwise-vector.proto`](https://github.com/ds-horizon/logwise/blob/main/vector/logwise-vector.proto)** - Production ready Protobuf schema defining log message structure
 
 ### Vector Components
 
 - [**OpenTelemetry Receiver**](https://vector.dev/docs/reference/configuration/sources/opentelemetry/)
 - [**Remap Transformer**](https://vector.dev/docs/reference/configuration/transforms/remap/)
 - [**Kafka Sink**](https://vector.dev/docs/reference/configuration/sinks/kafka/)
+

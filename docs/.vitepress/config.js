@@ -10,9 +10,9 @@ export default defineConfig({
     themeConfig: {
         nav: [
             { text: 'Home', link: '/' },
-            { text: 'Architecture', link: '/architecture-overview' },
-            { text: 'Components', link: '/components/vector' },
+            { text: 'Overview', link: '/what-is-logwise' },
             { text: 'Setup', link: '/setup/kafka' },
+            { text: 'Components', link: '/components/vector' },
             { text: 'GitHub', link: 'https://github.com/ds-horizon/logwise' }
         ],
 
@@ -21,13 +21,36 @@ export default defineConfig({
                 {
                     text: 'Getting Started',
                     items: [
-                        { text: 'Introduction', link: '/' }
+                        { text: 'Introduction', link: '/' },
+                        { text: 'What is Logwise?', link: '/what-is-logwise' },
+                        { text: 'Architecture Overview', link: '/architecture-overview' }
                     ]
                 },
                 {
-                    text: 'Architecture',
+                    text: 'Setup Guides',
                     items: [
-                        { text: 'Architecture Overview', link: '/architecture-overview' }
+                        {
+                            text: 'Docker Logwise',
+                            collapsed: true,
+                            items: [
+                                { text: 'Docker Setup Guide', link: '/setup/docker' }
+                            ]
+                        },
+                        {
+                            text: 'Self-Host Logwise',
+                            collapsed: true,
+                            items: [
+                                { text: 'Self-Host Setup Guide', link: '/setup/self-host' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    text: 'Send Logs',
+                    items: [
+                        { text: 'OpenTelemetry Collector', link: '/otel-installation/custom-otel-collector-config' },
+                        { text: 'EC2 Deployment', link: '/otel-installation/ec2/README' },
+                        { text: 'Kubernetes Deployment', link: '/otel-installation/kubernetes/README' }
                     ]
                 },
                 {
@@ -41,12 +64,6 @@ export default defineConfig({
                         { text: 'Orchestrator Service', link: '/components/orchestrator' }
                     ]
                 },
-                {
-                    text: 'Setup Guides',
-                    items: [
-                        { text: 'Kafka Setup', link: '/setup/kafka' }
-                    ]
-                }
             ]
         },
 
