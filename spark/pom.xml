@@ -329,12 +329,12 @@
                                 <!-- Relocate Protobuf -->
                                 <relocation>
                                     <pattern>com.google.protobuf</pattern>
-                                    <shadedPattern>com.logwise.logmanagementspark.shaded.protobuf</shadedPattern>
+                                    <shadedPattern>com.logwise.spark.logmanagementspark.shaded.protobuf</shadedPattern>
                                 </relocation>
                                 <!-- Relocate Guava -->
                                 <relocation>
                                     <pattern>com.google.common</pattern>
-                                    <shadedPattern>com.logwise.logmanagementspark.shaded.guava.com.google.common</shadedPattern>
+                                    <shadedPattern>com.logwise.spark.logmanagementspark.shaded.guava.com.google.common</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
