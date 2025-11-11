@@ -40,9 +40,7 @@ public abstract class BaseTest {
     }
   }
 
-  /**
-   * Get reactive Vertx instance for tests.
-   */
+  /** Get reactive Vertx instance for tests. */
   public static io.vertx.reactivex.core.Vertx getReactiveVertx() {
     if (vertx == null) {
       vertx = Vertx.vertx();

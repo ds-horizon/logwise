@@ -5,9 +5,9 @@ import static org.mockito.Mockito.*;
 
 import com.dream11.logcentralorchestrator.client.impl.ObjectStoreAwsImpl;
 import com.dream11.logcentralorchestrator.config.ApplicationConfig;
+import com.dream11.logcentralorchestrator.enums.Tenant;
 import com.dream11.logcentralorchestrator.factory.ObjectStoreFactory;
 import com.dream11.logcentralorchestrator.helper.HelperTestUtils;
-import com.dream11.logcentralorchestrator.enums.Tenant;
 import com.dream11.logcentralorchestrator.util.S3Utils;
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -66,7 +66,8 @@ public class ClientTest {
     // Act - This will attempt to create actual S3 client, but should complete
     Completable result = objectStoreAwsImpl.rxConnect(mockObjectStoreConfig);
 
-    // Assert - Should complete (may fail if AWS credentials not available, but method should handle it)
+    // Assert - Should complete (may fail if AWS credentials not available, but method should handle
+    // it)
     try {
       result.blockingAwait();
       Assert.assertNotNull(result);
@@ -251,9 +252,7 @@ public class ClientTest {
   @Test
   public void testObjectStoreFactory_GetClientMethodExists() throws Exception {
     // Verify method exists using reflection
-    java.lang.reflect.Method method =
-        ObjectStoreFactory.class.getMethod("getClient", Tenant.class);
+    java.lang.reflect.Method method = ObjectStoreFactory.class.getMethod("getClient", Tenant.class);
     Assert.assertNotNull(method);
   }
 }
-

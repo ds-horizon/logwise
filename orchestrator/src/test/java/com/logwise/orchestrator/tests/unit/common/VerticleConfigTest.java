@@ -22,11 +22,8 @@ public class VerticleConfigTest {
   @Test
   public void testBuilder_CreatesConfig() {
     // Act
-    VerticleConfig config = VerticleConfig.builder()
-        .instances(3)
-        .threadPoolSize(10)
-        .verticleType(1)
-        .build();
+    VerticleConfig config =
+        VerticleConfig.builder().instances(3).threadPoolSize(10).verticleType(1).build();
 
     // Assert
     Assert.assertNotNull(config);
@@ -78,11 +75,8 @@ public class VerticleConfigTest {
   @Test
   public void testToString_ReturnsString() {
     // Arrange
-    VerticleConfig config = VerticleConfig.builder()
-        .instances(2)
-        .threadPoolSize(5)
-        .verticleType(1)
-        .build();
+    VerticleConfig config =
+        VerticleConfig.builder().instances(2).threadPoolSize(5).verticleType(1).build();
 
     // Act
     String result = config.toString();
@@ -94,4 +88,3 @@ public class VerticleConfigTest {
     Assert.assertTrue(result.contains("verticleType=1"));
   }
 }
-

@@ -1,11 +1,10 @@
 package com.dream11.logcentralorchestrator.tests.unit.webclient;
 
+import com.dream11.logcentralorchestrator.setup.BaseTest;
 import com.dream11.logcentralorchestrator.webclient.client.WebClient;
 import com.dream11.logcentralorchestrator.webclient.client.WebClientConfig;
 import com.dream11.logcentralorchestrator.webclient.client.impl.WebClientImpl;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
 import io.vertx.core.Vertx;
-import io.vertx.ext.web.client.WebClientOptions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

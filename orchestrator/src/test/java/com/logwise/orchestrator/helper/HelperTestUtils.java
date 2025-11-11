@@ -88,4 +88,3 @@ public class HelperTestUtils {
     return ApplicationTestConfig.createMockTenantConfig(tenantName);
   }
 }
-

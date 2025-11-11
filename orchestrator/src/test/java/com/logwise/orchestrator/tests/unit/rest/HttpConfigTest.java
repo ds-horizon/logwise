@@ -18,7 +18,8 @@ public class HttpConfigTest {
   @Test
   public void testDefaultValues_AreSetCorrectly() {
     // Assert - Default values from the class
-    Assert.assertEquals(httpConfig.getVertxLoggerDelegateFactoryClassName(),
+    Assert.assertEquals(
+        httpConfig.getVertxLoggerDelegateFactoryClassName(),
         "io.vertx.core.logging.SLF4JLogDelegateFactory");
     Assert.assertEquals(httpConfig.getHost(), "0.0.0.0");
     Assert.assertEquals(httpConfig.getCompressionLevel(), 1);
@@ -129,4 +130,3 @@ public class HttpConfigTest {
     Assert.assertTrue(httpConfig.isUseAlpn());
   }
 }
-

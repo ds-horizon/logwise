@@ -48,7 +48,8 @@ public class ApplicationTestConfig {
     sparkConfig.setLogsDir("logs");
     tenantConfig.setSpark(sparkConfig);
 
-    ApplicationConfig.DelayMetricsConfig delayMetricsConfig = new ApplicationConfig.DelayMetricsConfig();
+    ApplicationConfig.DelayMetricsConfig delayMetricsConfig =
+        new ApplicationConfig.DelayMetricsConfig();
     ApplicationConfig.ApplicationDelayMetricsConfig appDelayMetricsConfig =
         new ApplicationConfig.ApplicationDelayMetricsConfig();
     appDelayMetricsConfig.setSampleEnv("prod");
@@ -71,4 +72,3 @@ public class ApplicationTestConfig {
     return sparkConfig;
   }
 }
-

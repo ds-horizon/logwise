@@ -1,22 +1,11 @@
 package com.dream11.logcentralorchestrator.tests.unit.common;
 
-import static org.mockito.ArgumentMatchers.any;
 
 import com.dream11.logcentralorchestrator.common.app.AbstractApplication;
 import com.dream11.logcentralorchestrator.common.app.Deployable;
-import com.dream11.logcentralorchestrator.common.app.VerticleConfig;
-import com.dream11.logcentralorchestrator.common.util.MaintenanceUtils;
-import com.dream11.logcentralorchestrator.config.constant.Constants;
 import com.dream11.logcentralorchestrator.setup.BaseTest;
 import com.google.inject.Module;
-import io.reactivex.Completable;
-import io.reactivex.Single;
-import io.vertx.core.Verticle;
 import io.vertx.reactivex.core.Vertx;
-import java.util.ArrayList;
-import java.util.List;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -61,4 +50,3 @@ public class AbstractApplicationTest extends BaseTest {
     // Test verticle implementation
   }
 }
-

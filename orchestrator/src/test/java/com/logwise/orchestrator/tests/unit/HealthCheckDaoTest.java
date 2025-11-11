@@ -6,8 +6,8 @@ import org.testng.annotations.BeforeMethod;
 
 /**
  * Unit tests for HealthCheckDao.
- * 
- * NOTE: These tests are disabled because MysqlClient is a generated RxGen class that Mockito 
+ *
+ * <p>NOTE: These tests are disabled because MysqlClient is a generated RxGen class that Mockito
  * cannot mock. Use integration tests with Testcontainers for testing DAO classes.
  */
 public class HealthCheckDaoTest extends BaseTest {
@@ -17,7 +17,8 @@ public class HealthCheckDaoTest extends BaseTest {
     super.setUp();
     // MysqlClient is a generated RxGen class that Mockito cannot mock
     // These tests are disabled - use integration tests with Testcontainers instead
-    throw new org.testng.SkipException("MysqlClient cannot be mocked - requires integration test setup");
+    throw new org.testng.SkipException(
+        "MysqlClient cannot be mocked - requires integration test setup");
   }
 
   @AfterClass

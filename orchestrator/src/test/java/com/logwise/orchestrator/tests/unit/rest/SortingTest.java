@@ -88,4 +88,3 @@ public class SortingTest {
     Assert.assertNotNull(Sorting.Order.DESC);
   }
 }
-

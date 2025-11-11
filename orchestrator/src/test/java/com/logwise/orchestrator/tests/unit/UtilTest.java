@@ -13,9 +13,8 @@ import com.dream11.logcentralorchestrator.testconfig.ApplicationTestConfig;
 import com.dream11.logcentralorchestrator.util.ApplicationUtils;
 import com.dream11.logcentralorchestrator.util.AwsClientUtils;
 import com.dream11.logcentralorchestrator.util.Encryption;
-import com.dream11.logcentralorchestrator.util.ResponseWrapper;
-import com.dream11.logcentralorchestrator.util.TestResponseWrapper;
 import com.dream11.logcentralorchestrator.util.S3Utils;
+import com.dream11.logcentralorchestrator.util.TestResponseWrapper;
 import com.dream11.logcentralorchestrator.util.WebClientUtils;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -41,7 +40,10 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.*;
 
-/** Unit tests for util package (S3Utils, ResponseWrapper, AwsClientUtils, WebClientUtils, Encryption, ApplicationUtils). */
+/**
+ * Unit tests for util package (S3Utils, ResponseWrapper, AwsClientUtils, WebClientUtils,
+ * Encryption, ApplicationUtils).
+ */
 public class UtilTest extends BaseTest {
 
   private S3AsyncClient mockS3Client;
@@ -90,7 +92,8 @@ public class UtilTest extends BaseTest {
               });
 
       // Act
-      Single<List<String>> result = S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
+      Single<List<String>> result =
+          S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
       List<String> prefixes = result.blockingGet();
 
       // Assert
@@ -124,7 +127,8 @@ public class UtilTest extends BaseTest {
               });
 
       // Act
-      Single<List<String>> result = S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
+      Single<List<String>> result =
+          S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
       List<String> prefixes = result.blockingGet();
 
       // Assert
@@ -155,7 +159,8 @@ public class UtilTest extends BaseTest {
               });
 
       // Act
-      Single<List<String>> result = S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
+      Single<List<String>> result =
+          S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
 
       // Assert
       try {
@@ -350,13 +355,15 @@ public class UtilTest extends BaseTest {
   }
 
   @Test
-  public void testResponseWrapper_FromSingle_WithValue_ReturnsSuccessfulResponse() throws Exception {
+  public void testResponseWrapper_FromSingle_WithValue_ReturnsSuccessfulResponse()
+      throws Exception {
     // Arrange
     Single<String> source = Single.just("success-value");
     int httpStatusCode = 200;
 
     // Act - Use TestResponseWrapper which handles Vertx context
-    VertxCompletableFuture<Response<String>> future = TestResponseWrapper.fromSingle(source, httpStatusCode);
+    VertxCompletableFuture<Response<String>> future =
+        TestResponseWrapper.fromSingle(source, httpStatusCode);
     Response<String> response = future.get();
 
     // Assert
@@ -374,7 +381,8 @@ public class UtilTest extends BaseTest {
     int httpStatusCode = 200;
 
     // Act - Use TestResponseWrapper which handles Vertx context
-    VertxCompletableFuture<Response<String>> future = TestResponseWrapper.fromSingle(source, httpStatusCode);
+    VertxCompletableFuture<Response<String>> future =
+        TestResponseWrapper.fromSingle(source, httpStatusCode);
 
     // Assert
     try {
@@ -387,13 +395,15 @@ public class UtilTest extends BaseTest {
   }
 
   @Test
-  public void testResponseWrapper_FromSingle_WithCustomStatusCode_SetsStatusCode() throws Exception {
+  public void testResponseWrapper_FromSingle_WithCustomStatusCode_SetsStatusCode()
+      throws Exception {
     // Arrange
     Single<Integer> source = Single.just(42);
     int httpStatusCode = 201;
 
     // Act - Use TestResponseWrapper which handles Vertx context
-    VertxCompletableFuture<Response<Integer>> future = TestResponseWrapper.fromSingle(source, httpStatusCode);
+    VertxCompletableFuture<Response<Integer>> future =
+        TestResponseWrapper.fromSingle(source, httpStatusCode);
     Response<Integer> response = future.get();
 
     // Assert
@@ -449,7 +459,8 @@ public class UtilTest extends BaseTest {
   // ========== WebClientUtils Tests ==========
 
   @Test
-  public void testWebClientUtils_RetryWithDelay_WithMaxAttempts_RetriesCorrectly() throws Exception {
+  public void testWebClientUtils_RetryWithDelay_WithMaxAttempts_RetriesCorrectly()
+      throws Exception {
     // Arrange
     int delay = 10; // Small delay for faster test
     TimeUnit delayTimeUnit = TimeUnit.MILLISECONDS;
@@ -569,7 +580,8 @@ public class UtilTest extends BaseTest {
   }
 
   @Test(expectedExceptions = NullPointerException.class)
-  public void testApplicationUtils_GetServiceFromObjectKey_WithNullPath_ThrowsNullPointerException() {
+  public void
+      testApplicationUtils_GetServiceFromObjectKey_WithNullPath_ThrowsNullPointerException() {
     // The actual implementation doesn't handle null, so it throws NPE
     ApplicationUtils.getServiceFromObjectKey(null);
   }
@@ -584,7 +596,8 @@ public class UtilTest extends BaseTest {
   }
 
   @Test
-  public void testApplicationUtils_GetServiceFromObjectKey_WithPartialMatch_ReturnsServiceDetails() {
+  public void
+      testApplicationUtils_GetServiceFromObjectKey_WithPartialMatch_ReturnsServiceDetails() {
     // Arrange
     String logPath = "prefix/env=staging/service_name=api/component_name=web/extra/path";
 
@@ -787,4 +800,3 @@ public class UtilTest extends BaseTest {
     Assert.assertTrue(result.isEmpty());
   }
 }
-

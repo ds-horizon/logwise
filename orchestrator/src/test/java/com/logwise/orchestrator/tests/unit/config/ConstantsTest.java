@@ -54,7 +54,8 @@ public class ConstantsTest {
 
   @Test
   public void testConsulToken_CanBeAccessed() {
-    // Note: Constants are initialized at class load time, so we can't easily test with different env vars
+    // Note: Constants are initialized at class load time, so we can't easily test with different
+    // env vars
     // This test verifies the constant exists and can be accessed
     String consulToken = Constants.CONSUL_TOKEN;
     // May be null if env var not set - that's acceptable
@@ -91,4 +92,3 @@ public class ConstantsTest {
     Assert.assertTrue(true); // Constant accessed successfully
   }
 }
-

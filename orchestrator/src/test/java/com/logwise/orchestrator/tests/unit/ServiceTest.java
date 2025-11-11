@@ -48,7 +48,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/** Unit tests for service package (ObjectStoreService, SparkService, ServiceManagerService, MetricsService). */
+/**
+ * Unit tests for service package (ObjectStoreService, SparkService, ServiceManagerService,
+ * MetricsService).
+ */
 public class ServiceTest extends BaseTest {
 
   // ========== ObjectStoreService Test Fields ==========
@@ -96,8 +99,10 @@ public class ServiceTest extends BaseTest {
     mockSparkConfig = mock(ApplicationConfig.SparkConfig.class);
     when(mockTenantConfig.getName()).thenReturn("test-tenant");
     when(mockTenantConfig.getSpark()).thenReturn(mockSparkConfig);
-    when(mockSparkConfig.getLogsDir()).thenReturn("logs"); // Required for getAllDistinctServicesInAws
-    when(mockTenantConfig.getObjectStore()).thenReturn(ApplicationTestConfig.createMockObjectStoreConfig());
+    when(mockSparkConfig.getLogsDir())
+        .thenReturn("logs"); // Required for getAllDistinctServicesInAws
+    when(mockTenantConfig.getObjectStore())
+        .thenReturn(ApplicationTestConfig.createMockObjectStoreConfig());
 
     // Setup SparkService
     mockWebClient = mock(WebClient.class);
@@ -125,7 +130,8 @@ public class ServiceTest extends BaseTest {
                       any(Vertx.class), anyString(), any(), anyString()))
           .thenReturn(mockCache);
       serviceManagerService =
-          new ServiceManagerService(vertx, mockServicesDaoForManager, mockObjectStoreServiceForManager);
+          new ServiceManagerService(
+              vertx, mockServicesDaoForManager, mockObjectStoreServiceForManager);
     }
 
     // Setup MetricsService
@@ -147,8 +153,9 @@ public class ServiceTest extends BaseTest {
   // ========== ObjectStoreService Tests ==========
 
   @Test
-  public void testObjectStoreService_GetAllDistinctServicesInAws_WithValidServices_ReturnsServiceDetailsList()
-      throws Exception {
+  public void
+      testObjectStoreService_GetAllDistinctServicesInAws_WithValidServices_ReturnsServiceDetailsList()
+          throws Exception {
     // Arrange
     Tenant tenant = Tenant.D11_Prod_AWS;
     List<String> envPrefixes = Arrays.asList("logs/env=prod/", "logs/env=staging/");
@@ -176,26 +183,34 @@ public class ServiceTest extends BaseTest {
             Mockito.mockStatic(ObjectStoreFactory.class);
         MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
             Mockito.mockStatic(ApplicationConfigUtil.class);
-        MockedStatic<ApplicationUtils> mockedUtils =
-            Mockito.mockStatic(ApplicationUtils.class)) {
+        MockedStatic<ApplicationUtils> mockedUtils = Mockito.mockStatic(ApplicationUtils.class)) {
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(mockTenantConfig);
 
       // Stub exact string matches as expected - use lenient() to avoid strict stubbing issues
-      lenient().when(mockObjectStoreClient.listCommonPrefix("logs/env=", "/"))
+      lenient()
+          .when(mockObjectStoreClient.listCommonPrefix("logs/env=", "/"))
           .thenReturn(Single.just(envPrefixes));
-      lenient().when(mockObjectStoreClient.listCommonPrefix("logs/env=prod/service_name=", "/"))
+      lenient()
+          .when(mockObjectStoreClient.listCommonPrefix("logs/env=prod/service_name=", "/"))
           .thenReturn(Single.just(servicePrefixes1));
-      lenient().when(mockObjectStoreClient.listCommonPrefix("logs/env=staging/service_name=", "/"))
+      lenient()
+          .when(mockObjectStoreClient.listCommonPrefix("logs/env=staging/service_name=", "/"))
           .thenReturn(Single.just(servicePrefixes2));
-      lenient().when(mockObjectStoreClient.listCommonPrefix(
-              "logs/env=prod/service_name=service1/component_name=", "/"))
+      lenient()
+          .when(
+              mockObjectStoreClient.listCommonPrefix(
+                  "logs/env=prod/service_name=service1/component_name=", "/"))
           .thenReturn(Single.just(Collections.singletonList(componentPrefixes.get(0))));
-      lenient().when(mockObjectStoreClient.listCommonPrefix(
-              "logs/env=staging/service_name=service2/component_name=", "/"))
+      lenient()
+          .when(
+              mockObjectStoreClient.listCommonPrefix(
+                  "logs/env=staging/service_name=service2/component_name=", "/"))
           .thenReturn(Single.just(Collections.singletonList(componentPrefixes.get(1))));
 
       mockedUtils
@@ -239,12 +254,15 @@ public class ServiceTest extends BaseTest {
         MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
             Mockito.mockStatic(ApplicationConfigUtil.class)) {
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(mockTenantConfig);
 
-      lenient().when(mockObjectStoreClient.listCommonPrefix("logs/env=", "/"))
+      lenient()
+          .when(mockObjectStoreClient.listCommonPrefix("logs/env=", "/"))
           .thenReturn(Single.just(Collections.emptyList()));
 
       // Act
@@ -268,12 +286,15 @@ public class ServiceTest extends BaseTest {
         MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
             Mockito.mockStatic(ApplicationConfigUtil.class)) {
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(mockTenantConfig);
 
-      lenient().when(mockObjectStoreClient.listCommonPrefix("logs/env=", "/"))
+      lenient()
+          .when(mockObjectStoreClient.listCommonPrefix("logs/env=", "/"))
           .thenReturn(Single.error(error));
 
       // Act
@@ -405,13 +426,16 @@ public class ServiceTest extends BaseTest {
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(mockTenantConfig);
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClientForSpark);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClientForSpark);
 
       when(mockObjectStoreClientForSpark.listObjects("checkpoint/"))
           .thenReturn(Single.just(checkpointFiles));
       when(mockObjectStoreClientForSpark.listObjects("logs/_spark_metadata/"))
           .thenReturn(Single.just(metadataFiles));
-      when(mockObjectStoreClientForSpark.deleteFile(anyString())).thenReturn(Completable.complete());
+      when(mockObjectStoreClientForSpark.deleteFile(anyString()))
+          .thenReturn(Completable.complete());
 
       // Act
       Completable result = sparkService.cleanSparkState(tenant);
@@ -425,7 +449,8 @@ public class ServiceTest extends BaseTest {
   // ========== ServiceManagerService Tests ==========
 
   @Test
-  public void testServiceManagerService_GetServiceDetailsFromCache_WithValidTenant_ReturnsCachedResponse() {
+  public void
+      testServiceManagerService_GetServiceDetailsFromCache_WithValidTenant_ReturnsCachedResponse() {
     // Arrange
     Tenant tenant = Tenant.D11_Prod_AWS;
     GetServiceDetailsResponse cachedResponse =
@@ -458,7 +483,8 @@ public class ServiceTest extends BaseTest {
   }
 
   @Test
-  public void testServiceManagerService_GetServiceDetailsFromDB_WithValidTenant_ReturnsServiceDetails() {
+  public void
+      testServiceManagerService_GetServiceDetailsFromDB_WithValidTenant_ReturnsServiceDetails() {
     // Arrange
     Tenant tenant = Tenant.D11_Prod_AWS;
     List<ServiceDetails> serviceDetailsList = new ArrayList<>();
@@ -473,7 +499,8 @@ public class ServiceTest extends BaseTest {
         .thenReturn(Single.just(serviceDetailsList));
 
     // Act
-    Single<GetServiceDetailsResponse> result = serviceManagerService.getServiceDetailsFromDB(tenant);
+    Single<GetServiceDetailsResponse> result =
+        serviceManagerService.getServiceDetailsFromDB(tenant);
     GetServiceDetailsResponse response = result.blockingGet();
 
     // Assert
@@ -532,8 +559,7 @@ public class ServiceTest extends BaseTest {
 
     List<ServiceDetails> services = Collections.singletonList(service);
 
-    when(mockServicesDaoForManager.getAllServiceDetails(tenant))
-        .thenReturn(Single.just(services));
+    when(mockServicesDaoForManager.getAllServiceDetails(tenant)).thenReturn(Single.just(services));
     when(mockObjectStoreServiceForManager.getAllDistinctServicesInAws(tenant))
         .thenReturn(Single.just(services));
 
@@ -560,14 +586,15 @@ public class ServiceTest extends BaseTest {
             Mockito.mockStatic(ApplicationConfigUtil.class);
         MockedStatic<ObjectStoreFactory> mockedFactory =
             Mockito.mockStatic(ObjectStoreFactory.class);
-        MockedStatic<ApplicationUtils> mockedUtils =
-            Mockito.mockStatic(ApplicationUtils.class)) {
+        MockedStatic<ApplicationUtils> mockedUtils = Mockito.mockStatic(ApplicationUtils.class)) {
 
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(mockTenantConfig);
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       Single<List<String>> listObjectsSingle = Single.just(objectNames);
       when(mockObjectStoreClient.listObjects(anyString())).thenReturn(listObjectsSingle);
@@ -599,20 +626,20 @@ public class ServiceTest extends BaseTest {
             Mockito.mockStatic(ApplicationConfigUtil.class);
         MockedStatic<ObjectStoreFactory> mockedFactory =
             Mockito.mockStatic(ObjectStoreFactory.class);
-        MockedStatic<ApplicationUtils> mockedUtils =
-            Mockito.mockStatic(ApplicationUtils.class)) {
+        MockedStatic<ApplicationUtils> mockedUtils = Mockito.mockStatic(ApplicationUtils.class)) {
 
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(mockTenantConfig);
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       Single<List<String>> listObjectsSingle = Single.just(emptyList);
       when(mockObjectStoreClient.listObjects(anyString())).thenReturn(listObjectsSingle);
 
-      Maybe<Integer> maybeDelay =
-          Maybe.just(ApplicationConstants.MAX_LOGS_SYNC_DELAY_HOURS * 60);
+      Maybe<Integer> maybeDelay = Maybe.just(ApplicationConstants.MAX_LOGS_SYNC_DELAY_HOURS * 60);
       mockedUtils
           .when(() -> ApplicationUtils.executeBlockingCallable(any()))
           .thenReturn(maybeDelay);
@@ -630,4 +657,3 @@ public class ServiceTest extends BaseTest {
     }
   }
 }
-

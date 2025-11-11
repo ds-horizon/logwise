@@ -26,8 +26,7 @@ public class ReactiveUtilsTest {
 
     // Act
     Maybe<String> result =
-        MaybeUtils.readThroughCache(
-            cacheHit, source, data -> Completable.complete());
+        MaybeUtils.readThroughCache(cacheHit, source, data -> Completable.complete());
 
     // Assert
     String value = result.blockingGet();
@@ -42,8 +41,7 @@ public class ReactiveUtilsTest {
 
     // Act
     Maybe<String> result =
-        MaybeUtils.readThroughCache(
-            cacheMiss, source, data -> Completable.complete());
+        MaybeUtils.readThroughCache(cacheMiss, source, data -> Completable.complete());
 
     // Assert
     String value = result.blockingGet();
@@ -86,8 +84,7 @@ public class ReactiveUtilsTest {
 
     // Act
     Single<String> result =
-        SingleUtils.readThroughCache(
-            cacheHit, source, data -> Completable.complete());
+        SingleUtils.readThroughCache(cacheHit, source, data -> Completable.complete());
 
     // Assert
     String value = result.blockingGet();
@@ -102,8 +99,7 @@ public class ReactiveUtilsTest {
 
     // Act
     Single<String> result =
-        SingleUtils.readThroughCache(
-            cacheMiss, source, data -> Completable.complete());
+        SingleUtils.readThroughCache(cacheMiss, source, data -> Completable.complete());
 
     // Assert
     String value = result.blockingGet();
@@ -180,4 +176,3 @@ public class ReactiveUtilsTest {
     }
   }
 }
-

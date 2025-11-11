@@ -48,8 +48,8 @@ public class ComponentTypeTest {
       Assert.fail("Should have thrown RestException for case mismatch");
     } catch (RestException e) {
       Assert.assertNotNull(e.getError());
-      Assert.assertEquals(e.getError().getCode(), ServiceError.INVALID_COMPONENT_TYPE.getErrorCode());
+      Assert.assertEquals(
+          e.getError().getCode(), ServiceError.INVALID_COMPONENT_TYPE.getErrorCode());
     }
   }
 }
-

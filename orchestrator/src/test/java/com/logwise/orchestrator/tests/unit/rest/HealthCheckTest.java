@@ -151,4 +151,3 @@ public class HealthCheckTest {
     Assert.assertEquals(result, "Test message");
   }
 }
-

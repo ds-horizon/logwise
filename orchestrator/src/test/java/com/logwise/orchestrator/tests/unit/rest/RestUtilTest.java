@@ -6,7 +6,6 @@ import com.dream11.logcentralorchestrator.rest.RestUtil;
 import com.dream11.logcentralorchestrator.rest.request.Sorting;
 import com.dream11.logcentralorchestrator.setup.BaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -153,8 +152,10 @@ public class RestUtilTest extends BaseTest {
 
     // Act - List is handled by collectionClasses check, but AppContext.getInstance is still called
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
-      mockedAppContext.when(() -> AppContext.getInstance(ObjectMapper.class)).thenReturn(mockObjectMapper);
-      
+      mockedAppContext
+          .when(() -> AppContext.getInstance(ObjectMapper.class))
+          .thenReturn(mockObjectMapper);
+
       String result = RestUtil.getString(list);
 
       // Assert
@@ -261,8 +262,11 @@ public class RestUtilTest extends BaseTest {
 
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
       ObjectMapper mockMapper = Mockito.mock(ObjectMapper.class);
-      Mockito.when(mockMapper.writeValueAsString(testObject)).thenReturn("{\"value\":\"test-value\"}");
-      mockedAppContext.when(() -> AppContext.getInstance(ObjectMapper.class)).thenReturn(mockMapper);
+      Mockito.when(mockMapper.writeValueAsString(testObject))
+          .thenReturn("{\"value\":\"test-value\"}");
+      mockedAppContext
+          .when(() -> AppContext.getInstance(ObjectMapper.class))
+          .thenReturn(mockMapper);
 
       // Act
       String result = RestUtil.getString(testObject);
@@ -320,7 +324,8 @@ public class RestUtilTest extends BaseTest {
     List<String> packageNames = Arrays.asList("com.dream11.logcentralorchestrator.rest");
 
     // Act
-    List<com.dream11.logcentralorchestrator.rest.AbstractRoute> result = RestUtil.abstractRouteList(packageNames);
+    List<com.dream11.logcentralorchestrator.rest.AbstractRoute> result =
+        RestUtil.abstractRouteList(packageNames);
 
     // Assert
     Assert.assertNotNull(result);
@@ -334,7 +339,8 @@ public class RestUtilTest extends BaseTest {
     List<String> packageNames = Arrays.asList("com.nonexistent.package");
 
     // Act
-    List<com.dream11.logcentralorchestrator.rest.AbstractRoute> result = RestUtil.abstractRouteList(packageNames);
+    List<com.dream11.logcentralorchestrator.rest.AbstractRoute> result =
+        RestUtil.abstractRouteList(packageNames);
 
     // Assert
     Assert.assertNotNull(result);

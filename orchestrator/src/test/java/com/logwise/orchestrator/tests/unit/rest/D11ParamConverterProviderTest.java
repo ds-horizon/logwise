@@ -25,7 +25,8 @@ public class D11ParamConverterProviderTest {
     setUp();
 
     // Act
-    ParamConverter<Long> converter = provider.getConverter(Long.class, null, new java.lang.annotation.Annotation[0]);
+    ParamConverter<Long> converter =
+        provider.getConverter(Long.class, null, new java.lang.annotation.Annotation[0]);
 
     // Assert
     Assert.assertNotNull(converter);
@@ -38,7 +39,8 @@ public class D11ParamConverterProviderTest {
     setUp();
 
     // Act
-    ParamConverter<Integer> converter = provider.getConverter(Integer.class, null, new java.lang.annotation.Annotation[0]);
+    ParamConverter<Integer> converter =
+        provider.getConverter(Integer.class, null, new java.lang.annotation.Annotation[0]);
 
     // Assert
     Assert.assertNotNull(converter);
@@ -51,7 +53,8 @@ public class D11ParamConverterProviderTest {
     setUp();
 
     // Act
-    ParamConverter<Double> converter = provider.getConverter(Double.class, null, new java.lang.annotation.Annotation[0]);
+    ParamConverter<Double> converter =
+        provider.getConverter(Double.class, null, new java.lang.annotation.Annotation[0]);
 
     // Assert
     Assert.assertNotNull(converter);
@@ -64,7 +67,8 @@ public class D11ParamConverterProviderTest {
     setUp();
 
     // Act
-    ParamConverter<Float> converter = provider.getConverter(Float.class, null, new java.lang.annotation.Annotation[0]);
+    ParamConverter<Float> converter =
+        provider.getConverter(Float.class, null, new java.lang.annotation.Annotation[0]);
 
     // Assert
     Assert.assertNotNull(converter);
@@ -77,7 +81,8 @@ public class D11ParamConverterProviderTest {
     setUp();
 
     // Act
-    ParamConverter<String> converter = provider.getConverter(String.class, null, new java.lang.annotation.Annotation[0]);
+    ParamConverter<String> converter =
+        provider.getConverter(String.class, null, new java.lang.annotation.Annotation[0]);
 
     // Assert
     Assert.assertNull(converter);
@@ -97,4 +102,3 @@ public class D11ParamConverterProviderTest {
     Assert.assertTrue(converter instanceof LongParamConverter);
   }
 }
-

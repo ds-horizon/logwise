@@ -28,7 +28,7 @@ public class ErrorTest {
     Error error = Error.of("TEST_CODE", "Test message");
     String jsonString = error.toJsonString();
     Assert.assertNotNull(jsonString);
-    
+
     JsonObject jsonObject = new JsonObject(jsonString);
     Assert.assertTrue(jsonObject.containsKey("error"));
     JsonObject errorObject = jsonObject.getJsonObject("error");
@@ -52,4 +52,3 @@ public class ErrorTest {
     Assert.assertNotNull(error2);
   }
 }
-

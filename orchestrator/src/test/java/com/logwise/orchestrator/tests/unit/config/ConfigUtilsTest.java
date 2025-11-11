@@ -2,9 +2,8 @@ package com.dream11.logcentralorchestrator.tests.unit.config;
 
 import com.dream11.logcentralorchestrator.config.utils.ConfigUtils;
 import com.dream11.logcentralorchestrator.config.utils.WatchUtils;
-import com.typesafe.config.Config;
-import io.vertx.core.Vertx;
 import io.vertx.config.ConfigRetriever;
+import io.vertx.core.Vertx;
 import io.vertx.ext.consul.Watch;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -34,7 +33,8 @@ public class ConfigUtilsTest extends com.dream11.logcentralorchestrator.setup.Ba
               com.dream11.logcentralorchestrator.config.client.ConfigOptions.class);
       Assert.assertNotNull(config);
     } catch (ExceptionInInitializerError | NoClassDefFoundError | Exception e) {
-      // ConfigOptions static initializer may fail if Constants.ENV is null - that's acceptable for unit tests
+      // ConfigOptions static initializer may fail if Constants.ENV is null - that's acceptable for
+      // unit tests
       Assert.assertTrue(true); // Method exists and was called
     }
   }
@@ -57,7 +57,9 @@ public class ConfigUtilsTest extends com.dream11.logcentralorchestrator.setup.Ba
   @Test
   public void testGetRetriever_WithValidFormat_ReturnsConfigRetriever() {
     // Act
-    ConfigRetriever retriever = com.dream11.logcentralorchestrator.common.util.ConfigUtils.getRetriever(vertx, "config/application/application-%s.conf");
+    ConfigRetriever retriever =
+        com.dream11.logcentralorchestrator.common.util.ConfigUtils.getRetriever(
+            vertx, "config/application/application-%s.conf");
 
     // Assert
     Assert.assertNotNull(retriever);
@@ -111,4 +113,3 @@ public class ConfigUtilsTest extends com.dream11.logcentralorchestrator.setup.Ba
     }
   }
 }
-

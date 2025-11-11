@@ -1,6 +1,7 @@
 package com.dream11.logcentralorchestrator.tests.unit.rest;
 
-import com.dream11.logcentralorchestrator.common.app.AppContext;
+import static org.mockito.ArgumentMatchers.eq;
+
 import com.dream11.logcentralorchestrator.rest.RestUtil;
 import com.dream11.logcentralorchestrator.rest.filter.LoggerFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,11 +12,8 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.UriInfo;
-import static org.mockito.ArgumentMatchers.eq;
-
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -48,7 +46,8 @@ public class LoggerFilterTest {
   public void testFilter_Request_WithEntity_SetsStartTime() throws IOException {
     // Arrange
     String body = "{\"test\":\"value\"}";
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
+    ByteArrayInputStream inputStream =
+        new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
     Mockito.when(mockRequestContext.hasEntity()).thenReturn(true);
     Mockito.when(mockRequestContext.getEntityStream()).thenReturn(inputStream);
 
@@ -92,10 +91,13 @@ public class LoggerFilterTest {
     Object entity = new TestEntity("test-value");
     Mockito.when(mockResponseContext.hasEntity()).thenReturn(true);
     Mockito.when(mockResponseContext.getEntity()).thenReturn(entity);
-    Mockito.when(mockRequestContext.getProperty("REQUEST_START_TIME")).thenReturn(System.currentTimeMillis() - 100);
+    Mockito.when(mockRequestContext.getProperty("REQUEST_START_TIME"))
+        .thenReturn(System.currentTimeMillis() - 100);
 
     try (MockedStatic<RestUtil> mockedRestUtil = Mockito.mockStatic(RestUtil.class)) {
-      mockedRestUtil.when(() -> RestUtil.getString(entity)).thenReturn("{\"value\":\"test-value\"}");
+      mockedRestUtil
+          .when(() -> RestUtil.getString(entity))
+          .thenReturn("{\"value\":\"test-value\"}");
 
       // Act
       loggerFilter.filter(mockRequestContext, mockResponseContext);
@@ -111,7 +113,8 @@ public class LoggerFilterTest {
     // Arrange
     Mockito.when(mockResponseContext.hasEntity()).thenReturn(false);
     Mockito.when(mockResponseContext.getStatus()).thenReturn(200);
-    Mockito.when(mockRequestContext.getProperty("REQUEST_START_TIME")).thenReturn(System.currentTimeMillis() - 100);
+    Mockito.when(mockRequestContext.getProperty("REQUEST_START_TIME"))
+        .thenReturn(System.currentTimeMillis() - 100);
 
     // Act
     loggerFilter.filter(mockRequestContext, mockResponseContext);
@@ -145,4 +148,3 @@ public class LoggerFilterTest {
     }
   }
 }
-

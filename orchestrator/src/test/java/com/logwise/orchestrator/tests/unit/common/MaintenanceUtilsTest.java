@@ -79,4 +79,3 @@ public class MaintenanceUtilsTest extends BaseTest {
     Assert.assertFalse(MaintenanceUtils.isUnderMaintenance(vertx).get());
   }
 }
-

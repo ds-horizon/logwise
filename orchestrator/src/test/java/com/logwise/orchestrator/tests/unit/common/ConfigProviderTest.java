@@ -35,7 +35,8 @@ public class ConfigProviderTest {
   public void testGetConfig_WithClass_ReturnsTypedConfig() throws Exception {
     // Note: Config files may have unresolved substitutions
     try {
-      java.util.Map config = configProvider.getConfig("config/application", "application", java.util.Map.class);
+      java.util.Map config =
+          configProvider.getConfig("config/application", "application", java.util.Map.class);
       Assert.assertNotNull(config);
     } catch (com.typesafe.config.ConfigException.UnresolvedSubstitution e) {
       // Config has unresolved substitutions - acceptable in test environment
@@ -43,4 +44,3 @@ public class ConfigProviderTest {
     }
   }
 }
-

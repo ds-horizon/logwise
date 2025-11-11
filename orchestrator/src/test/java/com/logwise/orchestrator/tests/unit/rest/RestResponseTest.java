@@ -39,10 +39,8 @@ public class RestResponseTest extends BaseTest {
   @Test
   public void testRestHandler_WithRestException_ReturnsErrorResponse() throws Exception {
     // Arrange
-    RestException restException = new RestException(
-        "Test error",
-        Error.of("TEST_ERROR", "Test error message"),
-        400);
+    RestException restException =
+        new RestException("Test error", Error.of("TEST_ERROR", "Test error message"), 400);
     Single<Object> source = Single.error(restException);
 
     // Act
@@ -79,22 +77,23 @@ public class RestResponseTest extends BaseTest {
   @Test
   public void testRestHandler_WithRestError_OnError_ReturnsRestException() throws Exception {
     // Arrange
-    RestError restError = new RestError() {
-      @Override
-      public String getErrorCode() {
-        return "CUSTOM_ERROR";
-      }
+    RestError restError =
+        new RestError() {
+          @Override
+          public String getErrorCode() {
+            return "CUSTOM_ERROR";
+          }
 
-      @Override
-      public String getErrorMessage() {
-        return "Custom error";
-      }
+          @Override
+          public String getErrorMessage() {
+            return "Custom error";
+          }
 
-      @Override
-      public int getHttpStatusCode() {
-        return 500;
-      }
-    };
+          @Override
+          public int getHttpStatusCode() {
+            return 500;
+          }
+        };
     RuntimeException runtimeException = new RuntimeException("Original error");
     Single<Object> source = Single.error(runtimeException);
 
@@ -113,22 +112,23 @@ public class RestResponseTest extends BaseTest {
   @Test
   public void testRestHandler_WithRestError_OnSuccess_ReturnsSuccessfulResponse() throws Exception {
     // Arrange
-    RestError restError = new RestError() {
-      @Override
-      public String getErrorCode() {
-        return "CUSTOM_ERROR";
-      }
+    RestError restError =
+        new RestError() {
+          @Override
+          public String getErrorCode() {
+            return "CUSTOM_ERROR";
+          }
 
-      @Override
-      public String getErrorMessage() {
-        return "Custom error";
-      }
+          @Override
+          public String getErrorMessage() {
+            return "Custom error";
+          }
 
-      @Override
-      public int getHttpStatusCode() {
-        return 500;
-      }
-    };
+          @Override
+          public int getHttpStatusCode() {
+            return 500;
+          }
+        };
     Single<Object> source = Single.just("success-data");
 
     // Act
@@ -147,27 +147,31 @@ public class RestResponseTest extends BaseTest {
     // Arrange
     Single<Object> source = Single.just("jaxrs-data");
     io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
-    
+
     // Act - Run within Vertx context to support VertxCompletableFuture
     java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     @SuppressWarnings("unchecked")
     final Response<Object>[] responseHolder = new Response[1];
     final Throwable[] exceptionHolder = new Throwable[1];
-    
-    reactiveVertx.getOrCreateContext().runOnContext(v -> {
-      try {
-        CompletionStage<Response<Object>> stage = RestResponse.jaxrsRestHandler().apply(source);
-        Response<Object> response = stage.toCompletableFuture().get();
-        responseHolder[0] = response;
-      } catch (Exception e) {
-        exceptionHolder[0] = e;
-      } finally {
-        latch.countDown();
-      }
-    });
-    
+
+    reactiveVertx
+        .getOrCreateContext()
+        .runOnContext(
+            v -> {
+              try {
+                CompletionStage<Response<Object>> stage =
+                    RestResponse.jaxrsRestHandler().apply(source);
+                Response<Object> response = stage.toCompletableFuture().get();
+                responseHolder[0] = response;
+              } catch (Exception e) {
+                exceptionHolder[0] = e;
+              } finally {
+                latch.countDown();
+              }
+            });
+
     latch.await();
-    
+
     if (exceptionHolder[0] != null) {
       if (exceptionHolder[0] instanceof Exception) {
         throw (Exception) exceptionHolder[0];
@@ -175,7 +179,7 @@ public class RestResponseTest extends BaseTest {
         throw new Exception(exceptionHolder[0]);
       }
     }
-    
+
     Response<Object> response = responseHolder[0];
     // Assert
     Assert.assertNotNull(response);
@@ -190,35 +194,39 @@ public class RestResponseTest extends BaseTest {
     RuntimeException error = new RuntimeException("JAXRS error");
     Single<Object> source = Single.error(error);
     io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
-    
+
     // Act - Run within Vertx context to support VertxCompletableFuture
     java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final Throwable[] exceptionHolder = new Throwable[1];
     final boolean[] exceptionThrown = new boolean[1];
-    
-    reactiveVertx.getOrCreateContext().runOnContext(v -> {
-      try {
-        CompletionStage<Response<Object>> stage = RestResponse.jaxrsRestHandler().apply(source);
-        try {
-          stage.toCompletableFuture().get();
-          exceptionThrown[0] = false; // Should have thrown exception
-        } catch (java.util.concurrent.ExecutionException e) {
-          Assert.assertNotNull(e.getCause());
-          exceptionThrown[0] = true; // Expected exception was thrown
-        }
-      } catch (Exception e) {
-        exceptionHolder[0] = e;
-      } finally {
-        latch.countDown();
-      }
-    });
-    
+
+    reactiveVertx
+        .getOrCreateContext()
+        .runOnContext(
+            v -> {
+              try {
+                CompletionStage<Response<Object>> stage =
+                    RestResponse.jaxrsRestHandler().apply(source);
+                try {
+                  stage.toCompletableFuture().get();
+                  exceptionThrown[0] = false; // Should have thrown exception
+                } catch (java.util.concurrent.ExecutionException e) {
+                  Assert.assertNotNull(e.getCause());
+                  exceptionThrown[0] = true; // Expected exception was thrown
+                }
+              } catch (Exception e) {
+                exceptionHolder[0] = e;
+              } finally {
+                latch.countDown();
+              }
+            });
+
     latch.await();
-    
+
     if (exceptionHolder[0] != null) {
       throw new Exception(exceptionHolder[0]);
     }
-    
+
     // Assert that exception was thrown as expected
     Assert.assertTrue(exceptionThrown[0], "Should have thrown ExecutionException");
   }
@@ -226,10 +234,7 @@ public class RestResponseTest extends BaseTest {
   @Test
   public void testParseThrowable_WithRestException_ReturnsRestException() {
     // Arrange
-    RestException restException = new RestException(
-        "Test",
-        Error.of("TEST", "Test message"),
-        400);
+    RestException restException = new RestException("Test", Error.of("TEST", "Test message"), 400);
 
     // Act
     Throwable result = RestResponse.parseThrowable(restException);
@@ -272,10 +277,7 @@ public class RestResponseTest extends BaseTest {
   @Test
   public void testParseThrowable_WithRestExceptionAndOldErrorKeys_ReturnsRestException() {
     // Arrange
-    RestException restException = new RestException(
-        "Test",
-        Error.of("TEST", "Test message"),
-        400);
+    RestException restException = new RestException("Test", Error.of("TEST", "Test message"), 400);
 
     // Act
     Throwable result = RestResponse.parseThrowable(restException, true);
@@ -284,4 +286,3 @@ public class RestResponseTest extends BaseTest {
     Assert.assertSame(result, restException);
   }
 }
-

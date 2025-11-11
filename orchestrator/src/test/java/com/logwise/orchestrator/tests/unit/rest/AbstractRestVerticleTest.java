@@ -1,19 +1,12 @@
 package com.dream11.logcentralorchestrator.tests.unit.rest;
 
-import com.dream11.logcentralorchestrator.common.app.AppContext;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 
-import com.dream11.logcentralorchestrator.common.util.ConfigUtils;
 import com.dream11.logcentralorchestrator.rest.AbstractRestVerticle;
-import com.dream11.logcentralorchestrator.rest.config.HttpConfig;
 import com.dream11.logcentralorchestrator.setup.BaseTest;
-import io.reactivex.Completable;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.http.HttpServer;
 import java.util.Arrays;
 import java.util.List;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -53,9 +46,7 @@ public class AbstractRestVerticleTest extends BaseTest {
   @Test
   public void testConstructor_WithPackageNameAndMountPath_CreatesInstance() {
     // Act
-    testRestVerticle = new TestRestVerticle(
-        "com.dream11.logcentralorchestrator.rest.v1",
-        "api");
+    testRestVerticle = new TestRestVerticle("com.dream11.logcentralorchestrator.rest.v1", "api");
 
     // Assert
     Assert.assertNotNull(testRestVerticle);
@@ -74,9 +65,7 @@ public class AbstractRestVerticleTest extends BaseTest {
   @Test
   public void testConstructor_WithEmptyMountPath_UsesEmptyString() {
     // Act
-    testRestVerticle = new TestRestVerticle(
-        "com.dream11.logcentralorchestrator.rest.v1",
-        "");
+    testRestVerticle = new TestRestVerticle("com.dream11.logcentralorchestrator.rest.v1", "");
 
     // Assert
     Assert.assertNotNull(testRestVerticle);
@@ -137,4 +126,3 @@ public class AbstractRestVerticleTest extends BaseTest {
     }
   }
 }
-

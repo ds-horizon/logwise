@@ -3,14 +3,11 @@ package com.dream11.logcentralorchestrator.tests.unit.rest;
 import com.dream11.logcentralorchestrator.common.app.AppContext;
 import com.dream11.logcentralorchestrator.rest.TypeValidationError;
 import com.dream11.logcentralorchestrator.rest.exception.RestException;
-import com.dream11.logcentralorchestrator.rest.io.Error;
 import com.dream11.logcentralorchestrator.rest.provider.D11JsonProvider;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import org.mockito.MockedStatic;
@@ -29,7 +26,9 @@ public class D11JsonProviderTest {
   public void setUp() {
     mockObjectMapper = new ObjectMapper();
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
-      mockedAppContext.when(() -> AppContext.getInstance(ObjectMapper.class)).thenReturn(mockObjectMapper);
+      mockedAppContext
+          .when(() -> AppContext.getInstance(ObjectMapper.class))
+          .thenReturn(mockObjectMapper);
       provider = new D11JsonProvider();
     }
   }
@@ -41,19 +40,20 @@ public class D11JsonProviderTest {
     InputStream entityStream = new ByteArrayInputStream(json.getBytes());
     MediaType mediaType = MediaType.APPLICATION_JSON_TYPE;
 
-      // Act
-      Object result = provider.readFrom(
-          (Class<Object>) (Class<?>) TestDto.class,
-          TestDto.class,
-          new Annotation[0],
-          mediaType,
-          new MultivaluedHashMap<>(),
-          entityStream);
-      TestDto dto = (TestDto) result;
+    // Act
+    Object result =
+        provider.readFrom(
+            (Class<Object>) (Class<?>) TestDto.class,
+            TestDto.class,
+            new Annotation[0],
+            mediaType,
+            new MultivaluedHashMap<>(),
+            entityStream);
+    TestDto dto = (TestDto) result;
 
-      // Assert
-      Assert.assertNotNull(dto);
-      Assert.assertEquals(dto.getValue(), "test");
+    // Assert
+    Assert.assertNotNull(dto);
+    Assert.assertEquals(dto.getValue(), "test");
   }
 
   @Test
@@ -66,13 +66,14 @@ public class D11JsonProviderTest {
     // Act & Assert
     try {
       @SuppressWarnings("unchecked")
-      Object result = provider.readFrom(
-          (Class<Object>) (Class<?>) TestDto.class,
-          TestDto.class,
-          new Annotation[0],
-          mediaType,
-          new MultivaluedHashMap<>(),
-          entityStream);
+      Object result =
+          provider.readFrom(
+              (Class<Object>) (Class<?>) TestDto.class,
+              TestDto.class,
+              new Annotation[0],
+              mediaType,
+              new MultivaluedHashMap<>(),
+              entityStream);
       Assert.fail("Should have thrown RestException");
     } catch (RestException e) {
       Assert.assertEquals(e.getError().getCode(), "INVALID_REQUEST");
@@ -91,13 +92,14 @@ public class D11JsonProviderTest {
 
     // Act & Assert - Should handle gracefully
     try {
-      Object result = provider.readFrom(
-          (Class<Object>) (Class<?>) TestDto.class,
-          TestDto.class,
-          new Annotation[0],
-          mediaType,
-          new MultivaluedHashMap<>(),
-          entityStream);
+      Object result =
+          provider.readFrom(
+              (Class<Object>) (Class<?>) TestDto.class,
+              TestDto.class,
+              new Annotation[0],
+              mediaType,
+              new MultivaluedHashMap<>(),
+              entityStream);
       // Should succeed with valid JSON
       Assert.assertNotNull(result);
     } catch (RestException e) {
@@ -106,7 +108,8 @@ public class D11JsonProviderTest {
   }
 
   @Test
-  public void testReadFrom_WithTypeValidationError_ThrowsRestExceptionWithCustomError() throws Exception {
+  public void testReadFrom_WithTypeValidationError_ThrowsRestExceptionWithCustomError()
+      throws Exception {
     // Arrange
     String json = "{\"value\":123}"; // Wrong type
     InputStream entityStream = new ByteArrayInputStream(json.getBytes());
@@ -114,13 +117,14 @@ public class D11JsonProviderTest {
 
     // Act & Assert
     try {
-      Object result = provider.readFrom(
-          (Class<Object>) (Class<?>) TestDtoWithValidation.class,
-          TestDtoWithValidation.class,
-          new Annotation[0],
-          mediaType,
-          new MultivaluedHashMap<>(),
-          entityStream);
+      Object result =
+          provider.readFrom(
+              (Class<Object>) (Class<?>) TestDtoWithValidation.class,
+              TestDtoWithValidation.class,
+              new Annotation[0],
+              mediaType,
+              new MultivaluedHashMap<>(),
+              entityStream);
       TestDtoWithValidation dto = (TestDtoWithValidation) result;
       // May succeed or fail depending on Jackson configuration
       Assert.assertNotNull(dto);
@@ -136,24 +140,26 @@ public class D11JsonProviderTest {
   @Test
   public void testReadFrom_WithIOException_ThrowsRestException() {
     // Arrange
-    InputStream entityStream = new InputStream() {
-      @Override
-      public int read() {
-        throw new RuntimeException("IO Error");
-      }
-    };
+    InputStream entityStream =
+        new InputStream() {
+          @Override
+          public int read() {
+            throw new RuntimeException("IO Error");
+          }
+        };
     MediaType mediaType = MediaType.APPLICATION_JSON_TYPE;
 
     // Act & Assert
     try {
       @SuppressWarnings("unchecked")
-      Object result = provider.readFrom(
-          (Class<Object>) (Class<?>) TestDto.class,
-          TestDto.class,
-          new Annotation[0],
-          mediaType,
-          new MultivaluedHashMap<>(),
-          entityStream);
+      Object result =
+          provider.readFrom(
+              (Class<Object>) (Class<?>) TestDto.class,
+              TestDto.class,
+              new Annotation[0],
+              mediaType,
+              new MultivaluedHashMap<>(),
+              entityStream);
       Assert.fail("Should have thrown exception");
     } catch (RestException e) {
       Assert.assertEquals(e.getError().getCode(), "INVALID_REQUEST");
@@ -189,4 +195,3 @@ public class D11JsonProviderTest {
     }
   }
 }
-

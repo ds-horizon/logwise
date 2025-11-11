@@ -32,8 +32,7 @@ public class DtoTest {
   @Test
   public void testServiceDetails_AllArgsConstructor_CreatesInstance() {
     // Act
-    ServiceDetails details =
-        new ServiceDetails("prod", "service1", "component1", 30, "tenant1");
+    ServiceDetails details = new ServiceDetails("prod", "service1", "component1", 30, "tenant1");
 
     // Assert
     Assert.assertEquals(details.getEnv(), "prod");
@@ -481,4 +480,3 @@ public class DtoTest {
     Assert.assertEquals(worker.getMemoryfree(), 4096);
   }
 }
-

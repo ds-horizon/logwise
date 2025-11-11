@@ -62,7 +62,8 @@ public class CaffeineTest {
   }
 
   @Test
-  public void testCaffeineConfig_SetRefreshAfterWriteDuration_WithExistingSeconds_ThrowsException() {
+  public void
+      testCaffeineConfig_SetRefreshAfterWriteDuration_WithExistingSeconds_ThrowsException() {
     // Arrange
     CaffeineConfig config = new CaffeineConfig();
     config.setRefreshAfterWriteSeconds(60L);
@@ -92,7 +93,8 @@ public class CaffeineTest {
   }
 
   @Test
-  public void testCaffeineConfig_SetExpireAfterAccessDuration_WithExistingSeconds_ThrowsException() {
+  public void
+      testCaffeineConfig_SetExpireAfterAccessDuration_WithExistingSeconds_ThrowsException() {
     // Arrange
     CaffeineConfig config = new CaffeineConfig();
     config.setExpireAfterAccessSeconds(60L);
@@ -107,7 +109,8 @@ public class CaffeineTest {
   }
 
   @Test
-  public void testCaffeineConfig_SetRefreshAfterWriteTimeUnit_WithExistingSeconds_ThrowsException() {
+  public void
+      testCaffeineConfig_SetRefreshAfterWriteTimeUnit_WithExistingSeconds_ThrowsException() {
     // Arrange
     CaffeineConfig config = new CaffeineConfig();
     config.setRefreshAfterWriteSeconds(60L);
@@ -150,4 +153,3 @@ public class CaffeineTest {
     Assert.assertNotNull(CaffeineCacheFactory.class);
   }
 }
-

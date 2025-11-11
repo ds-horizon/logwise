@@ -72,7 +72,8 @@ public class ApplicationConstantsTest {
 
   @Test
   public void testGetServiceDetailsCache() {
-    Assert.assertEquals(ApplicationConstants.GET_SERVICE_DETAILS_CACHE, "get-service-details-cache");
+    Assert.assertEquals(
+        ApplicationConstants.GET_SERVICE_DETAILS_CACHE, "get-service-details-cache");
   }
 
   @Test
@@ -137,4 +138,3 @@ public class ApplicationConstantsTest {
     Assert.assertEquals(ApplicationConstants.MAX_LOGS_SYNC_DELAY_HOURS, 3);
   }
 }
-

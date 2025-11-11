@@ -255,4 +255,3 @@ public class ParamConverterTest {
     Assert.assertEquals(result, "123.456");
   }
 }
-

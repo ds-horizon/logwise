@@ -14,7 +14,7 @@ public class RestExceptionTest {
   public void testConstructor_WithMessageAndError_CreatesException() {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error);
-    
+
     Assert.assertEquals(exception.getMessage(), "Test message");
     Assert.assertEquals(exception.getError(), error);
     Assert.assertEquals(exception.getHttpStatusCode(), 400); // Default
@@ -24,7 +24,7 @@ public class RestExceptionTest {
   public void testConstructor_WithMessageErrorAndStatusCode_CreatesException() {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error, 404);
-    
+
     Assert.assertEquals(exception.getMessage(), "Test message");
     Assert.assertEquals(exception.getError(), error);
     Assert.assertEquals(exception.getHttpStatusCode(), 404);
@@ -35,7 +35,7 @@ public class RestExceptionTest {
     Throwable cause = new RuntimeException("Cause");
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException(cause, error);
-    
+
     Assert.assertEquals(exception.getCause(), cause);
     Assert.assertEquals(exception.getError(), error);
     Assert.assertEquals(exception.getHttpStatusCode(), 400); // Default
@@ -46,7 +46,7 @@ public class RestExceptionTest {
     Throwable cause = new RuntimeException("Cause");
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException(cause, error, 500);
-    
+
     Assert.assertEquals(exception.getCause(), cause);
     Assert.assertEquals(exception.getError(), error);
     Assert.assertEquals(exception.getHttpStatusCode(), 500);
@@ -54,24 +54,25 @@ public class RestExceptionTest {
 
   @Test
   public void testConstructor_WithRestError_CreatesException() {
-    RestError restError = new RestError() {
-      @Override
-      public String getErrorCode() {
-        return "CODE";
-      }
+    RestError restError =
+        new RestError() {
+          @Override
+          public String getErrorCode() {
+            return "CODE";
+          }
 
-      @Override
-      public String getErrorMessage() {
-        return "Message";
-      }
+          @Override
+          public String getErrorMessage() {
+            return "Message";
+          }
 
-      @Override
-      public int getHttpStatusCode() {
-        return 400;
-      }
-    };
+          @Override
+          public int getHttpStatusCode() {
+            return 400;
+          }
+        };
     RestException exception = new RestException(restError);
-    
+
     Assert.assertEquals(exception.getError().getCode(), "CODE");
     Assert.assertEquals(exception.getError().getMessage(), "Message");
     Assert.assertEquals(exception.getHttpStatusCode(), 400);
@@ -80,24 +81,25 @@ public class RestExceptionTest {
   @Test
   public void testConstructor_WithRestErrorAndCause_CreatesException() {
     Throwable cause = new RuntimeException("Cause");
-    RestError restError = new RestError() {
-      @Override
-      public String getErrorCode() {
-        return "CODE";
-      }
+    RestError restError =
+        new RestError() {
+          @Override
+          public String getErrorCode() {
+            return "CODE";
+          }
 
-      @Override
-      public String getErrorMessage() {
-        return "Message";
-      }
+          @Override
+          public String getErrorMessage() {
+            return "Message";
+          }
 
-      @Override
-      public int getHttpStatusCode() {
-        return 500;
-      }
-    };
+          @Override
+          public int getHttpStatusCode() {
+            return 500;
+          }
+        };
     RestException exception = new RestException(restError, cause);
-    
+
     Assert.assertEquals(exception.getCause(), cause);
     Assert.assertEquals(exception.getError().getCode(), "CODE");
     Assert.assertEquals(exception.getHttpStatusCode(), 500);
@@ -107,9 +109,9 @@ public class RestExceptionTest {
   public void testToJson_ReturnsValidJsonObject() {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error, 400);
-    
+
     JsonObject json = exception.toJson();
-    
+
     Assert.assertNotNull(json);
     Assert.assertTrue(json.containsKey("error"));
     JsonObject errorJson = json.getJsonObject("error");
@@ -123,9 +125,9 @@ public class RestExceptionTest {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error, 400);
     exception.setOldErrorKeys(true);
-    
+
     JsonObject json = exception.toJson();
-    
+
     Assert.assertNotNull(json);
     JsonObject errorJson = json.getJsonObject("error");
     Assert.assertTrue(errorJson.containsKey("MsgCode"));
@@ -138,9 +140,9 @@ public class RestExceptionTest {
   public void testToString_ReturnsJsonString() {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error, 400);
-    
+
     String jsonString = exception.toString();
-    
+
     Assert.assertNotNull(jsonString);
     Assert.assertTrue(jsonString.contains("error"));
     Assert.assertTrue(jsonString.contains("CODE"));
@@ -150,7 +152,7 @@ public class RestExceptionTest {
   public void testSetOldErrorKeys_SetsOldErrorKeys() {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error);
-    
+
     // oldErrorKeys defaults to false
     exception.setOldErrorKeys(true);
     // Verify setter works (we can't directly check the value without reflection)
@@ -162,11 +164,10 @@ public class RestExceptionTest {
     java.util.Map<String, String> map = new java.util.HashMap<>();
     map.put("CODE1", "Message1");
     map.put("CODE2", "Message2");
-    
+
     RestException.mergeIntoOldErrorMap(map);
-    
+
     // Verify map was merged (no exception thrown)
     Assert.assertNotNull(map);
   }
 }
-

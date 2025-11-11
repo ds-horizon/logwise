@@ -12,7 +12,7 @@ public class ResponseTest {
   public void testSuccessfulResponse_WithData_ReturnsResponseWithData() {
     String testData = "test data";
     Response<String> response = Response.successfulResponse(testData);
-    
+
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), testData);
     Assert.assertNull(response.getError());
@@ -24,7 +24,7 @@ public class ResponseTest {
     String testData = "test data";
     int statusCode = 201;
     Response<String> response = Response.successfulResponse(testData, statusCode);
-    
+
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), testData);
     Assert.assertNull(response.getError());
@@ -35,7 +35,7 @@ public class ResponseTest {
   public void testErrorResponse_WithError_ReturnsResponseWithError() {
     Error error = Error.of("ERROR_CODE", "Error message");
     Response<?> response = Response.errorResponse(error);
-    
+
     Assert.assertNotNull(response);
     Assert.assertNull(response.getData());
     Assert.assertEquals(response.getError(), error);
@@ -47,7 +47,7 @@ public class ResponseTest {
     Error error = Error.of("ERROR_CODE", "Error message");
     int statusCode = 400;
     Response<?> response = Response.errorResponse(error, statusCode);
-    
+
     Assert.assertNotNull(response);
     Assert.assertNull(response.getData());
     Assert.assertEquals(response.getError(), error);
@@ -65,7 +65,7 @@ public class ResponseTest {
   public void testResponse_WithComplexObject_WorksCorrectly() {
     TestObject testObject = new TestObject("test", 123);
     Response<TestObject> response = Response.successfulResponse(testObject);
-    
+
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), testObject);
     Assert.assertEquals(response.getData().getName(), "test");
@@ -91,4 +91,3 @@ public class ResponseTest {
     }
   }
 }
-

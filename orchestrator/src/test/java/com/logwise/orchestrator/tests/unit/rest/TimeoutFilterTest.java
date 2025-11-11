@@ -2,20 +2,11 @@ package com.dream11.logcentralorchestrator.tests.unit.rest;
 
 import com.dream11.logcentralorchestrator.common.app.AppContext;
 import com.dream11.logcentralorchestrator.rest.Timeout;
-import com.dream11.logcentralorchestrator.rest.exception.RestException;
 import com.dream11.logcentralorchestrator.rest.filter.TimeoutFilter;
-import com.dream11.logcentralorchestrator.rest.io.Error;
 import com.dream11.logcentralorchestrator.setup.BaseTest;
 import io.vertx.reactivex.core.Vertx;
-import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.core.HttpHeaders;
-import org.jboss.resteasy.core.interception.jaxrs.PostMatchContainerRequestContext;
-import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.spi.HttpResponse;
-import static org.mockito.ArgumentMatchers.eq;
-
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.testng.Assert;
@@ -46,7 +37,8 @@ public class TimeoutFilterTest extends BaseTest {
 
   @Test
   public void testFilter_Request_WithMethodTimeout_CreatesTimer() {
-    // Note: TimeoutFilter requires ResourceInfo injection via @Context which is not available in unit tests
+    // Note: TimeoutFilter requires ResourceInfo injection via @Context which is not available in
+    // unit tests
     // This test verifies the filter can be instantiated
     Assert.assertNotNull(timeoutFilter);
   }
@@ -77,7 +69,8 @@ public class TimeoutFilterTest extends BaseTest {
     Mockito.verify(mockVertx, Mockito.never()).cancelTimer(Mockito.anyLong());
   }
 
-  // Note: Testing request filter requires ResourceInfo injection and PostMatchContainerRequestContext
+  // Note: Testing request filter requires ResourceInfo injection and
+  // PostMatchContainerRequestContext
   // which are complex to mock in unit tests. These would be better tested in integration tests.
 
   @Timeout(5000)
@@ -87,4 +80,3 @@ public class TimeoutFilterTest extends BaseTest {
     }
   }
 }
-

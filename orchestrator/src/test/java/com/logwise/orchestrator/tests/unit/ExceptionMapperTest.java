@@ -17,7 +17,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/** Unit tests for exception mapper package (GenericExceptionMapper, ValidationExceptionMapper, WebApplicationExceptionMapper). */
+/**
+ * Unit tests for exception mapper package (GenericExceptionMapper, ValidationExceptionMapper,
+ * WebApplicationExceptionMapper).
+ */
 public class ExceptionMapperTest {
 
   private GenericExceptionMapper genericMapper;
@@ -34,10 +37,10 @@ public class ExceptionMapperTest {
   // ========== GenericExceptionMapper Tests ==========
 
   @Test
-  public void testGenericExceptionMapper_ToResponse_WithRestException_ReturnsResponseWithStatusCode() {
+  public void
+      testGenericExceptionMapper_ToResponse_WithRestException_ReturnsResponseWithStatusCode() {
     // Arrange
-    RestException restException =
-        new RestException("Test error", Error.of("CODE", "Message"), 400);
+    RestException restException = new RestException("Test error", Error.of("CODE", "Message"), 400);
 
     try (MockedStatic<RestResponse> mockedRestResponse =
         org.mockito.Mockito.mockStatic(RestResponse.class)) {
@@ -60,8 +63,7 @@ public class ExceptionMapperTest {
     // Arrange
     RuntimeException runtimeException = new RuntimeException("Test error");
     RestException restException =
-        new RestException(
-            runtimeException, Error.of("UNKNOWN-EXCEPTION", "Test error"), 500);
+        new RestException(runtimeException, Error.of("UNKNOWN-EXCEPTION", "Test error"), 500);
 
     try (MockedStatic<RestResponse> mockedRestResponse =
         org.mockito.Mockito.mockStatic(RestResponse.class)) {
@@ -123,8 +125,7 @@ public class ExceptionMapperTest {
 
     // Assert
     Assert.assertNotNull(response);
-    Assert.assertEquals(
-        response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+    Assert.assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
     Assert.assertNotNull(response.getEntity());
 
     String entity = (String) response.getEntity();
@@ -142,8 +143,7 @@ public class ExceptionMapperTest {
 
     // Assert
     Assert.assertNotNull(response);
-    Assert.assertEquals(
-        response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+    Assert.assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
     Assert.assertNotNull(response.getEntity());
   }
 
@@ -157,18 +157,17 @@ public class ExceptionMapperTest {
 
     // Assert
     Assert.assertNotNull(response);
-    Assert.assertEquals(
-        response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+    Assert.assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
     Assert.assertNotNull(response.getEntity());
   }
 
   // ========== WebApplicationExceptionMapper Tests ==========
 
   @Test
-  public void testWebApplicationExceptionMapper_ToResponse_WithRestExceptionAsCause_ReturnsRestExceptionResponse() {
+  public void
+      testWebApplicationExceptionMapper_ToResponse_WithRestExceptionAsCause_ReturnsRestExceptionResponse() {
     // Arrange
-    RestException restException =
-        new RestException("Test error", Error.of("CODE", "Message"), 400);
+    RestException restException = new RestException("Test error", Error.of("CODE", "Message"), 400);
     WebApplicationException webException = new WebApplicationException(restException);
 
     // Act
@@ -181,7 +180,8 @@ public class ExceptionMapperTest {
   }
 
   @Test
-  public void testWebApplicationExceptionMapper_ToResponse_WithNonRestExceptionCause_ReturnsGenericErrorResponse() {
+  public void
+      testWebApplicationExceptionMapper_ToResponse_WithNonRestExceptionCause_ReturnsGenericErrorResponse() {
     // Arrange
     RuntimeException runtimeException = new RuntimeException("Test error");
     WebApplicationException webException =
@@ -201,18 +201,17 @@ public class ExceptionMapperTest {
   }
 
   @Test
-  public void testWebApplicationExceptionMapper_ToResponse_WithNoCause_ReturnsGenericErrorResponse() {
+  public void
+      testWebApplicationExceptionMapper_ToResponse_WithNoCause_ReturnsGenericErrorResponse() {
     // Arrange
-    WebApplicationException webException =
-        new WebApplicationException(Response.Status.BAD_REQUEST);
+    WebApplicationException webException = new WebApplicationException(Response.Status.BAD_REQUEST);
 
     // Act
     Response response = webApplicationMapper.toResponse(webException);
 
     // Assert
     Assert.assertNotNull(response);
-    Assert.assertEquals(
-        response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+    Assert.assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
     Assert.assertNotNull(response.getEntity());
   }
 
@@ -232,4 +231,3 @@ public class ExceptionMapperTest {
     Assert.assertNotNull(response.getEntity());
   }
 }
-

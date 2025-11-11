@@ -71,33 +71,34 @@ public class ContextUtilsTest extends BaseTest {
     // Arrange
     String value1 = "value1";
     String value2 = "value2";
-    
+
     // Act - getInstances requires Vertx.currentContext() which must be set
     // Set instances and retrieve them within the same context
     java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final Map<String, String>[] resultHolder = new Map[1];
     final Exception[] exceptionHolder = new Exception[1];
-    
+
     // Use the same context for both setting and getting instances
-    context.runOnContext(v -> {
-      try {
-        // Set instances within this context
-        ContextUtils.setInstance(context, value1, "key1");
-        ContextUtils.setInstance(context, value2, "key2");
-        
-        // Get instances from the same context
-        Map<String, String> instances = ContextUtils.getInstances(String.class);
-        resultHolder[0] = instances;
-      } catch (Exception e) {
-        exceptionHolder[0] = e;
-      } finally {
-        latch.countDown();
-      }
-    });
-    
+    context.runOnContext(
+        v -> {
+          try {
+            // Set instances within this context
+            ContextUtils.setInstance(context, value1, "key1");
+            ContextUtils.setInstance(context, value2, "key2");
+
+            // Get instances from the same context
+            Map<String, String> instances = ContextUtils.getInstances(String.class);
+            resultHolder[0] = instances;
+          } catch (Exception e) {
+            exceptionHolder[0] = e;
+          } finally {
+            latch.countDown();
+          }
+        });
+
     // Wait for async execution
     latch.await();
-    
+
     // Assert
     if (exceptionHolder[0] != null) {
       throw exceptionHolder[0];
@@ -178,4 +179,3 @@ public class ContextUtilsTest extends BaseTest {
     }
   }
 }
-

@@ -19,7 +19,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/** Unit tests for common/util package (CollectionUtils, MapUtils, StreamUtils, StackUtils, JsonUtils, ListUtils, CompletableFutureUtils, MaybeUtils, SingleUtils). */
+/**
+ * Unit tests for common/util package (CollectionUtils, MapUtils, StreamUtils, StackUtils,
+ * JsonUtils, ListUtils, CompletableFutureUtils, MaybeUtils, SingleUtils).
+ */
 public class CommonUtilTest extends BaseTest {
 
   private static final Logger log = LoggerFactory.getLogger(CommonUtilTest.class);
@@ -272,8 +275,7 @@ public class CommonUtilTest extends BaseTest {
     map.put("one", 1);
     map.put("three", 3);
     map.put("two", 2);
-    Comparator<Map.Entry<String, Integer>> comparator =
-        Comparator.comparing(Map.Entry::getValue);
+    Comparator<Map.Entry<String, Integer>> comparator = Comparator.comparing(Map.Entry::getValue);
 
     // Act
     LinkedHashMap<String, Integer> result = MapUtils.sort(comparator, map);
@@ -348,7 +350,8 @@ public class CommonUtilTest extends BaseTest {
 
     // Assert
     Assert.assertNotNull(callerName);
-    Assert.assertEquals(callerName, "testStackUtils_GetCallerName_FromHelperMethod_ReturnsHelperName");
+    Assert.assertEquals(
+        callerName, "testStackUtils_GetCallerName_FromHelperMethod_ReturnsHelperName");
   }
 
   private String helperMethod() {
@@ -417,10 +420,7 @@ public class CommonUtilTest extends BaseTest {
     // Arrange
     JsonObject json =
         new JsonObject()
-            .put(
-                "level1",
-                new JsonObject()
-                    .put("level2", new JsonObject().put("level3", "value")));
+            .put("level1", new JsonObject().put("level2", new JsonObject().put("level3", "value")));
 
     // Act
     Object result = JsonUtils.getValueFromNestedJson(json, "level1.level2.level3");
@@ -435,8 +435,7 @@ public class CommonUtilTest extends BaseTest {
   @Test
   public void testCompletableFutureUtils_ToSingle_WithCompletableFuture_ReturnsSingle() {
     // Arrange
-    CompletableFuture<String> completableFuture =
-        CompletableFuture.supplyAsync(() -> "test-value");
+    CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> "test-value");
     io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
 
     // Act
@@ -585,4 +584,3 @@ public class CommonUtilTest extends BaseTest {
     }
   }
 }
-

@@ -47,4 +47,3 @@ public class CacheNotFoundExceptionTest {
     Assert.assertNull(exception.getMessage());
   }
 }
-
