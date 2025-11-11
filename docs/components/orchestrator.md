@@ -1,8 +1,8 @@
 # Orchestrator
 
-The Orchestrator Service acts as the control plane for the Log Central system, managing critical operations including metadata synchronization, log sync delay tracking, and Spark job monitoring. Currently supports AWS for component sync and delay metrics.
+The Orchestrator Service acts as the control plane for the Logwise system, managing critical operations including metadata synchronization, log sync delay tracking, and Spark job monitoring. Currently supports AWS for component sync and delay metrics.
 
-## Architecture in Log Central
+## Architecture in Logwise
 
 ```
 Vector → Kafka → Spark Jobs → Object Storage (S3) 
