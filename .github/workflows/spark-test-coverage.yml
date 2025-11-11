@@ -55,7 +55,7 @@ jobs:
       - name: Run tests with coverage check
         if: steps.changes.outputs.has_changes == 'true' || github.event_name == 'workflow_dispatch'
         working-directory: spark
-        run: mvn clean test jacoco:report jacoco:check
+        run: mvn clean verify
 
       - name: Upload coverage report
         if: always() && (steps.changes.outputs.has_changes == 'true' || github.event_name == 'workflow_dispatch')
