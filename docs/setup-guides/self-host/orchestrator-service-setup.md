@@ -1,10 +1,10 @@
 ---
-title: Log Central Orchestrator (Self-Host)
+title: Logwise Orchestrator (Self-Host)
 ---
 
-# Log Central Orchestrator — Self-Hosted Setup
+# Logwise Orchestrator — Self-Hosted Setup
 
-Follow these steps to run Log Central Orchestrator as a standalone self-hosted application using the JAR file.
+Follow these steps to run Logwise Orchestrator as a standalone self-hosted application using the JAR file.
 
 ## Prerequisites
 
@@ -63,7 +63,7 @@ CREATE TABLE `spark_submit_status` (
 Navigate to the project directory and build the fat JAR:
 
 ```bash
-cd /path/to/log-central-orchestrator
+cd logwise/orchestrator
 mvn clean package
 ```
 
