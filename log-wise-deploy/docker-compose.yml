@@ -27,9 +27,7 @@ services:
     env_file:
       - .env
     environment:
-      # Vector → Kafka parameters (provided in .env)
       - KAFKA_BROKERS=${KAFKA_BROKERS}
-      # Enable Vector internal API (not exposed outside network)
       - VECTOR_API_VERSION=2
       - VECTOR_API_ADDRESS=0.0.0.0:8686
       - VECTOR_WATCH_CONFIG=true
@@ -53,27 +51,6 @@ services:
       retries: 10
     restart: unless-stopped
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.6.0
-    container_name: lc_zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_4LW_COMMANDS_WHITELIST: srvr,ruok,stat,conf
-    volumes:
-      - zookeeper_data:/var/lib/zookeeper
-    expose:
-      - "2181"
-    networks:
-      - lc_net
-    healthcheck:
-      test: ["CMD", "bash", "-lc", "zookeeper-shell localhost:2181 ls / >/dev/null 2>&1"]
-      interval: 10s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
-    restart: unless-stopped
-
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     container_name: lc_kafka
@@ -81,10 +58,18 @@ services:
       - .env
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      # KRaft mode (no ZooKeeper)
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      # Cluster ID required in KRaft mode (static ID; can be customized via .env)
+      KAFKA_CLUSTER_ID: ${KAFKA_CLUSTER_ID:-9ZkYwXlQ2Tq8rBn5JcH0xA}
+      CLUSTER_ID: ${KAFKA_CLUSTER_ID:-9ZkYwXlQ2Tq8rBn5JcH0xA}
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://kafka:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -101,9 +86,6 @@ services:
       - "9999"  # JMX port for Kafka Manager polling
     networks:
       - lc_net
-    depends_on:
-      zookeeper:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "bash", "-lc", "kafka-topics --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
       interval: 15s
@@ -162,8 +144,8 @@ services:
       - KAFKA_TOPIC=${KAFKA_TOPIC}
       # Internal base URL (used by cron jobs)
       - ORCH_INTERNAL_BASE_URL=http://orchestrator:8080
-    volumes:
-      - ./orchestrator/application.yml:/config/application.yml:ro
+    # volumes:
+      # - ./orchestrator/application.yml:/config/application.yml:ro
     ports:
       - "${ORCH_PORT:-8080}:8080" # user-facing (optional for local dev)
     networks:
@@ -180,56 +162,6 @@ services:
       retries: 20
       start_period: 20s
     restart: unless-stopped
-
-  # kafka-manager:
-  #   image: hlebalbau/kafka-manager:stable
-  #   platform: linux/amd64
-  #   container_name: lc_kafka_manager
-  #   environment:
-  #     ZK_HOSTS: zookeeper:2181
-  #     APPLICATION_SECRET: change_me_secret
-  #     KM_ARGS: -Dpidfile.path=/dev/null
-  #   networks:
-  #     - lc_net
-  #   depends_on:
-  #     zookeeper:
-  #       condition: service_healthy
-  #     kafka:
-  #       condition: service_healthy
-  #   ports:
-  #     - "${KAFKA_MANAGER_PORT:-9000}:9000"
-  #   healthcheck:
-  #     test: ["CMD", "bash", "-lc", "wget -qO- http://localhost:9000 | grep -i kafka >/dev/null"]
-  #     interval: 15s
-  #     timeout: 10s
-  #     retries: 20
-  #     start_period: 20s
-  #   restart: unless-stopped
-
-  # kafka-manager-init:
-  #   image: alpine:3.20
-  #   container_name: lc_kafka_manager_init
-  #   environment:
-  #     ZK_HOSTS: zookeeper:2181
-  #     CLUSTER_NAME: logwise
-  #     KAFKA_MANAGER_HOST: kafka-manager
-  #     KAFKA_MANAGER_PORT: 9000
-  #     KAFKA_VERSION: 2.4.0
-  #     KAFKA_HOST: kafka
-  #     KAFKA_JMX_PORT: 9999
-  #   networks:
-  #     - lc_net
-  #   depends_on:
-  #     kafka-manager:
-  #       condition: service_started
-  #     kafka:
-  #       condition: service_healthy
-  #     zookeeper:
-  #       condition: service_healthy
-  #   volumes:
-  #     - ./kafka-manager/init-cluster.sh:/init-cluster.sh:ro
-  #   entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl netcat-openbsd && /init-cluster.sh"]
-  #   restart: "on-failure"
 
   spark-master:
     build:
@@ -300,50 +232,6 @@ services:
     restart: unless-stopped
     mem_limit: 3g
     cpus: "2.00"
-
-  # spark-worker-2:
-  #   build:
-  #     context: ./spark
-  #     dockerfile: Dockerfile
-  #   container_name: lc_spark_worker_2
-  #   environment:
-  #     - SPARK_MODE=worker
-  #     - SPARK_WORKER_MEMORY=2g
-  #     - SPARK_WORKER_CORES=2
-  #   command: ["bash", "-lc", 
-  #     "mkdir -p /opt/spark/logs && SPARK_WORKER_OPTS='-Dspark.worker.memory=2048m' /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077 --webui-port 8081 --memory 2048m --cores 2"]
-  #   networks:
-  #     - lc_net
-  #   volumes:
-  #     - ./d11-log-management-spark/central-log-management-spark-2.0.4-SNAPSHOT.jar:/opt/app/app.jar:ro
-  #     # - ./spark-kafka-vector:/opt/spark/work-dir
-  #     - ./log4j.properties:/opt/spark/conf/log4j.properties:ro
-  #     - spark_worker_logs:/opt/spark/logs
-  #     # - ./spark-work-dir:/opt/spark/work
-  #   depends_on:
-  #     spark-master:
-  #       condition: service_started
-  #   ports: 
-  #     - "8081:8081"
-  #   healthcheck:
-  #     test: ["CMD", "bash", "-lc", "wget -qO- http://localhost:8081 >/dev/null"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 20
-  #     start_period: 10s
-  #   restart: unless-stopped
-  #   mem_limit: 3g
-  #   cpus: "2.00"
-  # spark-build:
-  #   image: maven:3-eclipse-temurin-17
-  #   container_name: lc_spark_build
-  #   working_dir: /workspace
-  #   volumes:
-  #     - ./d11-log-managament-spark:/workspace
-  #   command: ["bash", "-lc", "mvn -B -T 4 clean package -Dmaven.test.skip -Dmaven.artifact.threads=10 -Paws && cd target && set -e; JAR=$(ls -1 *.jar | grep -v sources | head -n1); ln -sf \"$JAR\" app.jar; echo Built $JAR and linked app.jar"]
-  #   networks:
-  #     - lc_net
-  #   restart: "no"
 
   spark-client:
     build:
