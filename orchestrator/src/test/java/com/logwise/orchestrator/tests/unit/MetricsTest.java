@@ -1,19 +1,19 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.dream11.logcentralorchestrator.constants.TestConstants;
-import com.dream11.logcentralorchestrator.dto.response.LogSyncDelayResponse;
-import com.dream11.logcentralorchestrator.enums.Tenant;
-import com.dream11.logcentralorchestrator.rest.io.Response;
-import com.dream11.logcentralorchestrator.rest.v1.Metrics;
-import com.dream11.logcentralorchestrator.service.MetricsService;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
-import com.dream11.logcentralorchestrator.util.ResponseWrapper;
-import com.dream11.logcentralorchestrator.util.TestResponseWrapper;
+import com.logwise.orchestrator.constants.TestConstants;
+import com.logwise.orchestrator.dto.response.LogSyncDelayResponse;
+import com.logwise.orchestrator.enums.Tenant;
+import com.logwise.orchestrator.rest.MetricSyncDelay;
+import com.logwise.orchestrator.rest.io.Response;
+import com.logwise.orchestrator.service.MetricsService;
+import com.logwise.orchestrator.setup.BaseTest;
+import com.logwise.orchestrator.util.ResponseWrapper;
+import com.logwise.orchestrator.util.TestResponseWrapper;
 import io.reactivex.Single;
 import java.util.concurrent.CompletionStage;
 import org.mockito.Mock;
@@ -27,23 +27,21 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 /** Unit tests for Metrics API - getObjectStoreSyncDelay endpoint. */
-@Listeners(com.dream11.logcentralorchestrator.listeners.ExtentReportListener.class)
+@Listeners(com.logwise.orchestrator.listeners.ExtentReportListener.class)
 public class MetricsTest extends BaseTest {
 
-  // Test Constants
   private static final int MAX_DELAY_MINUTES = 1440; // 24 hours * 60 minutes
 
   @Mock private MetricsService metricsService;
 
-  private Metrics metrics;
+  private MetricSyncDelay metrics;
 
   @BeforeMethod
   public void setUp() throws Exception {
     super.setUp();
     MockitoAnnotations.openMocks(this);
-    // Since Metrics uses @RequiredArgsConstructor with final fields,
-    // we need to manually inject using reflection
-    metrics = new Metrics(metricsService);
+
+    metrics = new MetricSyncDelay(metricsService);
   }
 
   @AfterClass
@@ -54,7 +52,7 @@ public class MetricsTest extends BaseTest {
   @Test
   public void testGetObjectStoreSyncDelay_WithValidTenant_ReturnsLogSyncDelayResponse()
       throws Exception {
-    // Arrange
+
     LogSyncDelayResponse expectedResponse =
         LogSyncDelayResponse.builder()
             .tenant(TestConstants.VALID_TENANT_NAME)
@@ -64,7 +62,6 @@ public class MetricsTest extends BaseTest {
     when(metricsService.computeLogSyncDelay(any(Tenant.class)))
         .thenReturn(Single.just(expectedResponse));
 
-    // Mock ResponseWrapper to use TestResponseWrapper instead
     try (MockedStatic<ResponseWrapper> mockedResponseWrapper =
         Mockito.mockStatic(ResponseWrapper.class)) {
       mockedResponseWrapper
@@ -76,11 +73,9 @@ public class MetricsTest extends BaseTest {
                 return TestResponseWrapper.fromSingle(single, statusCode);
               });
 
-      // Act
       CompletionStage<Response<LogSyncDelayResponse>> result =
           metrics.getObjectStoreSyncDelay(TestConstants.VALID_TENANT_NAME);
 
-      // Assert
       Response<LogSyncDelayResponse> response = result.toCompletableFuture().get();
       Assert.assertNotNull(response, "Response should not be null");
       Assert.assertEquals(response.getHttpStatusCode(), 200, "HTTP status code should be 200");
@@ -89,8 +84,6 @@ public class MetricsTest extends BaseTest {
       LogSyncDelayResponse responseData = response.getData();
       Assert.assertNotNull(responseData, "Response data should not be null");
 
-      // Verify all fields in LogSyncDelayResponse
-      // Verify tenant field
       Assert.assertNotNull(responseData.getTenant(), "Tenant should not be null");
       Assert.assertEquals(
           responseData.getTenant(),
@@ -98,7 +91,6 @@ public class MetricsTest extends BaseTest {
           "Tenant should match expected value");
       Assert.assertFalse(responseData.getTenant().isEmpty(), "Tenant should not be empty");
 
-      // Verify appLogsDelayMinutes field
       Assert.assertNotNull(
           responseData.getAppLogsDelayMinutes(), "App logs delay minutes should not be null");
       Assert.assertEquals(
@@ -109,10 +101,8 @@ public class MetricsTest extends BaseTest {
           responseData.getAppLogsDelayMinutes() >= 0,
           "App logs delay minutes should be non-negative");
 
-      // Verify service was called with correct tenant
-      verify(metricsService, times(1)).computeLogSyncDelay(eq(Tenant.D11_Prod_AWS));
+      verify(metricsService, times(1)).computeLogSyncDelay(eq(Tenant.ABC));
 
-      // Verify ResponseWrapper was called with correct status code
       mockedResponseWrapper.verify(
           () -> ResponseWrapper.fromSingle(any(Single.class), eq(200)), times(1));
     }
@@ -121,12 +111,11 @@ public class MetricsTest extends BaseTest {
   @Test(expectedExceptions = Exception.class)
   public void testGetObjectStoreSyncDelay_WhenMetricsComputationFails_PropagatesException()
       throws Exception {
-    // Arrange
+
     RuntimeException error = new RuntimeException("Metrics computation failed");
 
     when(metricsService.computeLogSyncDelay(any(Tenant.class))).thenReturn(Single.error(error));
 
-    // Mock ResponseWrapper to use TestResponseWrapper instead
     try (MockedStatic<ResponseWrapper> mockedResponseWrapper =
         Mockito.mockStatic(ResponseWrapper.class)) {
       mockedResponseWrapper
@@ -138,21 +127,18 @@ public class MetricsTest extends BaseTest {
                 return TestResponseWrapper.fromSingle(single, statusCode);
               });
 
-      // Act - should throw Exception
       CompletionStage<Response<LogSyncDelayResponse>> result =
           metrics.getObjectStoreSyncDelay(TestConstants.VALID_TENANT_NAME);
 
-      // Assert
       result.toCompletableFuture().get();
 
-      // Verify service was called with correct tenant
-      verify(metricsService, times(1)).computeLogSyncDelay(eq(Tenant.D11_Prod_AWS));
+      verify(metricsService, times(1)).computeLogSyncDelay(eq(Tenant.ABC));
     }
   }
 
   @Test
   public void testGetObjectStoreSyncDelay_WithNoLogsFound_ReturnsMaxDelay() throws Exception {
-    // Arrange
+
     LogSyncDelayResponse expectedResponse =
         LogSyncDelayResponse.builder()
             .tenant(TestConstants.VALID_TENANT_NAME)
@@ -162,7 +148,6 @@ public class MetricsTest extends BaseTest {
     when(metricsService.computeLogSyncDelay(any(Tenant.class)))
         .thenReturn(Single.just(expectedResponse));
 
-    // Mock ResponseWrapper to use TestResponseWrapper instead
     try (MockedStatic<ResponseWrapper> mockedResponseWrapper =
         Mockito.mockStatic(ResponseWrapper.class)) {
       mockedResponseWrapper
@@ -174,11 +159,9 @@ public class MetricsTest extends BaseTest {
                 return TestResponseWrapper.fromSingle(single, statusCode);
               });
 
-      // Act
       CompletionStage<Response<LogSyncDelayResponse>> result =
           metrics.getObjectStoreSyncDelay(TestConstants.VALID_TENANT_NAME);
 
-      // Assert
       Response<LogSyncDelayResponse> response = result.toCompletableFuture().get();
       Assert.assertNotNull(response, "Response should not be null");
       Assert.assertEquals(response.getHttpStatusCode(), 200, "HTTP status code should be 200");
@@ -187,8 +170,6 @@ public class MetricsTest extends BaseTest {
       LogSyncDelayResponse responseData = response.getData();
       Assert.assertNotNull(responseData, "Response data should not be null");
 
-      // Verify all fields in LogSyncDelayResponse
-      // Verify tenant field
       Assert.assertNotNull(responseData.getTenant(), "Tenant should not be null");
       Assert.assertEquals(
           responseData.getTenant(),
@@ -196,7 +177,6 @@ public class MetricsTest extends BaseTest {
           "Tenant should match expected value");
       Assert.assertFalse(responseData.getTenant().isEmpty(), "Tenant should not be empty");
 
-      // Verify appLogsDelayMinutes is set to max delay when no logs found
       Assert.assertNotNull(
           responseData.getAppLogsDelayMinutes(), "App logs delay minutes should not be null");
       Assert.assertEquals(
@@ -206,8 +186,7 @@ public class MetricsTest extends BaseTest {
       Assert.assertTrue(
           responseData.getAppLogsDelayMinutes() > 0, "App logs delay minutes should be positive");
 
-      // Verify service was called with correct tenant
-      verify(metricsService, times(1)).computeLogSyncDelay(eq(Tenant.D11_Prod_AWS));
+      verify(metricsService, times(1)).computeLogSyncDelay(eq(Tenant.ABC));
     }
   }
 }

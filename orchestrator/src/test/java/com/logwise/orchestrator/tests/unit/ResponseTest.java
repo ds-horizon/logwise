@@ -1,7 +1,7 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
-import com.dream11.logcentralorchestrator.rest.io.Error;
-import com.dream11.logcentralorchestrator.rest.io.Response;
+import com.logwise.orchestrator.rest.io.Error;
+import com.logwise.orchestrator.rest.io.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -72,7 +72,6 @@ public class ResponseTest {
     Assert.assertEquals(response.getData().getValue(), Integer.valueOf(123));
   }
 
-  // Helper class for testing
   private static class TestObject {
     private String name;
     private Integer value;

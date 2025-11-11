@@ -1,8 +1,8 @@
-package com.dream11.logcentralorchestrator.tests.unit.rest;
+package com.logwise.orchestrator.tests.unit.rest;
 
-import com.dream11.logcentralorchestrator.rest.TypeValidationError;
-import com.dream11.logcentralorchestrator.rest.converter.*;
-import com.dream11.logcentralorchestrator.rest.exception.RestException;
+import com.logwise.orchestrator.rest.TypeValidationError;
+import com.logwise.orchestrator.rest.converter.*;
+import com.logwise.orchestrator.rest.exception.RestException;
 import java.lang.annotation.Annotation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -12,33 +12,30 @@ public class ParamConverterTest {
 
   @Test
   public void testParseParam_WithValidInput_ReturnsParsedValue() {
-    // Arrange - Test through IntegerParamConverter since parseParam is protected
+
     IntegerParamConverter converter = new IntegerParamConverter(new Annotation[0]);
 
-    // Act
     Integer result = converter.fromString("123");
 
-    // Assert
     Assert.assertEquals(result, Integer.valueOf(123));
   }
 
   @Test
   public void testParseParam_WithInvalidInput_ThrowsException() {
-    // Arrange - Test through IntegerParamConverter since parseParam is protected
+
     IntegerParamConverter converter = new IntegerParamConverter(new Annotation[0]);
 
-    // Act & Assert
     try {
       converter.fromString("invalid");
       Assert.fail("Should have thrown exception");
     } catch (NumberFormatException e) {
-      // Expected
+
     }
   }
 
   @Test
   public void testParseParam_WithInvalidInputAndTypeValidationError_ThrowsRestException() {
-    // Arrange
+
     TypeValidationError annotation =
         new TypeValidationError() {
           @Override
@@ -63,7 +60,6 @@ public class ParamConverterTest {
         };
     IntegerParamConverter converter = new IntegerParamConverter(new Annotation[] {annotation});
 
-    // Act & Assert
     try {
       converter.fromString("invalid");
       Assert.fail("Should have thrown RestException");
@@ -75,7 +71,7 @@ public class ParamConverterTest {
 
   @Test
   public void testConstructor_WithTypeValidationError_SetsErrorAndStatusCode() {
-    // Arrange
+
     TypeValidationError annotation =
         new TypeValidationError() {
           @Override
@@ -99,10 +95,8 @@ public class ParamConverterTest {
           }
         };
 
-    // Act
     IntegerParamConverter converter = new IntegerParamConverter(new Annotation[] {annotation});
 
-    // Assert
     Assert.assertNotNull(converter.getError());
     Assert.assertEquals(converter.getError().getCode(), "TEST_CODE");
     Assert.assertEquals(converter.getError().getMessage(), "Test message");
@@ -111,15 +105,12 @@ public class ParamConverterTest {
 
   @Test
   public void testConstructor_WithoutTypeValidationError_DoesNotSetError() {
-    // Arrange & Act
+
     IntegerParamConverter converter = new IntegerParamConverter(new Annotation[0]);
 
-    // Assert
     Assert.assertNull(converter.getError());
     Assert.assertEquals(converter.getHttpStatusCode(), 0);
   }
-
-  // ========== IntegerParamConverter Tests ==========
 
   @Test
   public void testIntegerParamConverter_FromString_WithValidInteger_ReturnsInteger() {
@@ -142,7 +133,7 @@ public class ParamConverterTest {
       converter.fromString("not-a-number");
       Assert.fail("Should have thrown exception");
     } catch (NumberFormatException e) {
-      // Expected
+
     }
   }
 
@@ -152,8 +143,6 @@ public class ParamConverterTest {
     String result = converter.toString(123);
     Assert.assertEquals(result, "123");
   }
-
-  // ========== LongParamConverter Tests ==========
 
   @Test
   public void testLongParamConverter_FromString_WithValidLong_ReturnsLong() {
@@ -176,7 +165,7 @@ public class ParamConverterTest {
       converter.fromString("not-a-number");
       Assert.fail("Should have thrown exception");
     } catch (NumberFormatException e) {
-      // Expected
+
     }
   }
 
@@ -186,8 +175,6 @@ public class ParamConverterTest {
     String result = converter.toString(1234567890123L);
     Assert.assertEquals(result, "1234567890123");
   }
-
-  // ========== DoubleParamConverter Tests ==========
 
   @Test
   public void testDoubleParamConverter_FromString_WithValidDouble_ReturnsDouble() {
@@ -210,7 +197,7 @@ public class ParamConverterTest {
       converter.fromString("not-a-number");
       Assert.fail("Should have thrown exception");
     } catch (NumberFormatException e) {
-      // Expected
+
     }
   }
 
@@ -220,8 +207,6 @@ public class ParamConverterTest {
     String result = converter.toString(123.456);
     Assert.assertEquals(result, "123.456");
   }
-
-  // ========== FloatParamConverter Tests ==========
 
   @Test
   public void testFloatParamConverter_FromString_WithValidFloat_ReturnsFloat() {
@@ -244,7 +229,7 @@ public class ParamConverterTest {
       converter.fromString("not-a-number");
       Assert.fail("Should have thrown exception");
     } catch (NumberFormatException e) {
-      // Expected
+
     }
   }
 

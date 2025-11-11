@@ -1,8 +1,8 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
-import com.dream11.logcentralorchestrator.rest.exception.RestError;
-import com.dream11.logcentralorchestrator.rest.exception.RestException;
-import com.dream11.logcentralorchestrator.rest.io.Error;
+import com.logwise.orchestrator.rest.exception.RestError;
+import com.logwise.orchestrator.rest.exception.RestException;
+import com.logwise.orchestrator.rest.io.Error;
 import io.vertx.core.json.JsonObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -153,9 +153,8 @@ public class RestExceptionTest {
     Error error = Error.of("CODE", "Message");
     RestException exception = new RestException("Test message", error);
 
-    // oldErrorKeys defaults to false
     exception.setOldErrorKeys(true);
-    // Verify setter works (we can't directly check the value without reflection)
+
     Assert.assertNotNull(exception);
   }
 
@@ -167,7 +166,6 @@ public class RestExceptionTest {
 
     RestException.mergeIntoOldErrorMap(map);
 
-    // Verify map was merged (no exception thrown)
     Assert.assertNotNull(map);
   }
 }

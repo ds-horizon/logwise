@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
-import com.dream11.logcentralorchestrator.setup.BaseTest;
+import com.logwise.orchestrator.setup.BaseTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 
@@ -15,8 +15,7 @@ public class HealthCheckDaoTest extends BaseTest {
   @BeforeMethod
   public void setUp() throws Exception {
     super.setUp();
-    // MysqlClient is a generated RxGen class that Mockito cannot mock
-    // These tests are disabled - use integration tests with Testcontainers instead
+
     throw new org.testng.SkipException(
         "MysqlClient cannot be mocked - requires integration test setup");
   }
@@ -25,6 +24,4 @@ public class HealthCheckDaoTest extends BaseTest {
   public static void tearDownClass() {
     BaseTest.cleanup();
   }
-
-  // All test methods removed - use integration tests with Testcontainers instead
 }

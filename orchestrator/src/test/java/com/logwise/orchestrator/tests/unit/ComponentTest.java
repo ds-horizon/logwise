@@ -1,20 +1,20 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.dream11.logcentralorchestrator.constants.TestConstants;
-import com.dream11.logcentralorchestrator.dto.request.ComponentSyncRequest;
-import com.dream11.logcentralorchestrator.dto.response.DefaultSuccessResponse;
-import com.dream11.logcentralorchestrator.enums.Tenant;
-import com.dream11.logcentralorchestrator.rest.io.Response;
-import com.dream11.logcentralorchestrator.rest.v1.Component;
-import com.dream11.logcentralorchestrator.service.ServiceManagerService;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
-import com.dream11.logcentralorchestrator.util.ResponseWrapper;
-import com.dream11.logcentralorchestrator.util.TestResponseWrapper;
+import com.logwise.orchestrator.constants.TestConstants;
+import com.logwise.orchestrator.dto.request.ComponentSyncRequest;
+import com.logwise.orchestrator.dto.response.DefaultSuccessResponse;
+import com.logwise.orchestrator.enums.Tenant;
+import com.logwise.orchestrator.rest.SyncComponents;
+import com.logwise.orchestrator.rest.io.Response;
+import com.logwise.orchestrator.service.ServiceManagerService;
+import com.logwise.orchestrator.setup.BaseTest;
+import com.logwise.orchestrator.util.ResponseWrapper;
+import com.logwise.orchestrator.util.TestResponseWrapper;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.concurrent.CompletionStage;
@@ -29,20 +29,18 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 /** Unit tests for Component API - syncHandler endpoint. */
-@Listeners(com.dream11.logcentralorchestrator.listeners.ExtentReportListener.class)
+@Listeners(com.logwise.orchestrator.listeners.ExtentReportListener.class)
 public class ComponentTest extends BaseTest {
 
   @Mock private ServiceManagerService serviceManagerService;
 
-  private Component component;
+  private SyncComponents component;
 
   @BeforeMethod
   public void setUp() throws Exception {
     super.setUp();
     MockitoAnnotations.openMocks(this);
-    // Since Component uses @RequiredArgsConstructor with final fields,
-    // we can directly pass the mock in constructor
-    component = new Component(serviceManagerService);
+    component = new SyncComponents(serviceManagerService);
   }
 
   @AfterClass
@@ -53,13 +51,11 @@ public class ComponentTest extends BaseTest {
   @Test
   public void testSyncHandler_WithApplicationComponentType_ReturnsSuccessResponse()
       throws Exception {
-    // Arrange
     ComponentSyncRequest request = new ComponentSyncRequest();
     request.setComponentType(TestConstants.APPLICATION_COMPONENT_TYPE);
 
     when(serviceManagerService.syncServices(any(Tenant.class))).thenReturn(Completable.complete());
 
-    // Mock ResponseWrapper to use TestResponseWrapper instead
     try (MockedStatic<ResponseWrapper> mockedResponseWrapper =
         Mockito.mockStatic(ResponseWrapper.class)) {
       mockedResponseWrapper
@@ -71,11 +67,9 @@ public class ComponentTest extends BaseTest {
                 return TestResponseWrapper.fromSingle(single, statusCode);
               });
 
-      // Act
       CompletionStage<Response<DefaultSuccessResponse>> result =
           component.syncHandler(TestConstants.VALID_TENANT_NAME, request);
 
-      // Assert
       Response<DefaultSuccessResponse> response = result.toCompletableFuture().get();
       Assert.assertNotNull(response, "Response should not be null");
       Assert.assertEquals(response.getHttpStatusCode(), 200, "HTTP status code should be 200");
@@ -84,11 +78,9 @@ public class ComponentTest extends BaseTest {
       DefaultSuccessResponse responseData = response.getData();
       Assert.assertNotNull(responseData, "Response data should not be null");
 
-      // Verify all fields in DefaultSuccessResponse
       Assert.assertTrue(responseData.isSuccess(), "Success field should be true");
       Assert.assertNotNull(responseData.getMessage(), "Response message should not be null");
 
-      // Verify message format and content
       String message = responseData.getMessage();
       String expectedMessageFormat =
           "Successfully synced componentType: "
@@ -104,10 +96,8 @@ public class ComponentTest extends BaseTest {
           message.contains(TestConstants.VALID_TENANT_NAME),
           "Response message should contain tenant name");
 
-      // Verify service was called with correct tenant
-      verify(serviceManagerService, times(1)).syncServices(eq(Tenant.D11_Prod_AWS));
+      verify(serviceManagerService, times(1)).syncServices(eq(Tenant.ABC));
 
-      // Verify ResponseWrapper was called with correct status code
       mockedResponseWrapper.verify(
           () -> ResponseWrapper.fromSingle(any(Single.class), eq(200)), times(1));
     }
@@ -115,7 +105,6 @@ public class ComponentTest extends BaseTest {
 
   @Test(expectedExceptions = Exception.class)
   public void testSyncHandler_WhenServiceSyncFails_PropagatesException() throws Exception {
-    // Arrange
     ComponentSyncRequest request = new ComponentSyncRequest();
     request.setComponentType(TestConstants.APPLICATION_COMPONENT_TYPE);
 
@@ -123,7 +112,6 @@ public class ComponentTest extends BaseTest {
     when(serviceManagerService.syncServices(any(Tenant.class)))
         .thenReturn(Completable.error(error));
 
-    // Mock ResponseWrapper to use TestResponseWrapper instead
     try (MockedStatic<ResponseWrapper> mockedResponseWrapper =
         Mockito.mockStatic(ResponseWrapper.class)) {
       mockedResponseWrapper
@@ -135,15 +123,12 @@ public class ComponentTest extends BaseTest {
                 return TestResponseWrapper.fromSingle(single, statusCode);
               });
 
-      // Act - should throw Exception
       CompletionStage<Response<DefaultSuccessResponse>> result =
           component.syncHandler(TestConstants.VALID_TENANT_NAME, request);
 
-      // Assert
       result.toCompletableFuture().get();
 
-      // Verify service was called with correct tenant
-      verify(serviceManagerService, times(1)).syncServices(eq(Tenant.D11_Prod_AWS));
+      verify(serviceManagerService, times(1)).syncServices(eq(Tenant.ABC));
     }
   }
 }

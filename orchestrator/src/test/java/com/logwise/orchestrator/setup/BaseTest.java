@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.setup;
+package com.logwise.orchestrator.setup;
 
-import com.dream11.logcentralorchestrator.util.TestResponseWrapper;
+import com.logwise.orchestrator.util.TestResponseWrapper;
 import io.vertx.core.Vertx;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -15,7 +15,7 @@ public abstract class BaseTest {
 
   @BeforeMethod
   public void setUp() throws Exception {
-    // Initialize Vertx if not already initialized
+
     if (vertx == null) {
       vertx = Vertx.vertx();
       TestResponseWrapper.init(vertx);
@@ -23,11 +23,7 @@ public abstract class BaseTest {
   }
 
   @AfterMethod
-  public void tearDown() {
-    // Common teardown logic can be added here
-    // For example: cleaning up resources, resetting mocks, etc.
-    // Note: We don't close Vertx here as it's shared across tests
-  }
+  public void tearDown() {}
 
   /**
    * Cleanup method to be called after all tests in a class are done. Should be called

@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.testconfig;
+package com.logwise.orchestrator.testconfig;
 
-import com.dream11.logcentralorchestrator.config.ApplicationConfig;
+import com.logwise.orchestrator.config.ApplicationConfig;
 import lombok.experimental.UtilityClass;
 
 /**

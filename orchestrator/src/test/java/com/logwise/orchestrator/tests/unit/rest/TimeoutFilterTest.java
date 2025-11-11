@@ -1,9 +1,9 @@
-package com.dream11.logcentralorchestrator.tests.unit.rest;
+package com.logwise.orchestrator.tests.unit.rest;
 
-import com.dream11.logcentralorchestrator.common.app.AppContext;
-import com.dream11.logcentralorchestrator.rest.Timeout;
-import com.dream11.logcentralorchestrator.rest.filter.TimeoutFilter;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
+import com.logwise.orchestrator.common.app.AppContext;
+import com.logwise.orchestrator.rest.Timeout;
+import com.logwise.orchestrator.rest.filter.TimeoutFilter;
+import com.logwise.orchestrator.setup.BaseTest;
 import io.vertx.reactivex.core.Vertx;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -37,46 +37,34 @@ public class TimeoutFilterTest extends BaseTest {
 
   @Test
   public void testFilter_Request_WithMethodTimeout_CreatesTimer() {
-    // Note: TimeoutFilter requires ResourceInfo injection via @Context which is not available in
-    // unit tests
-    // This test verifies the filter can be instantiated
+
     Assert.assertNotNull(timeoutFilter);
   }
 
   @Test
   public void testFilter_Response_CancelsTimer() {
-    // Arrange
+
     Long timerId = 12345L;
     Mockito.when(mockRequestContext.getProperty("__TIMER_ID__")).thenReturn(timerId);
 
-    // Act
     timeoutFilter.filter(mockRequestContext, mockResponseContext);
 
-    // Assert
     Mockito.verify(mockVertx).cancelTimer(timerId);
     Mockito.verify(mockRequestContext).removeProperty("__TIMER_ID__");
   }
 
   @Test
   public void testFilter_Response_WithoutTimer_DoesNothing() {
-    // Arrange
+
     Mockito.when(mockRequestContext.getProperty("__TIMER_ID__")).thenReturn(null);
 
-    // Act
     timeoutFilter.filter(mockRequestContext, mockResponseContext);
 
-    // Assert
     Mockito.verify(mockVertx, Mockito.never()).cancelTimer(Mockito.anyLong());
   }
 
-  // Note: Testing request filter requires ResourceInfo injection and
-  // PostMatchContainerRequestContext
-  // which are complex to mock in unit tests. These would be better tested in integration tests.
-
   @Timeout(5000)
   private static class TestResource {
-    public void testMethod() {
-      // Test resource
-    }
+    public void testMethod() {}
   }
 }

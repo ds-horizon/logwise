@@ -1,8 +1,8 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
-import com.dream11.logcentralorchestrator.enums.ComponentType;
-import com.dream11.logcentralorchestrator.error.ServiceError;
-import com.dream11.logcentralorchestrator.rest.exception.RestException;
+import com.logwise.orchestrator.enums.ComponentType;
+import com.logwise.orchestrator.error.ServiceError;
+import com.logwise.orchestrator.rest.exception.RestException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

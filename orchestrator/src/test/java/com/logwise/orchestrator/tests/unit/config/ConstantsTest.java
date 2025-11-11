@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.tests.unit.config;
+package com.logwise.orchestrator.tests.unit.config;
 
-import com.dream11.logcentralorchestrator.config.constant.Constants;
+import com.logwise.orchestrator.config.constant.Constants;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -18,7 +18,7 @@ public class ConstantsTest {
 
   @BeforeMethod
   public void setUp() {
-    // Save original values
+
     originalConsulToken = System.getenv("CONSUL_TOKEN");
     originalEnv = System.getenv("ENV");
     originalNamespace = System.getenv("NAMESPACE");
@@ -29,7 +29,7 @@ public class ConstantsTest {
 
   @AfterMethod
   public void tearDown() {
-    // Restore original values
+
     if (originalConsulToken != null) {
       System.setProperty("CONSUL_TOKEN", originalConsulToken);
     }
@@ -54,41 +54,38 @@ public class ConstantsTest {
 
   @Test
   public void testConsulToken_CanBeAccessed() {
-    // Note: Constants are initialized at class load time, so we can't easily test with different
-    // env vars
-    // This test verifies the constant exists and can be accessed
+
     String consulToken = Constants.CONSUL_TOKEN;
-    // May be null if env var not set - that's acceptable
-    // Just verify we can access it without exception
+
     Assert.assertTrue(true); // Constant accessed successfully
   }
 
   @Test
   public void testEnv_CanBeAccessed() {
-    // Note: Constants are initialized at class load time
+
     String env = Constants.ENV;
-    // May be null if env var not set - that's acceptable
+
     Assert.assertTrue(true); // Constant accessed successfully
   }
 
   @Test
   public void testNamespace_CanBeAccessed() {
     String namespace = Constants.NAMESPACE;
-    // May be null if env var not set - that's acceptable
+
     Assert.assertTrue(true); // Constant accessed successfully
   }
 
   @Test
   public void testServiceName_CanBeAccessed() {
     String serviceName = Constants.SERVICE_NAME;
-    // May be null if env var not set - that's acceptable
+
     Assert.assertTrue(true); // Constant accessed successfully
   }
 
   @Test
   public void testVaultToken_CanBeAccessed() {
     String vaultToken = Constants.VAULT_TOKEN;
-    // May be null if env var not set - that's acceptable
+
     Assert.assertTrue(true); // Constant accessed successfully
   }
 }

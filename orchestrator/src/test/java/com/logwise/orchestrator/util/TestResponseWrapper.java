@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.util;
+package com.logwise.orchestrator.util;
 
-import com.dream11.logcentralorchestrator.rest.io.Response;
+import com.logwise.orchestrator.rest.io.Response;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.vertx.core.Vertx;
@@ -29,7 +29,7 @@ public class TestResponseWrapper {
         value -> future.complete(Response.successfulResponse(value, httpStatusCode)),
         future::completeExceptionally,
         () -> future.complete(Response.successfulResponse(defaultValue, httpStatusCode)));
-    // Convert regular CompletableFuture to VertxCompletableFuture using test Vertx context
+
     return VertxCompletableFuture.from(testVertx.getOrCreateContext(), future);
   }
 
@@ -39,7 +39,7 @@ public class TestResponseWrapper {
     source.subscribe(
         value -> future.complete(Response.successfulResponse(value, httpStatusCode)),
         future::completeExceptionally);
-    // Convert regular CompletableFuture to VertxCompletableFuture using test Vertx context
+
     return VertxCompletableFuture.from(testVertx.getOrCreateContext(), future);
   }
 }

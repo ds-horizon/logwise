@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.tests.unit.rest;
+package com.logwise.orchestrator.tests.unit.rest;
 
-import com.dream11.logcentralorchestrator.rest.config.HttpConfig;
+import com.logwise.orchestrator.rest.config.HttpConfig;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -17,7 +17,7 @@ public class HttpConfigTest {
 
   @Test
   public void testDefaultValues_AreSetCorrectly() {
-    // Assert - Default values from the class
+
     Assert.assertEquals(
         httpConfig.getVertxLoggerDelegateFactoryClassName(),
         "io.vertx.core.logging.SLF4JLogDelegateFactory");
@@ -39,16 +39,14 @@ public class HttpConfigTest {
 
   @Test
   public void testGetPort_WithZeroPort_UsesSystemProperty() {
-    // Arrange
+
     String originalPort = System.getProperty("http.default.port");
     try {
       System.setProperty("http.default.port", "9090");
       httpConfig.setPort(0);
 
-      // Act
       int port = httpConfig.getPort();
 
-      // Assert
       Assert.assertEquals(port, 9090);
     } finally {
       if (originalPort != null) {
@@ -61,28 +59,24 @@ public class HttpConfigTest {
 
   @Test
   public void testGetPort_WithPositivePort_ReturnsPort() {
-    // Arrange
+
     httpConfig.setPort(8080);
 
-    // Act
     int port = httpConfig.getPort();
 
-    // Assert
     Assert.assertEquals(port, 8080);
   }
 
   @Test
   public void testGetPort_WithNoSystemProperty_UsesDefault8080() {
-    // Arrange
+
     String originalPort = System.getProperty("http.default.port");
     try {
       System.clearProperty("http.default.port");
       httpConfig.setPort(0);
 
-      // Act
       int port = httpConfig.getPort();
 
-      // Assert
       Assert.assertEquals(port, 8080);
     } finally {
       if (originalPort != null) {
@@ -93,7 +87,7 @@ public class HttpConfigTest {
 
   @Test
   public void testSetters_WorkCorrectly() {
-    // Act
+
     httpConfig.setVertxLoggerDelegateFactoryClassName("custom.factory");
     httpConfig.setHost("localhost");
     httpConfig.setPort(9090);
@@ -111,7 +105,6 @@ public class HttpConfigTest {
     httpConfig.setTcpKeepAlive(false);
     httpConfig.setUseAlpn(true);
 
-    // Assert
     Assert.assertEquals(httpConfig.getVertxLoggerDelegateFactoryClassName(), "custom.factory");
     Assert.assertEquals(httpConfig.getHost(), "localhost");
     Assert.assertEquals(httpConfig.getPort(), 9090);

@@ -1,9 +1,9 @@
-package com.dream11.logcentralorchestrator.tests.unit.common;
+package com.logwise.orchestrator.tests.unit.common;
 
-import com.dream11.logcentralorchestrator.common.app.AbstractApplication;
-import com.dream11.logcentralorchestrator.common.app.Deployable;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
 import com.google.inject.Module;
+import com.logwise.orchestrator.common.app.AbstractApplication;
+import com.logwise.orchestrator.common.app.Deployable;
+import com.logwise.orchestrator.setup.BaseTest;
 import io.vertx.reactivex.core.Vertx;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -22,16 +22,13 @@ public class AbstractApplicationTest extends BaseTest {
     testApplication = new TestApplication();
   }
 
-  // Note: Many methods in AbstractApplication are protected
-  // These tests verify the test application can be created and basic structure
   @Test
   public void testAbstractApplication_CanBeCreated() {
-    // Assert
+
     Assert.assertNotNull(testApplication);
     Assert.assertNotNull(AbstractApplication.NUM_OF_CORES);
   }
 
-  // Test implementation of AbstractApplication
   private static class TestApplication extends AbstractApplication {
     @Override
     protected Module[] getGoogleGuiceModules(Vertx vertx) {
@@ -44,8 +41,5 @@ public class AbstractApplicationTest extends BaseTest {
     }
   }
 
-  // Test Verticle
-  private static class TestVerticle extends io.vertx.core.AbstractVerticle {
-    // Test verticle implementation
-  }
+  private static class TestVerticle extends io.vertx.core.AbstractVerticle {}
 }

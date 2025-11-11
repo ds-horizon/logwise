@@ -1,4 +1,4 @@
-package com.dream11.logcentralorchestrator.listeners;
+package com.logwise.orchestrator.listeners;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -20,13 +20,12 @@ public class ExtentReportListener implements ITestListener {
 
   @Override
   public void onStart(ITestContext context) {
-    // Create test-output directory if it doesn't exist
+
     File testOutputDir = new File("test-output");
     if (!testOutputDir.exists()) {
       testOutputDir.mkdirs();
     }
 
-    // Initialize ExtentReports with Spark reporter
     ExtentSparkReporter sparkReporter =
         new ExtentSparkReporter("test-output/TestReport/report.html");
     sparkReporter.config().setTheme(Theme.DARK);
@@ -51,16 +50,13 @@ public class ExtentReportListener implements ITestListener {
 
     ExtentTest extentTest = extent.createTest(testName, description);
 
-    // Add author (test class name)
     String className = result.getTestClass().getName();
     String author = className.substring(className.lastIndexOf('.') + 1);
     extentTest.assignAuthor(author);
 
-    // Add tags based on test class and method
     extentTest.assignCategory("TestType:Unit");
     extentTest.assignCategory("TestRunType:WhiteBox");
 
-    // Determine test purpose based on method name
     String methodName = result.getMethod().getMethodName().toLowerCase();
     if (methodName.contains("failure")
         || methodName.contains("error")
@@ -71,7 +67,6 @@ public class ExtentReportListener implements ITestListener {
       extentTest.assignCategory("Purpose:Positive-Tests");
     }
 
-    // Add route/API based on test class
     if (className.contains("Component")) {
       extentTest.assignCategory("Route:componentSync");
     } else if (className.contains("Metrics")) {
@@ -117,12 +112,10 @@ public class ExtentReportListener implements ITestListener {
   private String getTestName(ITestResult result) {
     String methodName = result.getMethod().getMethodName();
 
-    // Remove "test" prefix if present
     if (methodName.startsWith("test")) {
       methodName = methodName.substring(4);
     }
 
-    // Split by underscore and capitalize each word
     String[] parts = methodName.split("_");
     StringBuilder testName = new StringBuilder("Test ");
 
@@ -130,7 +123,6 @@ public class ExtentReportListener implements ITestListener {
       String part = parts[i];
       if (part.isEmpty()) continue;
 
-      // Capitalize first letter
       testName.append(Character.toUpperCase(part.charAt(0)));
       if (part.length() > 1) {
         testName.append(part.substring(1).toLowerCase());

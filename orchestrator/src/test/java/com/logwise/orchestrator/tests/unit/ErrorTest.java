@@ -1,6 +1,6 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
-import com.dream11.logcentralorchestrator.rest.io.Error;
+import com.logwise.orchestrator.rest.io.Error;
 import io.vertx.core.json.JsonObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -47,7 +47,7 @@ public class ErrorTest {
   public void testEquals_WithSameCodeAndMessage_ReturnsTrue() {
     Error error1 = Error.of("CODE", "Message");
     Error error2 = Error.of("CODE", "Message");
-    // Note: Error doesn't override equals, so this tests object identity
+
     Assert.assertNotNull(error1);
     Assert.assertNotNull(error2);
   }

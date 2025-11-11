@@ -1,7 +1,7 @@
-package com.dream11.logcentralorchestrator.helper;
+package com.logwise.orchestrator.helper;
 
-import com.dream11.logcentralorchestrator.config.ApplicationConfig;
-import com.dream11.logcentralorchestrator.testconfig.ApplicationTestConfig;
+import com.logwise.orchestrator.config.ApplicationConfig;
+import com.logwise.orchestrator.testconfig.ApplicationTestConfig;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;

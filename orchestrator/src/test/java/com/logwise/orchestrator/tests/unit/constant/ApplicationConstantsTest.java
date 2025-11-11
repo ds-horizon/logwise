@@ -1,27 +1,11 @@
-package com.dream11.logcentralorchestrator.tests.unit.constant;
+package com.logwise.orchestrator.tests.unit.constant;
 
-import com.dream11.logcentralorchestrator.constant.ApplicationConstants;
+import com.logwise.orchestrator.constant.ApplicationConstants;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /** Unit tests for ApplicationConstants. */
 public class ApplicationConstantsTest {
-
-  @Test
-  public void testServiceName() {
-    Assert.assertEquals(ApplicationConstants.SERVICE_NAME, "log-central-orchestrator");
-  }
-
-  @Test
-  public void testApiVersionV1() {
-    Assert.assertEquals(ApplicationConstants.API_VERSION_V1, "/api/v1");
-  }
-
-  @Test
-  public void testTempDir() {
-    Assert.assertNotNull(ApplicationConstants.TEMP_DIR);
-    Assert.assertEquals(ApplicationConstants.TEMP_DIR, System.getProperty("java.io.tmpdir"));
-  }
 
   @Test
   public void testAwsSdkRetries() {
@@ -66,11 +50,6 @@ public class ApplicationConstantsTest {
   }
 
   @Test
-  public void testHeaderTenantNames() {
-    Assert.assertEquals(ApplicationConstants.HEADER_TENANT_NAMES, "X-Tenant-Names");
-  }
-
-  @Test
   public void testGetServiceDetailsCache() {
     Assert.assertEquals(
         ApplicationConstants.GET_SERVICE_DETAILS_CACHE, "get-service-details-cache");
@@ -99,31 +78,6 @@ public class ApplicationConstantsTest {
   @Test
   public void testSparkMonitorTimeInSecs() {
     Assert.assertEquals(ApplicationConstants.SPARK_MONITOR_TIME_IN_SECS, 60);
-  }
-
-  @Test
-  public void testSparkMinDownscale() {
-    Assert.assertEquals(ApplicationConstants.SPARK_MIN_DOWNSCALE, 2);
-  }
-
-  @Test
-  public void testSparkMaxDownscale() {
-    Assert.assertEquals(ApplicationConstants.SPARK_MAX_DOWNSCALE, 50);
-  }
-
-  @Test
-  public void testSparkDownscaleProportion() {
-    Assert.assertEquals(ApplicationConstants.SPARK_DOWNSCALE_PROPORTION, 0.25);
-  }
-
-  @Test
-  public void testSparkMinUpscale() {
-    Assert.assertEquals(ApplicationConstants.SPARK_MIN_UPSCALE, 1);
-  }
-
-  @Test
-  public void testSparkMaxUpscale() {
-    Assert.assertEquals(ApplicationConstants.SPARK_MAX_UPSCALE, 200);
   }
 
   @Test

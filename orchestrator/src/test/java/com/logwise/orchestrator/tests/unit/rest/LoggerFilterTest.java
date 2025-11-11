@@ -1,10 +1,10 @@
-package com.dream11.logcentralorchestrator.tests.unit.rest;
+package com.logwise.orchestrator.tests.unit.rest;
 
 import static org.mockito.ArgumentMatchers.eq;
 
-import com.dream11.logcentralorchestrator.rest.RestUtil;
-import com.dream11.logcentralorchestrator.rest.filter.LoggerFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.logwise.orchestrator.rest.RestUtil;
+import com.logwise.orchestrator.rest.filter.LoggerFilter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -44,17 +44,15 @@ public class LoggerFilterTest {
 
   @Test
   public void testFilter_Request_WithEntity_SetsStartTime() throws IOException {
-    // Arrange
+
     String body = "{\"test\":\"value\"}";
     ByteArrayInputStream inputStream =
         new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
     Mockito.when(mockRequestContext.hasEntity()).thenReturn(true);
     Mockito.when(mockRequestContext.getEntityStream()).thenReturn(inputStream);
 
-    // Act
     loggerFilter.filter(mockRequestContext);
 
-    // Assert
     Mockito.verify(mockRequestContext).setProperty(eq("REQUEST_START_TIME"), Mockito.anyLong());
     Mockito.verify(mockRequestContext, Mockito.atLeastOnce()).getMethod();
     Mockito.verify(mockUriInfo, Mockito.atLeastOnce()).getPath();
@@ -62,32 +60,28 @@ public class LoggerFilterTest {
 
   @Test
   public void testFilter_Request_WithoutEntity_SetsStartTime() throws IOException {
-    // Arrange
+
     Mockito.when(mockRequestContext.hasEntity()).thenReturn(false);
 
-    // Act
     loggerFilter.filter(mockRequestContext);
 
-    // Assert
     Mockito.verify(mockRequestContext).setProperty(eq("REQUEST_START_TIME"), Mockito.anyLong());
   }
 
   @Test
   public void testFilter_Request_WithNullEntityStream_HandlesGracefully() throws IOException {
-    // Arrange
+
     Mockito.when(mockRequestContext.hasEntity()).thenReturn(true);
     Mockito.when(mockRequestContext.getEntityStream()).thenReturn(null);
 
-    // Act
     loggerFilter.filter(mockRequestContext);
 
-    // Assert
     Mockito.verify(mockRequestContext).setProperty(eq("REQUEST_START_TIME"), Mockito.anyLong());
   }
 
   @Test
   public void testFilter_Response_WithEntity_ConvertsToString() throws Exception {
-    // Arrange
+
     Object entity = new TestEntity("test-value");
     Mockito.when(mockResponseContext.hasEntity()).thenReturn(true);
     Mockito.when(mockResponseContext.getEntity()).thenReturn(entity);
@@ -99,10 +93,8 @@ public class LoggerFilterTest {
           .when(() -> RestUtil.getString(entity))
           .thenReturn("{\"value\":\"test-value\"}");
 
-      // Act
       loggerFilter.filter(mockRequestContext, mockResponseContext);
 
-      // Assert
       Mockito.verify(mockResponseContext).setEntity(Mockito.anyString());
       Mockito.verify(mockRequestContext).removeProperty("REQUEST_START_TIME");
     }
@@ -110,29 +102,25 @@ public class LoggerFilterTest {
 
   @Test
   public void testFilter_Response_WithoutEntity_LogsResponseTime() throws Exception {
-    // Arrange
+
     Mockito.when(mockResponseContext.hasEntity()).thenReturn(false);
     Mockito.when(mockResponseContext.getStatus()).thenReturn(200);
     Mockito.when(mockRequestContext.getProperty("REQUEST_START_TIME"))
         .thenReturn(System.currentTimeMillis() - 100);
 
-    // Act
     loggerFilter.filter(mockRequestContext, mockResponseContext);
 
-    // Assert
     Mockito.verify(mockRequestContext).removeProperty("REQUEST_START_TIME");
   }
 
   @Test
   public void testFilter_Response_WithoutStartTime_DoesNotLogResponseTime() throws Exception {
-    // Arrange
+
     Mockito.when(mockResponseContext.hasEntity()).thenReturn(false);
     Mockito.when(mockRequestContext.getProperty("REQUEST_START_TIME")).thenReturn(null);
 
-    // Act
     loggerFilter.filter(mockRequestContext, mockResponseContext);
 
-    // Assert
     Mockito.verify(mockRequestContext, Mockito.never()).removeProperty("REQUEST_START_TIME");
   }
 

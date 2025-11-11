@@ -1,21 +1,21 @@
-package com.dream11.logcentralorchestrator.tests.unit;
+package com.logwise.orchestrator.tests.unit;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import com.dream11.logcentralorchestrator.common.app.AppContext;
-import com.dream11.logcentralorchestrator.common.util.CompletableFutureUtils;
-import com.dream11.logcentralorchestrator.config.ApplicationConfig;
-import com.dream11.logcentralorchestrator.dto.entity.ServiceDetails;
-import com.dream11.logcentralorchestrator.rest.io.Response;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
-import com.dream11.logcentralorchestrator.testconfig.ApplicationTestConfig;
-import com.dream11.logcentralorchestrator.util.ApplicationUtils;
-import com.dream11.logcentralorchestrator.util.AwsClientUtils;
-import com.dream11.logcentralorchestrator.util.Encryption;
-import com.dream11.logcentralorchestrator.util.S3Utils;
-import com.dream11.logcentralorchestrator.util.TestResponseWrapper;
-import com.dream11.logcentralorchestrator.util.WebClientUtils;
+import com.logwise.orchestrator.common.app.AppContext;
+import com.logwise.orchestrator.common.util.CompletableFutureUtils;
+import com.logwise.orchestrator.config.ApplicationConfig;
+import com.logwise.orchestrator.dto.entity.ServiceDetails;
+import com.logwise.orchestrator.rest.io.Response;
+import com.logwise.orchestrator.setup.BaseTest;
+import com.logwise.orchestrator.testconfig.ApplicationTestConfig;
+import com.logwise.orchestrator.util.ApplicationUtils;
+import com.logwise.orchestrator.util.AwsClientUtils;
+import com.logwise.orchestrator.util.Encryption;
+import com.logwise.orchestrator.util.S3Utils;
+import com.logwise.orchestrator.util.TestResponseWrapper;
+import com.logwise.orchestrator.util.WebClientUtils;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
@@ -62,11 +62,9 @@ public class UtilTest extends BaseTest {
     BaseTest.cleanup();
   }
 
-  // ========== S3Utils Tests ==========
-
   @Test
   public void testS3Utils_ListCommonPrefix_WithValidInputs_ReturnsPrefixList() throws Exception {
-    // Arrange
+
     String prefix = "logs/env=";
     String delimiter = "/";
 
@@ -91,12 +89,10 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Single<List<String>> result =
           S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
       List<String> prefixes = result.blockingGet();
 
-      // Assert
       Assert.assertNotNull(prefixes);
       Assert.assertEquals(prefixes.size(), 2);
       Assert.assertTrue(prefixes.contains("logs/env=prod/"));
@@ -107,7 +103,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testS3Utils_ListCommonPrefix_WithNoPrefixes_ReturnsEmptyList() throws Exception {
-    // Arrange
+
     String prefix = "logs/env=";
     String delimiter = "/";
 
@@ -126,12 +122,10 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Single<List<String>> result =
           S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
       List<String> prefixes = result.blockingGet();
 
-      // Assert
       Assert.assertNotNull(prefixes);
       Assert.assertTrue(prefixes.isEmpty());
     }
@@ -139,7 +133,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testS3Utils_ListCommonPrefix_WithError_PropagatesError() {
-    // Arrange
+
     String prefix = "logs/env=";
     String delimiter = "/";
     RuntimeException error = new RuntimeException("S3 error");
@@ -158,11 +152,9 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Single<List<String>> result =
           S3Utils.listCommonPrefix(mockS3Client, s3Config, prefix, delimiter);
 
-      // Assert
       try {
         result.blockingGet();
         Assert.fail("Should have thrown exception");
@@ -174,7 +166,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testS3Utils_DeleteFile_WithValidObjectKey_CompletesSuccessfully() throws Exception {
-    // Arrange
+
     String objectKey = "logs/file.log";
     DeleteObjectResponse response = DeleteObjectResponse.builder().build();
     CompletableFuture<DeleteObjectResponse> future = CompletableFuture.completedFuture(response);
@@ -190,18 +182,16 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Completable result = S3Utils.deleteFile(mockS3Client, s3Config, objectKey);
       result.blockingAwait();
 
-      // Assert
       verify(mockS3Client, times(1)).deleteObject(any(DeleteObjectRequest.class));
     }
   }
 
   @Test
   public void testS3Utils_DeleteFile_WithError_PropagatesError() {
-    // Arrange
+
     String objectKey = "logs/file.log";
     RuntimeException error = new RuntimeException("Delete error");
     CompletableFuture<DeleteObjectResponse> future = new CompletableFuture<>();
@@ -218,10 +208,8 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Completable result = S3Utils.deleteFile(mockS3Client, s3Config, objectKey);
 
-      // Assert
       try {
         result.blockingAwait();
         Assert.fail("Should have thrown exception");
@@ -233,7 +221,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testS3Utils_CopyObject_WithValidKeys_CompletesSuccessfully() throws Exception {
-    // Arrange
+
     String srcObjectKey = "logs/src.log";
     String destObjectKey = "logs/dest.log";
     CopyObjectResponse response = CopyObjectResponse.builder().build();
@@ -250,18 +238,16 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Completable result = S3Utils.copyObject(mockS3Client, s3Config, srcObjectKey, destObjectKey);
       result.blockingAwait();
 
-      // Assert
       verify(mockS3Client, times(1)).copyObject(any(CopyObjectRequest.class));
     }
   }
 
   @Test
   public void testS3Utils_CopyObject_WithError_PropagatesError() {
-    // Arrange
+
     String srcObjectKey = "logs/src.log";
     String destObjectKey = "logs/dest.log";
     RuntimeException error = new RuntimeException("Copy error");
@@ -279,10 +265,8 @@ public class UtilTest extends BaseTest {
                 return Single.fromFuture(cf);
               });
 
-      // Act
       Completable result = S3Utils.copyObject(mockS3Client, s3Config, srcObjectKey, destObjectKey);
 
-      // Assert
       try {
         result.blockingAwait();
         Assert.fail("Should have thrown exception");
@@ -292,21 +276,17 @@ public class UtilTest extends BaseTest {
     }
   }
 
-  // ========== ResponseWrapper Tests ==========
-
   @Test
   public void testResponseWrapper_FromMaybe_WithValue_ReturnsSuccessfulResponse() throws Exception {
-    // Arrange
+
     Maybe<String> source = Maybe.just("test-value");
     String defaultValue = "default";
     int httpStatusCode = 200;
 
-    // Act - Use TestResponseWrapper which handles Vertx context
     VertxCompletableFuture<Response<String>> future =
         TestResponseWrapper.fromMaybe(source, defaultValue, httpStatusCode);
     Response<String> response = future.get();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), "test-value");
     Assert.assertEquals(response.getHttpStatusCode(), 200);
@@ -315,17 +295,15 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testResponseWrapper_FromMaybe_WithEmpty_ReturnsDefaultValue() throws Exception {
-    // Arrange
+
     Maybe<String> source = Maybe.empty();
     String defaultValue = "default-value";
     int httpStatusCode = 201;
 
-    // Act - Use TestResponseWrapper which handles Vertx context
     VertxCompletableFuture<Response<String>> future =
         TestResponseWrapper.fromMaybe(source, defaultValue, httpStatusCode);
     Response<String> response = future.get();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), defaultValue);
     Assert.assertEquals(response.getHttpStatusCode(), 201);
@@ -334,17 +312,15 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testResponseWrapper_FromMaybe_WithError_CompletesExceptionally() throws Exception {
-    // Arrange
+
     RuntimeException error = new RuntimeException("Test error");
     Maybe<String> source = Maybe.error(error);
     String defaultValue = "default";
     int httpStatusCode = 200;
 
-    // Act - Use TestResponseWrapper which handles Vertx context
     VertxCompletableFuture<Response<String>> future =
         TestResponseWrapper.fromMaybe(source, defaultValue, httpStatusCode);
 
-    // Assert
     try {
       future.get();
       Assert.fail("Should have thrown exception");
@@ -357,16 +333,14 @@ public class UtilTest extends BaseTest {
   @Test
   public void testResponseWrapper_FromSingle_WithValue_ReturnsSuccessfulResponse()
       throws Exception {
-    // Arrange
+
     Single<String> source = Single.just("success-value");
     int httpStatusCode = 200;
 
-    // Act - Use TestResponseWrapper which handles Vertx context
     VertxCompletableFuture<Response<String>> future =
         TestResponseWrapper.fromSingle(source, httpStatusCode);
     Response<String> response = future.get();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), "success-value");
     Assert.assertEquals(response.getHttpStatusCode(), 200);
@@ -375,16 +349,14 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testResponseWrapper_FromSingle_WithError_CompletesExceptionally() throws Exception {
-    // Arrange
+
     RuntimeException error = new RuntimeException("Single error");
     Single<String> source = Single.error(error);
     int httpStatusCode = 200;
 
-    // Act - Use TestResponseWrapper which handles Vertx context
     VertxCompletableFuture<Response<String>> future =
         TestResponseWrapper.fromSingle(source, httpStatusCode);
 
-    // Assert
     try {
       future.get();
       Assert.fail("Should have thrown exception");
@@ -397,94 +369,79 @@ public class UtilTest extends BaseTest {
   @Test
   public void testResponseWrapper_FromSingle_WithCustomStatusCode_SetsStatusCode()
       throws Exception {
-    // Arrange
+
     Single<Integer> source = Single.just(42);
     int httpStatusCode = 201;
 
-    // Act - Use TestResponseWrapper which handles Vertx context
     VertxCompletableFuture<Response<Integer>> future =
         TestResponseWrapper.fromSingle(source, httpStatusCode);
     Response<Integer> response = future.get();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), Integer.valueOf(42));
     Assert.assertEquals(response.getHttpStatusCode(), 201);
   }
 
-  // ========== AwsClientUtils Tests ==========
-
   @Test
   public void testAwsClientUtils_CreateHttpClient_ReturnsNonNull() {
-    // Act
+
     SdkAsyncHttpClient httpClient = AwsClientUtils.createHttpClient();
 
-    // Assert
     Assert.assertNotNull(httpClient);
   }
 
   @Test
   public void testAwsClientUtils_CreateRetryPolicy_ReturnsNonNull() {
-    // Act
+
     RetryPolicy retryPolicy = AwsClientUtils.createRetryPolicy();
 
-    // Assert
     Assert.assertNotNull(retryPolicy);
   }
 
   @Test
   public void testAwsClientUtils_GetDefaultCredentialsProvider_ReturnsNonNull() {
-    // Act
+
     AwsCredentialsProvider credentialsProvider = AwsClientUtils.getDefaultCredentialsProvider();
 
-    // Assert
     Assert.assertNotNull(credentialsProvider);
   }
 
   @Test
   public void testAwsClientUtils_GetRoleArnCredentialsProvider_WithValidInputs_ReturnsNonNull() {
-    // Arrange
+
     String roleArn = "arn:aws:iam::123456789012:role/test-role";
     String sessionName = "test-session";
     Region region = Region.US_EAST_1;
 
-    // Act
     AwsCredentialsProvider credentialsProvider =
         AwsClientUtils.getRoleArnCredentialsProvider(roleArn, sessionName, region);
 
-    // Assert
     Assert.assertNotNull(credentialsProvider);
   }
-
-  // ========== WebClientUtils Tests ==========
 
   @Test
   public void testWebClientUtils_RetryWithDelay_WithMaxAttempts_RetriesCorrectly()
       throws Exception {
-    // Arrange
+
     int delay = 10; // Small delay for faster test
     TimeUnit delayTimeUnit = TimeUnit.MILLISECONDS;
     int maxAttempts = 2;
 
-    // Act
     var retryFunction = WebClientUtils.retryWithDelay(delay, delayTimeUnit, maxAttempts);
 
-    // Create a Flowable that emits errors
     Flowable<Throwable> errors =
         Flowable.just(
             new RuntimeException("Error 1"),
             new RuntimeException("Error 2"),
             new RuntimeException("Error 3"));
 
-    // Apply retry function
     Flowable<?> result = retryFunction.apply(errors);
 
-    // Assert - Should retry maxAttempts times then propagate error
     try {
       result.blockingLast();
       Assert.fail("Should have thrown exception");
     } catch (Exception e) {
-      // Flowable may wrap the exception or throw directly
+
       Assert.assertTrue(
           e instanceof RuntimeException
               || (e.getCause() != null && e.getCause() instanceof RuntimeException));
@@ -494,44 +451,37 @@ public class UtilTest extends BaseTest {
   @Test
   public void testWebClientUtils_RetryWithDelay_WithZeroMaxAttempts_PropagatesErrorImmediately()
       throws Exception {
-    // Arrange
+
     int delay = 10;
     TimeUnit delayTimeUnit = TimeUnit.MILLISECONDS;
     int maxAttempts = 0;
 
-    // Act
     var retryFunction = WebClientUtils.retryWithDelay(delay, delayTimeUnit, maxAttempts);
 
     Flowable<Throwable> errors = Flowable.just(new RuntimeException("Error"));
 
-    // Apply retry function
     Flowable<?> result = retryFunction.apply(errors);
 
-    // Assert - Should propagate error immediately without retry
     try {
       result.blockingLast();
       Assert.fail("Should have thrown exception");
     } catch (Exception e) {
-      // Flowable may wrap the exception
+
       Assert.assertTrue(
           e instanceof RuntimeException
               || (e.getCause() != null && e.getCause() instanceof RuntimeException));
     }
   }
 
-  // ========== Encryption Tests ==========
-
   @Test
   public void testEncryption_ClassExists() {
-    // Note: Encryption is @UtilityClass which makes constructor private
-    // Methods appear as instance methods but Lombok may make them static
+
     Assert.assertNotNull(Encryption.class);
   }
 
   @Test
   public void testEncryption_MethodsExist() throws Exception {
-    // Verify methods exist using reflection
-    // @UtilityClass makes methods static, so we check for static methods
+
     Method[] methods = Encryption.class.getDeclaredMethods();
     boolean hasEncrypt = false;
     boolean hasDecrypt = false;
@@ -549,18 +499,14 @@ public class UtilTest extends BaseTest {
     Assert.assertTrue(hasDecrypt, "decrypt method should exist");
   }
 
-  // ========== ApplicationUtils Tests ==========
-
   @Test
   public void testApplicationUtils_GetServiceFromObjectKey_WithValidPath_ReturnsServiceDetails() {
-    // Arrange
+
     String logPath =
         "logs/env=prod/service_name=test-service/component_name=test-component/year=2024/";
 
-    // Act
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey(logPath);
 
-    // Assert
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getEnv(), "prod");
     Assert.assertEquals(result.getServiceName(), "test-service");
@@ -569,42 +515,37 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_GetServiceFromObjectKey_WithInvalidPath_ReturnsNull() {
-    // Arrange
+
     String logPath = "invalid/path/without/required/pattern";
 
-    // Act
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey(logPath);
 
-    // Assert
     Assert.assertNull(result);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void
       testApplicationUtils_GetServiceFromObjectKey_WithNullPath_ThrowsNullPointerException() {
-    // The actual implementation doesn't handle null, so it throws NPE
+
     ApplicationUtils.getServiceFromObjectKey(null);
   }
 
   @Test
   public void testApplicationUtils_GetServiceFromObjectKey_WithEmptyPath_ReturnsNull() {
-    // Act
+
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey("");
 
-    // Assert
     Assert.assertNull(result);
   }
 
   @Test
   public void
       testApplicationUtils_GetServiceFromObjectKey_WithPartialMatch_ReturnsServiceDetails() {
-    // Arrange
+
     String logPath = "prefix/env=staging/service_name=api/component_name=web/extra/path";
 
-    // Act
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey(logPath);
 
-    // Assert
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getEnv(), "staging");
     Assert.assertEquals(result.getServiceName(), "api");
@@ -613,21 +554,18 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_ExecuteBlockingCallable_WithValidCallable_ReturnsMaybe() {
-    // Arrange
+
     Callable<String> callable = () -> "test result";
 
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
       io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
 
-      // Mock the getInstance method to return the reactive Vertx instance
       mockedAppContext
           .when(() -> AppContext.getInstance(io.vertx.reactivex.core.Vertx.class))
           .thenReturn(reactiveVertx);
 
-      // Act
       Maybe<String> result = ApplicationUtils.executeBlockingCallable(callable);
 
-      // Assert
       Assert.assertNotNull(result);
       String value = result.blockingGet();
       Assert.assertEquals(value, "test result");
@@ -636,7 +574,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_ExecuteBlockingCallable_WithException_ReturnsErrorMaybe() {
-    // Arrange
+
     Callable<String> callable =
         () -> {
           throw new RuntimeException("Test error");
@@ -645,15 +583,12 @@ public class UtilTest extends BaseTest {
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
       io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
 
-      // Mock the getInstance method to return the reactive Vertx instance
       mockedAppContext
           .when(() -> AppContext.getInstance(io.vertx.reactivex.core.Vertx.class))
           .thenReturn(reactiveVertx);
 
-      // Act
       Maybe<String> result = ApplicationUtils.executeBlockingCallable(callable);
 
-      // Assert
       Assert.assertNotNull(result);
       try {
         result.blockingGet();
@@ -666,7 +601,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_GetGuiceInstance_WithValidClassAndName_ReturnsInstance() {
-    // Arrange
+
     String testName = "testInstance";
 
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
@@ -674,10 +609,8 @@ public class UtilTest extends BaseTest {
           .when(() -> AppContext.getInstance(String.class, testName))
           .thenReturn("test value");
 
-      // Act
       String result = ApplicationUtils.getGuiceInstance(String.class, testName);
 
-      // Assert
       Assert.assertNotNull(result);
       Assert.assertEquals(result, "test value");
     }
@@ -685,7 +618,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_GetGuiceInstance_WithConfigurationException_ReturnsNull() {
-    // Arrange
+
     String testName = "nonexistent";
 
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
@@ -695,17 +628,15 @@ public class UtilTest extends BaseTest {
           .when(() -> AppContext.getInstance(String.class, testName))
           .thenThrow(configException);
 
-      // Act
       String result = ApplicationUtils.getGuiceInstance(String.class, testName);
 
-      // Assert
       Assert.assertNull(result);
     }
   }
 
   @Test
   public void testApplicationUtils_GetGuiceInstance_WithOtherException_ReturnsNull() {
-    // Arrange
+
     String testName = "error";
 
     try (MockedStatic<AppContext> mockedAppContext = Mockito.mockStatic(AppContext.class)) {
@@ -713,17 +644,15 @@ public class UtilTest extends BaseTest {
           .when(() -> AppContext.getInstance(String.class, testName))
           .thenThrow(new RuntimeException("Unexpected error"));
 
-      // Act
       String result = ApplicationUtils.getGuiceInstance(String.class, testName);
 
-      // Assert
       Assert.assertNull(result);
     }
   }
 
   @Test
   public void testApplicationUtils_RowSetToMapList_WithValidRowSet_ReturnsMapList() {
-    // Arrange
+
     @SuppressWarnings("unchecked")
     io.vertx.reactivex.sqlclient.RowSet<io.vertx.reactivex.sqlclient.Row> rowSet =
         mock(io.vertx.reactivex.sqlclient.RowSet.class);
@@ -744,10 +673,8 @@ public class UtilTest extends BaseTest {
     when(row2.getValue(0)).thenReturn("value2");
     when(row2.getValue(1)).thenReturn(456);
 
-    // Act
     List<Map<String, Object>> result = ApplicationUtils.rowSetToMapList(rowSet);
 
-    // Assert
     Assert.assertNotNull(result);
     Assert.assertEquals(result.size(), 2);
     Assert.assertEquals(result.get(0).get("col1"), "value1");
@@ -758,7 +685,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_RowSetToMapList_WithLocalDateTime_ConvertsToDate() {
-    // Arrange
+
     @SuppressWarnings("unchecked")
     io.vertx.reactivex.sqlclient.RowSet<io.vertx.reactivex.sqlclient.Row> rowSet =
         mock(io.vertx.reactivex.sqlclient.RowSet.class);
@@ -772,10 +699,8 @@ public class UtilTest extends BaseTest {
     when(row.getValue(0)).thenReturn(localDateTime);
     when(row.getLocalDateTime(0)).thenReturn(localDateTime);
 
-    // Act
     List<Map<String, Object>> result = ApplicationUtils.rowSetToMapList(rowSet);
 
-    // Assert
     Assert.assertNotNull(result);
     Assert.assertEquals(result.size(), 1);
     Object timestamp = result.get(0).get("timestamp");
@@ -784,7 +709,7 @@ public class UtilTest extends BaseTest {
 
   @Test
   public void testApplicationUtils_RowSetToMapList_WithEmptyRowSet_ReturnsEmptyList() {
-    // Arrange
+
     @SuppressWarnings("unchecked")
     io.vertx.reactivex.sqlclient.RowSet<io.vertx.reactivex.sqlclient.Row> rowSet =
         mock(io.vertx.reactivex.sqlclient.RowSet.class);
@@ -792,10 +717,8 @@ public class UtilTest extends BaseTest {
     java.util.List<io.vertx.reactivex.sqlclient.Row> emptyRowList = Collections.emptyList();
     when(rowSet.spliterator()).thenReturn(emptyRowList.spliterator());
 
-    // Act
     List<Map<String, Object>> result = ApplicationUtils.rowSetToMapList(rowSet);
 
-    // Assert
     Assert.assertNotNull(result);
     Assert.assertTrue(result.isEmpty());
   }

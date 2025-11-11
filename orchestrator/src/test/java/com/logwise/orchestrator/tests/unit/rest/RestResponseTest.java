@@ -1,11 +1,11 @@
-package com.dream11.logcentralorchestrator.tests.unit.rest;
+package com.logwise.orchestrator.tests.unit.rest;
 
-import com.dream11.logcentralorchestrator.rest.exception.RestError;
-import com.dream11.logcentralorchestrator.rest.exception.RestException;
-import com.dream11.logcentralorchestrator.rest.io.Error;
-import com.dream11.logcentralorchestrator.rest.io.Response;
-import com.dream11.logcentralorchestrator.rest.io.RestResponse;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
+import com.logwise.orchestrator.rest.exception.RestError;
+import com.logwise.orchestrator.rest.exception.RestException;
+import com.logwise.orchestrator.rest.io.Error;
+import com.logwise.orchestrator.rest.io.Response;
+import com.logwise.orchestrator.rest.io.RestResponse;
+import com.logwise.orchestrator.setup.BaseTest;
 import io.reactivex.Single;
 import java.util.concurrent.CompletionStage;
 import org.testng.Assert;
@@ -22,14 +22,12 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testRestHandler_WithSuccess_ReturnsSuccessfulResponse() throws Exception {
-    // Arrange
+
     Single<Object> source = Single.just("test-data");
 
-    // Act
     Single<Response<Object>> result = RestResponse.restHandler().apply(source);
     Response<Object> response = result.blockingGet();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), "test-data");
     Assert.assertNull(response.getError());
@@ -38,16 +36,14 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testRestHandler_WithRestException_ReturnsErrorResponse() throws Exception {
-    // Arrange
+
     RestException restException =
         new RestException("Test error", Error.of("TEST_ERROR", "Test error message"), 400);
     Single<Object> source = Single.error(restException);
 
-    // Act
     Single<Response<Object>> result = RestResponse.restHandler().apply(source);
     Response<Object> response = result.blockingGet();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertNull(response.getData());
     Assert.assertNotNull(response.getError());
@@ -58,15 +54,13 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testRestHandler_WithNonRestException_ReturnsErrorResponse() throws Exception {
-    // Arrange
+
     RuntimeException runtimeException = new RuntimeException("Runtime error");
     Single<Object> source = Single.error(runtimeException);
 
-    // Act
     Single<Response<Object>> result = RestResponse.restHandler().apply(source);
     Response<Object> response = result.blockingGet();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertNull(response.getData());
     Assert.assertNotNull(response.getError());
@@ -76,7 +70,7 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testRestHandler_WithRestError_OnError_ReturnsRestException() throws Exception {
-    // Arrange
+
     RestError restError =
         new RestError() {
           @Override
@@ -97,11 +91,9 @@ public class RestResponseTest extends BaseTest {
     RuntimeException runtimeException = new RuntimeException("Original error");
     Single<Object> source = Single.error(runtimeException);
 
-    // Act
     Single<Response<Object>> result = RestResponse.restHandler(restError).apply(source);
     Response<Object> response = result.blockingGet();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertNull(response.getData());
     Assert.assertNotNull(response.getError());
@@ -111,7 +103,7 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testRestHandler_WithRestError_OnSuccess_ReturnsSuccessfulResponse() throws Exception {
-    // Arrange
+
     RestError restError =
         new RestError() {
           @Override
@@ -131,11 +123,9 @@ public class RestResponseTest extends BaseTest {
         };
     Single<Object> source = Single.just("success-data");
 
-    // Act
     Single<Response<Object>> result = RestResponse.restHandler(restError).apply(source);
     Response<Object> response = result.blockingGet();
 
-    // Assert
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), "success-data");
     Assert.assertNull(response.getError());
@@ -144,11 +134,10 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testJaxrsRestHandler_WithSuccess_ReturnsCompletionStage() throws Exception {
-    // Arrange
+
     Single<Object> source = Single.just("jaxrs-data");
     io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
 
-    // Act - Run within Vertx context to support VertxCompletableFuture
     java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     @SuppressWarnings("unchecked")
     final Response<Object>[] responseHolder = new Response[1];
@@ -181,7 +170,7 @@ public class RestResponseTest extends BaseTest {
     }
 
     Response<Object> response = responseHolder[0];
-    // Assert
+
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getData(), "jaxrs-data");
     Assert.assertNull(response.getError());
@@ -190,12 +179,11 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testJaxrsRestHandler_WithError_CompletesExceptionally() throws Exception {
-    // Arrange
+
     RuntimeException error = new RuntimeException("JAXRS error");
     Single<Object> source = Single.error(error);
     io.vertx.reactivex.core.Vertx reactiveVertx = BaseTest.getReactiveVertx();
 
-    // Act - Run within Vertx context to support VertxCompletableFuture
     java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final Throwable[] exceptionHolder = new Throwable[1];
     final boolean[] exceptionThrown = new boolean[1];
@@ -227,31 +215,26 @@ public class RestResponseTest extends BaseTest {
       throw new Exception(exceptionHolder[0]);
     }
 
-    // Assert that exception was thrown as expected
     Assert.assertTrue(exceptionThrown[0], "Should have thrown ExecutionException");
   }
 
   @Test
   public void testParseThrowable_WithRestException_ReturnsRestException() {
-    // Arrange
+
     RestException restException = new RestException("Test", Error.of("TEST", "Test message"), 400);
 
-    // Act
     Throwable result = RestResponse.parseThrowable(restException);
 
-    // Assert
     Assert.assertSame(result, restException);
   }
 
   @Test
   public void testParseThrowable_WithNonRestException_ReturnsRestException() {
-    // Arrange
+
     RuntimeException runtimeException = new RuntimeException("Runtime error");
 
-    // Act
     Throwable result = RestResponse.parseThrowable(runtimeException);
 
-    // Assert
     Assert.assertTrue(result instanceof RestException);
     RestException restException = (RestException) result;
     Assert.assertEquals(restException.getError().getCode(), "UNKNOWN-EXCEPTION");
@@ -260,29 +243,24 @@ public class RestResponseTest extends BaseTest {
 
   @Test
   public void testParseThrowable_WithOldErrorKeys_ReturnsRestExceptionWithOldErrorKeys() {
-    // Arrange
+
     RuntimeException runtimeException = new RuntimeException("Runtime error");
 
-    // Act
     Throwable result = RestResponse.parseThrowable(runtimeException, true);
 
-    // Assert
     Assert.assertTrue(result instanceof RestException);
     RestException restException = (RestException) result;
     Assert.assertEquals(restException.getError().getCode(), "UNKNOWN-EXCEPTION");
     Assert.assertEquals(restException.getHttpStatusCode(), 500);
-    // Note: setOldErrorKeys is a setter-only field, so we can't directly verify it
   }
 
   @Test
   public void testParseThrowable_WithRestExceptionAndOldErrorKeys_ReturnsRestException() {
-    // Arrange
+
     RestException restException = new RestException("Test", Error.of("TEST", "Test message"), 400);
 
-    // Act
     Throwable result = RestResponse.parseThrowable(restException, true);
 
-    // Assert
     Assert.assertSame(result, restException);
   }
 }

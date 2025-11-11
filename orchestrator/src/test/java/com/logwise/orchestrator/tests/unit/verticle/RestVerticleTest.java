@@ -1,13 +1,13 @@
-package com.dream11.logcentralorchestrator.tests.unit.verticle;
+package com.logwise.orchestrator.tests.unit.verticle;
 
 import static org.mockito.Mockito.when;
 
-import com.dream11.logcentralorchestrator.client.ObjectStoreClient;
-import com.dream11.logcentralorchestrator.common.app.AppContext;
-import com.dream11.logcentralorchestrator.config.ApplicationConfig;
-import com.dream11.logcentralorchestrator.constant.ApplicationConstants;
-import com.dream11.logcentralorchestrator.setup.BaseTest;
-import com.dream11.logcentralorchestrator.verticle.RestVerticle;
+import com.logwise.orchestrator.client.ObjectStoreClient;
+import com.logwise.orchestrator.common.app.AppContext;
+import com.logwise.orchestrator.config.ApplicationConfig;
+import com.logwise.orchestrator.constant.ApplicationConstants;
+import com.logwise.orchestrator.setup.BaseTest;
+import com.logwise.orchestrator.verticle.RestVerticle;
 import io.reactivex.Completable;
 import io.vertx.reactivex.core.Vertx;
 import java.util.ArrayList;
@@ -31,16 +31,15 @@ public class RestVerticleTest extends BaseTest {
 
   @Test
   public void testRestVerticle_Constructor_CreatesInstance() {
-    // Act
+
     RestVerticle verticle = new RestVerticle();
 
-    // Assert
     Assert.assertNotNull(verticle);
   }
 
   @Test
   public void testStartObjectStores_WithTenants_ConnectsToObjectStores() {
-    // Arrange
+
     RestVerticle verticle = new RestVerticle();
     ApplicationConfig mockApplicationConfig = Mockito.mock(ApplicationConfig.class);
     ApplicationConfig.TenantConfig mockTenantConfig =
@@ -74,13 +73,11 @@ public class RestVerticleTest extends BaseTest {
                       ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply("test-tenant")))
           .thenReturn(mockObjectStoreClient);
 
-      // Act - Use reflection to call private method
       java.lang.reflect.Method method = RestVerticle.class.getDeclaredMethod("startObjectStores");
       method.setAccessible(true);
       Completable result = (Completable) method.invoke(verticle);
       result.blockingAwait();
 
-      // Assert
       Mockito.verify(mockObjectStoreClient).rxConnect(mockObjectStoreConfig);
     } catch (Exception e) {
       Assert.fail("Should not throw exception", e);
