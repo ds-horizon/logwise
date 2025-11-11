@@ -5,7 +5,7 @@ FROM eclipse-temurin:11-jre
 WORKDIR /app
 
 # Copy the shaded fat JAR explicitly (contains Main-Class manifest)
-COPY target/log-central-orchestrator-*-all.jar app.jar
+COPY ./orchestrator-*-all.jar app.jar
 
 # Expose the port your app listens on
 EXPOSE 8080

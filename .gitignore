@@ -98,7 +98,6 @@ id_rsa*
 docs/yarn.lock
 
 
-*.jar
 *.war
 *.ear
 *.class

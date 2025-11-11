@@ -208,13 +208,13 @@
             "root_selector": "$.data.serviceDetails[*].env",
             "source": "url",
             "type": "json",
-            "url": "http://log-central-orchestrator.dss-platform.com/service-details",
+            "url": "http://localhost:8080/service-details",
             "url_options": {
               "data": "",
               "headers": [
                 {
                   "key": "X-Tenant-Name",
-                  "value": "D11-Prod-AWS"
+                  "value": "ABC"
                 }
               ],
               "method": "GET"
@@ -227,16 +227,22 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 5,
-        "type": "query"
+        "type": "query",
+        "staticOptions": [
+          {
+            "text": "prod",
+            "value": "prod"
+          }
+        ]
       },
       {
         "current": {
           "selected": true,
           "text": [
-            "central-log-management"
+            "healthcheck"
           ],
           "value": [
-            "central-log-management"
+            "healthcheck"
           ]
         },
         "datasource": {
@@ -272,13 +278,13 @@
             "summarizeBy": "serviceName",
             "type": "json",
             "uql": "parse-json\n",
-            "url": "http://log-central-orchestrator.dss-platform.com/service-details",
+            "url": "http://localhost:8080/service-details",
             "url_options": {
               "data": "",
               "headers": [
                 {
                   "key": "X-Tenant-Name",
-                  "value": "D11-Prod-AWS"
+                  "value": "ABC"
                 }
               ],
               "method": "GET"
@@ -291,16 +297,22 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 5,
-        "type": "query"
+        "type": "query",
+        "staticOptions": [
+          {
+            "text": "healthcheck",
+            "value": "healthcheck"
+          }
+        ]
       },
       {
         "current": {
           "selected": true,
           "text": [
-            "central-log-management-vector"
+            "healthcheck-dummy"
           ],
           "value": [
-            "central-log-management-vector"
+            "healthcheck-dummy"
           ]
         },
         "datasource": {
@@ -335,13 +347,13 @@
             "summarizeBy": "componentName",
             "type": "json",
             "uql": "parse-json\n$.data.serviceDetails[env == '${env}' && serviceName == '${service_name}'].componentName",
-            "url": "http://log-central-orchestrator.dss-platform.com/service-details",
+            "url": "http://localhost:8080/service-details",
             "url_options": {
               "data": "",
               "headers": [
                 {
                   "key": "X-Tenant-Name",
-                  "value": "D11-Prod-AWS"
+                  "value": "ABC"
                 }
               ],
               "method": "GET"
@@ -354,7 +366,13 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 5,
-        "type": "query"
+        "type": "query",
+        "staticOptions": [
+          {
+            "text": "healthcheck-dummy",
+            "value": "healthcheck-dummy"
+          }
+        ]
       },
       {
         "current": {
