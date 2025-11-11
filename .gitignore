@@ -41,6 +41,9 @@ target/
 *.a
 *.so
 *.dylib
+*.jar
+*.war
+*.ear
 
 # Dependencies
 node_modules/
@@ -97,10 +100,7 @@ id_rsa*
 
 docs/yarn.lock
 
-*.jar
 *.target
-*.war
-*.ear
 *.class
 .DS_Store
 # eclipse specific git ignore
