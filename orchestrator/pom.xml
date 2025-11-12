@@ -522,33 +522,6 @@
         </executions>
       </plugin>
 
-      <!-- Jib: Build container images without Dockerfile/daemon -->
-      <plugin>
-        <groupId>com.google.cloud.tools</groupId>
-        <artifactId>jib-maven-plugin</artifactId>
-        <version>3.4.2</version>
-        <configuration>
-          <from>
-            <image>eclipse-temurin:11-jre</image>
-          </from>
-          <container>
-            <mainClass>${main.class}</mainClass>
-            <jvmFlags>
-              <jvmFlag>-XX:+HeapDumpOnOutOfMemoryError</jvmFlag>
-              <jvmFlag>-Dcom.sun.management.jmxremote=true</jvmFlag>
-              <jvmFlag>-Dcom.sun.management.jmxremote.port=1099</jvmFlag>
-              <jvmFlag>-Dcom.sun.management.jmxremote.authenticate=false</jvmFlag>
-              <jvmFlag>-Dcom.sun.management.jmxremote.ssl=false</jvmFlag>
-              <jvmFlag>-Dvertx.disableDnsResolver=true</jvmFlag>
-              <jvmFlag>-DIGNITE_JETTY_PORT=9000</jvmFlag>
-            </jvmFlags>
-            <ports>
-              <port>8080</port>
-            </ports>
-          </container>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>properties-maven-plugin</artifactId>

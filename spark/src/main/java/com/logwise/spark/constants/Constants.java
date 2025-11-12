@@ -19,7 +19,6 @@ public class Constants {
   public final String APPLICATION_LOGS_KAFKA_GROUP_ID = "app-spark-" + randomAlphanumeric(5);
 
   public final String WRITE_STREAM_PARQUET_FORMAT = "parquet";
-  public final String WRITE_STREAM_BQ_FORMAT = "com.google.cloud.spark.bigquery";
   public final String WRITE_STREAM_GZIP_COMPRESSION = "gzip";
 
   // Config Keys
@@ -45,26 +44,23 @@ public class Constants {
 
   // Partition Columns
   public final String[] APPLICATION_LOG_S3_PARTITION_COLUMNS = {
-    Constants.APPLICATION_LOG_COLUMN_ENV,
-    Constants.APPLICATION_LOG_COLUMN_SERVICE_NAME,
-    Constants.APPLICATION_LOG_COLUMN_COMPONENT_NAME,
-    Constants.APPLICATION_LOG_COLUMN_YEAR,
-    Constants.APPLICATION_LOG_COLUMN_MONTH,
-    Constants.APPLICATION_LOG_COLUMN_DAY,
-    Constants.APPLICATION_LOG_COLUMN_HOUR,
-    Constants.APPLICATION_LOG_COLUMN_MINUTE
+      Constants.APPLICATION_LOG_COLUMN_ENV,
+      Constants.APPLICATION_LOG_COLUMN_SERVICE_NAME,
+      Constants.APPLICATION_LOG_COLUMN_COMPONENT_NAME,
+      Constants.APPLICATION_LOG_COLUMN_YEAR,
+      Constants.APPLICATION_LOG_COLUMN_MONTH,
+      Constants.APPLICATION_LOG_COLUMN_DAY,
+      Constants.APPLICATION_LOG_COLUMN_HOUR,
+      Constants.APPLICATION_LOG_COLUMN_MINUTE
   };
 
   // Kafka Consumer Config
-  public final String KEY_DESERIALIZER_CLASS_CONFIG_VALUE =
-      "org.apache.kafka.common.serialization.StringDeserializer";
-  public final String VALUE_DESERIALIZER_CLASS_CONFIG_VALUE =
-      "org.apache.kafka.common.serialization.StringDeserializer";
+  public final String KEY_DESERIALIZER_CLASS_CONFIG_VALUE = "org.apache.kafka.common.serialization.StringDeserializer";
+  public final String VALUE_DESERIALIZER_CLASS_CONFIG_VALUE = "org.apache.kafka.common.serialization.StringDeserializer";
   public final String GROUP_ID_CONFIG_VALUE = "offsetFinderGroup";
   public final String AUTO_OFFSET_RESET_CONFIG_VALUE = "earliest";
   public final Duration KAFKA_CONSUMER_TIMEOUT = Duration.ofSeconds(10);
 
-  public final Map<String, String> QUERY_NAME_TO_STAGE_MAP =
-      ImmutableMap.of(
-          APPLICATION_LOGS_TO_S3_QUERY_NAME, "start at ApplicationLogsStreamToS3.java:57");
+  public final Map<String, String> QUERY_NAME_TO_STAGE_MAP = ImmutableMap.of(
+      APPLICATION_LOGS_TO_S3_QUERY_NAME, "start at ApplicationLogsStreamToS3.java:57");
 }
