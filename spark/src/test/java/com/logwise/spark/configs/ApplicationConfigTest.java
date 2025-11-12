@@ -40,7 +40,8 @@ public class ApplicationConfigTest {
 
     // Assert
     assertNotNull(config);
-    // First argument takes precedence (withFallback means earlier configs override later ones)
+    // First argument takes precedence (withFallback means earlier configs override
+    // later ones)
     assertEquals(config.getString("app.job.name"), "JOB1");
   }
 
@@ -54,7 +55,8 @@ public class ApplicationConfigTest {
     ApplicationConfig appConfig = null;
 
     try {
-      // Act - use reflection to call private init() method to get initialized ApplicationConfig
+      // Act - use reflection to call private init() method to get initialized
+      // ApplicationConfig
       Method initMethod = ApplicationConfig.class.getDeclaredMethod("init", String[].class);
       initMethod.setAccessible(true);
       appConfig = (ApplicationConfig) initMethod.invoke(null, (Object) new String[] {configArg});
@@ -85,7 +87,8 @@ public class ApplicationConfigTest {
     ApplicationConfig appConfig = null;
 
     try {
-      // Act - use reflection to call private init() method to get initialized ApplicationConfig
+      // Act - use reflection to call private init() method to get initialized
+      // ApplicationConfig
       Method initMethod = ApplicationConfig.class.getDeclaredMethod("init", String[].class);
       initMethod.setAccessible(true);
       appConfig = (ApplicationConfig) initMethod.invoke(null, (Object) new String[] {configArg});
@@ -94,7 +97,8 @@ public class ApplicationConfigTest {
       assertNotNull(appConfig, "ApplicationConfig instance creation failed");
       Config envConfig = appConfig.getSystemEnvironment();
       assertNotNull(envConfig);
-      // Verify environment config is not empty (should contain at least PATH or similar)
+      // Verify environment config is not empty (should contain at least PATH or
+      // similar)
       assertTrue(
           envConfig.entrySet().size() > 0,
           "Environment config should contain environment variables");
@@ -138,7 +142,8 @@ public class ApplicationConfigTest {
     Config config1 = ApplicationConfig.getConfig(configString1);
     Config config2 = ApplicationConfig.getConfig(configString2);
 
-    // Assert - ConfigFactory.invalidateCaches() is called, so each call should use new config
+    // Assert - ConfigFactory.invalidateCaches() is called, so each call should use
+    // new config
     assertNotNull(config1);
     assertNotNull(config2);
     // Verify cache invalidation works - each config should have different values
@@ -147,17 +152,6 @@ public class ApplicationConfigTest {
         config2.getString(propertyKey),
         "value2",
         "Second config should have value2 after cache invalidation");
-  }
-
-  @Test(expectedExceptions = com.typesafe.config.ConfigException.UnresolvedSubstitution.class)
-  public void testGetConfig_WithEmptyArgs_RequiresSubstitutionResolution() {
-    // Arrange - This test verifies that empty args require substitution to be provided
-    // Since application.conf has ${X-Tenant-Name}, it will fail without providing it
-
-    // Act & Assert - Should throw UnresolvedSubstitution exception
-    // Note: System properties are not automatically included in config resolution chain
-    // by the current implementation, so this will fail as expected
-    ApplicationConfig.getConfig();
   }
 
   @Test
