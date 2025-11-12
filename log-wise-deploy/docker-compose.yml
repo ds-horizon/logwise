@@ -181,7 +181,7 @@ services:
       - "${SPARK_MASTER_UI_PORT:-18080}:8080"
       - 6066:6066
     volumes:
-      - ../spark/target/logwise-spark-2.0.4-SNAPSHOT.jar:/opt/app/app.jar:ro
+      - ../spark/logwise-spark-2.0.4-SNAPSHOT.jar:/opt/app/app.jar:ro
       - ./log4j.properties:/opt/spark/conf/log4j.properties:ro
       - spark_master_logs:/opt/spark/logs
     networks:
@@ -213,7 +213,7 @@ services:
     networks:
       - lc_net
     volumes:
-      - ../spark/target/logwise-spark-2.0.4-SNAPSHOT.jar:/opt/app/app.jar:ro
+      - ../spark/logwise-spark-2.0.4-SNAPSHOT.jar:/opt/app/app.jar:ro
       # - ./spark-kafka-vector:/opt/spark/work-dir
       - ./log4j.properties:/opt/spark/conf/log4j.properties:ro
       - spark_worker_logs:/opt/spark/logs
