@@ -122,7 +122,24 @@ if [[ -n "$APP_ARGS" ]]; then
   FIRST=1
   ARGS_JSON="["
   for a in "${ARR[@]}"; do
-    # Escape quotes and backslashes for JSON (but preserve the HOCON structure)
+    # For arguments with special HOCON characters like *, ensure quotes are preserved
+    # Spark REST API may strip outer quotes, so we need to ensure quotes are part of the value
+    # Check if argument contains unquoted * and add quotes if needed
+    if [[ "$a" =~ =.*\* ]]; then
+      # Extract key and value
+      key="${a%%=*}"
+      value="${a#*=}"
+      # Check if value is already quoted (starts and ends with same quote type)
+      local is_quoted=false
+      if [[ "$value" =~ ^\".*\"$ ]] || [[ "$value" =~ ^\'.*\'$ ]]; then
+        is_quoted=true
+      fi
+      # If value contains * and is not quoted, quote it
+      if [[ "$value" =~ \* ]] && [[ "$is_quoted" == "false" ]]; then
+        a="${key}=\"${value}\""
+      fi
+    fi
+    # Escape quotes and backslashes for JSON
     a_escaped=$(printf '%s' "$a" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
     if [[ $FIRST -eq 1 ]]; then
       ARGS_JSON="$ARGS_JSON\"$a_escaped\""
