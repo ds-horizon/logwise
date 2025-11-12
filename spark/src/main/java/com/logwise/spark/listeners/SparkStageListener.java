@@ -24,6 +24,7 @@ import scala.Option;
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class SparkStageListener extends SparkListener {
 
+
   private static class StageMetrics {
     Long inputRecords = 0L;
     Long outputBytes = 0L;
@@ -148,14 +149,6 @@ public class SparkStageListener extends SparkListener {
     while (true) {
       if (PENDING_STOP_STAGE_IDS.isEmpty()) {
         break;
-      }
-      try {
-        // Add a small delay to prevent busy-waiting and reduce CPU usage
-        Thread.sleep(100);
-      } catch (InterruptedException e) {
-        log.warn("completeExecution() interrupted while waiting for stages to finish.", e);
-        Thread.currentThread().interrupt(); // Restore the interrupted status
-        break; // Exit the loop if interrupted
       }
     }
     PushLogsToS3SparkJob.stopAllRunningJobs();

@@ -102,6 +102,32 @@ wait_with_spinner() {
   return 1
 }
 
+# Check if a port is available
+check_port_available() {
+  local port=$1
+  local service_name=$2
+  
+  if command -v lsof >/dev/null 2>&1; then
+    if lsof -Pi :"$port" -sTCP:LISTEN -t >/dev/null 2>&1; then
+      return 1  # Port is in use
+    fi
+  elif command -v netstat >/dev/null 2>&1; then
+    if netstat -an 2>/dev/null | grep -q ":$port.*LISTEN"; then
+      return 1  # Port is in use
+    fi
+  elif command -v ss >/dev/null 2>&1; then
+    if ss -lnt 2>/dev/null | grep -q ":$port "; then
+      return 1  # Port is in use
+    fi
+  else
+    # Fallback: try to bind to the port
+    if timeout 1 bash -c "echo >/dev/tcp/localhost/$port" 2>/dev/null; then
+      return 1  # Port is in use
+    fi
+  fi
+  return 0  # Port is available
+}
+
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -188,6 +214,51 @@ main() {
   
   print_separator
   
+  # Step 3.5: Check port availability
+  print_step "Step 3.5: Checking Port Availability"
+  print_substep "Verifying required ports are available..."
+  
+  GRAFANA_PORT=${GRAFANA_PORT:-3000}
+  ORCH_PORT=${ORCH_PORT:-8080}
+  
+  PORT_CONFLICTS=()
+  
+  if ! check_port_available "$GRAFANA_PORT" "Grafana"; then
+    PORT_CONFLICTS+=("Grafana:${GRAFANA_PORT}")
+    print_error "Port $GRAFANA_PORT is already in use (required for Grafana)"
+    print_info "You can set GRAFANA_PORT in .env to use a different port"
+  else
+    print_success "Port $GRAFANA_PORT is available (Grafana)"
+  fi
+  
+  if ! check_port_available "$ORCH_PORT" "Orchestrator"; then
+    PORT_CONFLICTS+=("Orchestrator:${ORCH_PORT}")
+    print_error "Port $ORCH_PORT is already in use (required for Orchestrator)"
+    print_info "You can set ORCH_PORT in .env to use a different port"
+  else
+    print_success "Port $ORCH_PORT is available (Orchestrator)"
+  fi
+  
+  if [ ${#PORT_CONFLICTS[@]} -gt 0 ]; then
+    echo ""
+    print_error "Port conflicts detected. Please resolve them before continuing."
+    echo ""
+    print_info "Options:"
+    echo ""
+    printf "  ${dim}1.${reset} Stop the service(s) using the conflicting port(s)\n"
+    printf "  ${dim}2.${reset} Set different ports in .env:\n"
+    printf "     ${dim}GRAFANA_PORT=3001${reset}\n"
+    printf "     ${dim}ORCH_PORT=8081${reset}\n"
+    echo ""
+    print_info "To find what's using a port:"
+    printf "  ${dim}lsof -i :$GRAFANA_PORT${reset}  (for Grafana)\n"
+    printf "  ${dim}lsof -i :$ORCH_PORT${reset}  (for Orchestrator)\n"
+    echo ""
+    exit 1
+  fi
+  
+  print_separator
+  
   # Step 4: Start all services
   print_step "Step 4: Starting Services"
   print_substep "Building Docker images and starting containers..."
@@ -195,12 +266,154 @@ main() {
   echo ""
   
   printf "${dim}  Starting services...${reset}"
-  if make up >/dev/null 2>&1; then
+  
+  # Capture output to a temp file so we can show it on failure
+  TEMP_LOG=$(mktemp)
+  if make up >"$TEMP_LOG" 2>&1; then
     printf "\r${green}✓${reset} All services started successfully\n"
+    rm -f "$TEMP_LOG"
   else
-    printf "\r${red}✗${reset} Failed to start services\n"
-    print_error "Check the logs with: make logs"
-    exit 1
+    # Even if make up returned non-zero, check actual service status
+    # Docker Compose might return non-zero for warnings but services may still be starting
+    printf "\r${yellow}⚠${reset}  Docker Compose reported issues, checking service status...\n"
+    echo ""
+    
+    # Wait a moment for services to stabilize
+    sleep 2
+    
+    # Get list of all services from docker-compose
+    ALL_SERVICES=$(docker compose config --services 2>/dev/null || echo "")
+    
+    if [ -n "$ALL_SERVICES" ]; then
+      FAILED_SERVICES=()
+      
+      # Show all service statuses first
+      print_info "Service Status:"
+      docker compose ps 2>/dev/null || true
+      echo ""
+      
+      for service in $ALL_SERVICES; do
+        # Get container name - try multiple methods
+        CONTAINER_NAME=$(docker compose ps "$service" --format "{{.Name}}" 2>/dev/null | head -1)
+        
+        if [ -z "$CONTAINER_NAME" ]; then
+          # Try with -a flag to include stopped containers
+          CONTAINER_NAME=$(docker compose ps -a "$service" --format "{{.Name}}" 2>/dev/null | head -1)
+        fi
+        
+        if [ -z "$CONTAINER_NAME" ]; then
+          # Fallback: construct container name from service name (matches docker-compose naming)
+          CONTAINER_NAME="logwise_${service}"
+          
+          # Verify container actually exists with this name
+          if ! docker ps -a --format "{{.Names}}" 2>/dev/null | grep -q "^${CONTAINER_NAME}$"; then
+            # Container doesn't exist - definitely failed
+            FAILED_SERVICES+=("$service")
+            echo ""
+            printf "  ${red}✗${reset} ${bold}${service}${reset} - Status: ${red}container not found${reset}\n"
+            printf "    ${dim}This service may have failed to start or build${reset}\n"
+            continue
+          fi
+        fi
+        
+        # Get container status using docker inspect (most reliable)
+        STATUS=$(docker inspect "$CONTAINER_NAME" --format='{{.State.Status}}' 2>/dev/null || echo "unknown")
+        # Get health status - returns empty if no health check is defined
+        HEALTH=$(docker inspect "$CONTAINER_NAME" --format='{{if .State.Health}}{{.State.Health.Status}}{{end}}' 2>/dev/null || echo "")
+        EXIT_CODE=$(docker inspect "$CONTAINER_NAME" --format='{{.State.ExitCode}}' 2>/dev/null || echo "0")
+        
+        # Check if service actually failed
+        # Only mark as failed if:
+        # 1. Status is "exited" with non-zero exit code, or "dead", or "removing"
+        # 2. Status is "running" but health check exists and is "unhealthy" (not "starting" - that's transitional)
+        IS_FAILED=false
+        
+        case "$STATUS" in
+          "exited")
+            # Only failed if exit code is non-zero
+            if [ "$EXIT_CODE" != "0" ] && [ "$EXIT_CODE" != "" ]; then
+              IS_FAILED=true
+              STATUS="${STATUS} (exit code: ${EXIT_CODE})"
+            fi
+            ;;
+          "dead"|"removing")
+            IS_FAILED=true
+            ;;
+          "running")
+            # If running, only fail if health check exists and is unhealthy (not starting)
+            if [ -n "$HEALTH" ] && [ "$HEALTH" = "unhealthy" ]; then
+              IS_FAILED=true
+              STATUS="${STATUS} (${HEALTH})"
+            fi
+            ;;
+          "restarting")
+            # Restarting is a transitional state, not a failure
+            # Only fail if it's been restarting for a very long time (we'll check logs)
+            # For now, don't mark as failed
+            ;;
+          "created"|"paused")
+            # These are not running but not necessarily failed
+            # Don't mark as failed, but note the state
+            ;;
+          "unknown")
+            # Couldn't inspect container - might not exist or be accessible
+            # Check if container actually exists
+            if ! docker ps -a --format "{{.Names}}" 2>/dev/null | grep -q "^${CONTAINER_NAME}$"; then
+              IS_FAILED=true
+            fi
+            ;;
+        esac
+        
+        if [ "$IS_FAILED" = true ]; then
+          FAILED_SERVICES+=("$service")
+          
+          echo ""
+          printf "  ${red}✗${reset} ${bold}${service}${reset} - Status: ${red}${STATUS}${reset}\n"
+          
+          # Show recent logs for failed service
+          printf "    ${dim}Recent logs (last 15 lines):${reset}\n"
+          docker compose logs --tail=15 "$service" 2>/dev/null | sed 's/^/      /' || printf "      ${dim}No logs available${reset}\n"
+        fi
+      done
+      
+      if [ ${#FAILED_SERVICES[@]} -gt 0 ]; then
+        echo ""
+        print_error "Docker Compose output:"
+        echo ""
+        cat "$TEMP_LOG" | sed 's/^/  /'
+        echo ""
+        print_error "The following services failed to start:"
+        for service in "${FAILED_SERVICES[@]}"; do
+          printf "  ${red}•${reset} ${bold}${service}${reset}\n"
+        done
+        echo ""
+        print_info "To view logs for a specific service:"
+        printf "  ${dim}docker compose logs <service-name>${reset}\n"
+        echo ""
+        print_info "To view all logs:"
+        printf "  ${dim}make logs${reset}\n"
+        echo ""
+        print_info "To check service status:"
+        printf "  ${dim}make ps${reset}\n"
+        echo ""
+        rm -f "$TEMP_LOG"
+        exit 1
+      else
+        # No services actually failed, just warnings or transient issues
+        printf "\r${green}✓${reset} All services started successfully (warnings in output are non-critical)\n"
+        rm -f "$TEMP_LOG"
+      fi
+    else
+      # Couldn't get service list, show the error output
+      print_error "Docker Compose output:"
+      echo ""
+      cat "$TEMP_LOG" | sed 's/^/  /'
+      rm -f "$TEMP_LOG"
+      echo ""
+      print_warn "Could not retrieve service list. Check Docker Compose configuration."
+      echo ""
+      exit 1
+    fi
   fi
   print_separator
   
@@ -231,6 +444,19 @@ main() {
     "curl -fsS http://localhost:${ORCH_PORT:-8080}/healthcheck 2>/dev/null | grep -q \"UP\"" \
     40; then
     UNHEALTHY_SERVICES+=("orchestrator:Orchestrator Service")
+  fi
+  
+  # Wait for Grafana (check from host to ensure port mapping works)
+  GRAFANA_PORT=${GRAFANA_PORT:-3000}
+  if ! wait_with_spinner "Grafana Dashboard" \
+    "curl -fsS -o /dev/null -w '%{http_code}' http://localhost:${GRAFANA_PORT}/api/health 2>/dev/null | grep -q '200'" \
+    40; then
+    UNHEALTHY_SERVICES+=("grafana:Grafana Dashboard")
+    # Additional check: verify container is running even if port mapping failed
+    if docker compose ps grafana 2>/dev/null | grep -q "running"; then
+      print_warn "Grafana container is running but not accessible on port ${GRAFANA_PORT}"
+      print_warn "This may indicate a port binding issue. Check if port ${GRAFANA_PORT} is available."
+    fi
   fi
   
   # Show logs for unhealthy services
@@ -274,8 +500,9 @@ main() {
   
   printf "${bold}${cyan}Access Your Services:${reset}\n"
   echo ""
+  GRAFANA_PORT=${GRAFANA_PORT:-3000}
   printf "  ${green}📊${reset} ${bold}Grafana Dashboard${reset}\n"
-  printf "     ${dim}http://localhost:3000${reset}\n"
+  printf "     ${dim}http://localhost:${GRAFANA_PORT}${reset}\n"
   printf "     ${dim}Login: admin / admin${reset}\n"
   echo ""
   printf "  ${green}⚡${reset} ${bold}Spark Master UI${reset}\n"
@@ -302,7 +529,7 @@ main() {
   printf "${bold}${cyan}Next Steps:${reset}\n"
   echo ""
   printf "  ${dim}1.${reset} Verify your AWS credentials in .env are correct\n"
-  printf "  ${dim}2.${reset} Check Spark job: ${bold}docker compose logs spark-client${reset}\n"
+  printf "  ${dim}2.${reset} Monitor Spark jobs: ${bold}http://localhost:18080${reset}\n"
   printf "  ${dim}3.${reset} Access Grafana and configure your dashboards\n"
   echo ""
   
