@@ -42,11 +42,45 @@ A complete end-to-end logging system that streams logs from Vector → Kafka →
   - S3 bucket (read/write)
   - Athena workgroup (query execution)
 
+> **Note:** The `setup.sh` script will automatically install Docker, Make, and other prerequisites if they're missing (on macOS and Debian/Ubuntu Linux). For other systems, install these manually before running setup.
+
 ### Optional
 - **Maven 3.2+** (if building Spark JAR locally)
 - **Java 11+** (if building Spark JAR locally)
 
-### Quick Install Missing Tools
+## 🚀 Quick Start
+
+### One-Command Setup
+
+The easiest way to get started is with our one-click setup script:
+
+```bash
+cd deploy
+./setup.sh
+```
+
+Or using Make:
+
+```bash
+cd deploy
+make setup
+```
+
+This single command will:
+- ✅ Install prerequisites (Docker, Make, AWS CLI, etc.) if needed
+- ✅ Create `.env` file from template (`.env.example`)
+- ✅ Prompt you to fill in AWS credentials
+- ✅ Start all services (Vector, Kafka, Spark, Grafana, Orchestrator, MySQL)
+- ✅ Wait for services to become healthy
+- ✅ Create Kafka topics automatically
+
+**That's it!** Your LogWise stack will be up and running.
+
+### Manual Setup (Advanced)
+
+If you prefer to set up manually or need to customize the configuration:
+
+#### 1. Install Prerequisites
 
 ```bash
 # Run the bootstrap script to install prerequisites
@@ -56,61 +90,18 @@ A complete end-to-end logging system that streams logs from Vector → Kafka →
 make bootstrap
 ```
 
-## 🚀 Quick Start
+#### 2. Configure Environment
 
-### 1. Clone and Navigate
-
-```bash
-cd log-wise-deploy
-```
-
-### 2. Configure Environment
-
-Create a `.env` file from the example (if available) or create one with these variables:
+Copy the example environment file and fill in your AWS credentials:
 
 ```bash
-# AWS Configuration
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=your-access-key
-AWS_SECRET_ACCESS_KEY=your-secret-key
-AWS_SESSION_TOKEN=your-session-token  # Optional, for temporary credentials
-
-# S3 Configuration
-S3_BUCKET=your-bucket-name
-S3_PREFIX=logs/
-
-# Athena Configuration
-S3_ATHENA_OUTPUT=s3://your-bucket/athena-output/
-ATHENA_WORKGROUP=primary
-ATHENA_CATALOG=AwsDataCatalog
-ATHENA_DATABASE=logwise
-
-# Kafka Configuration
-KAFKA_BROKERS=kafka:9092
-KAFKA_TOPIC=logs
-
-# Spark Configuration
-SPARK_MASTER_URL=spark://spark-master:7077
-SPARK_STREAMING=true
-SPARK_DRIVER_MEMORY=512m
-SPARK_EXECUTOR_MEMORY=512m
-SPARK_DRIVER_CORES=1
-SPARK_EXECUTOR_CORES=1
-
-# Grafana Configuration
-GRAFANA_PORT=3000
-GF_SECURITY_ADMIN_USER=admin
-GF_SECURITY_ADMIN_PASSWORD=admin
-GF_INSTALL_PLUGINS=grafana-athena-datasource
-
-# Orchestrator Configuration
-ORCH_PORT=8080
-
-# Tenant Configuration
-TENANT_VALUE=D11-Prod-AWS
+cp .env.example .env
+# Edit .env with your AWS credentials, S3 bucket, Athena settings, etc.
 ```
 
-### 3. Start All Services
+See [Configuration Details](#-configuration-details) below for all available options.
+
+#### 3. Start Services
 
 ```bash
 make up
@@ -121,7 +112,7 @@ This will:
 - Start all services (Vector, Kafka, Spark, Grafana, Orchestrator, MySQL)
 - Wait for health checks to pass
 
-### 4. Create Kafka Topic
+#### 4. Create Kafka Topic
 
 ```bash
 make topics
@@ -151,6 +142,73 @@ docker compose logs kafka
 | **Spark Worker UI** | http://localhost:8081 | - |
 | **Orchestrator** | http://localhost:8080 | - |
 | **Orchestrator Health** | http://localhost:8080/actuator/health | - |
+
+## ⚙️ Configuration Details
+
+The `.env` file contains all configuration for the LogWise stack. When you run `setup.sh`, it automatically creates this file from `.env.example`. Here are the key configuration sections:
+
+### AWS Configuration (Required)
+
+```bash
+AWS_REGION=us-east-1                    # AWS region for S3 and Athena
+AWS_ACCESS_KEY_ID=your-access-key       # AWS access key ID
+AWS_SECRET_ACCESS_KEY=your-secret-key   # AWS secret access key
+AWS_SESSION_TOKEN=                      # Optional: for temporary credentials
+```
+
+### S3 Configuration (Required)
+
+```bash
+S3_BUCKET=your-bucket-name              # S3 bucket for storing processed logs
+S3_PREFIX=logs/                         # Prefix/path within the bucket
+```
+
+### Athena Configuration (Required)
+
+```bash
+S3_ATHENA_OUTPUT=s3://bucket/athena-output/  # S3 path for Athena query results
+ATHENA_WORKGROUP=primary                     # Athena workgroup name
+ATHENA_CATALOG=AwsDataCatalog               # Athena data catalog
+ATHENA_DATABASE=logwise                     # Athena database name
+```
+
+### Kafka Configuration
+
+```bash
+KAFKA_BROKERS=kafka:9092                 # Kafka broker address (default for Docker)
+KAFKA_TOPIC=logs                         # Kafka topic name for logs
+KAFKA_CLUSTER_ID=9ZkYwXlQ2Tq8rBn5JcH0xA  # Kafka cluster ID (KRaft mode)
+```
+
+### Spark Configuration
+
+```bash
+SPARK_MASTER_URL=spark://spark-master:7077  # Spark master URL
+SPARK_STREAMING=true                        # Enable Spark streaming
+SPARK_MASTER_UI_PORT=18080                  # Spark Master UI port
+SPARK_VERSION_MATCH=3.1.2                   # Spark version
+HADOOP_AWS_VERSION=3.2.0                    # Hadoop AWS library version
+AWS_SDK_VERSION=1.11.375                   # AWS SDK version
+MAIN_CLASS=com.dream11.MainApplication      # Spark application main class
+```
+
+### Database Configuration
+
+```bash
+MYSQL_DATABASE=myapp                       # MySQL database name
+MYSQL_USER=myapp                           # MySQL user
+MYSQL_PASSWORD=myapp_pass                  # MySQL password
+MYSQL_ROOT_PASSWORD=root_pass              # MySQL root password
+```
+
+### Other Configuration
+
+```bash
+ORCH_PORT=8080                             # Orchestrator service port
+TENANT_VALUE=D11-Prod-AWS                  # Tenant identifier
+```
+
+For a complete list of all environment variables, see `.env.example` in the deploy directory.
 
 ## 🔧 Running Spark Jobs
 

@@ -3,11 +3,16 @@ SHELL := /bin/bash
 PROJECT := log-central
 COMPOSE := docker compose
 
-.PHONY: bootstrap up down logs ps topics spark-submit spark-rest-submit init-db teardown reset-kafka
+.PHONY: bootstrap setup up down logs ps topics spark-submit spark-rest-submit init-db teardown reset-kafka
 
 bootstrap:
 	@chmod +x ./start.sh || true
 	./start.sh
+
+# One-click setup: bootstrap, create .env, start services, create topics
+setup:
+	@chmod +x ./setup.sh || true
+	./setup.sh
 
 up:
 	$(COMPOSE) up -d --build

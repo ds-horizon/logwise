@@ -79,9 +79,6 @@ main() {
 
   bold "Done. Next steps:"
   echo "1) Copy .env.example to .env and fill values (AWS creds, etc.)"
-  echo "2) Run: make up"
-  echo "3) Run: make topics"
-  echo "4) Run: make spark-submit"
 }
 
 main "$@"
