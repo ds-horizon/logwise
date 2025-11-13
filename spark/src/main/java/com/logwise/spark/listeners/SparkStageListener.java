@@ -24,7 +24,6 @@ import scala.Option;
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class SparkStageListener extends SparkListener {
 
-
   private static class StageMetrics {
     Long inputRecords = 0L;
     Long outputBytes = 0L;
