@@ -110,7 +110,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_pass}
       DB_HOST: db
     ports:
-      - "3306:3306"
+      - "3306"
     networks:
       - lc_net
     volumes:
@@ -378,7 +378,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pgrafana_root_password"]
       interval: 10s
