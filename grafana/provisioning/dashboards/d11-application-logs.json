@@ -208,7 +208,7 @@
             "root_selector": "$.data.serviceDetails[*].env",
             "source": "url",
             "type": "json",
-            "url": "http://localhost:8080/service-details",
+            "url": "http://orchestrator:8080/service-details",
             "url_options": {
               "data": "",
               "headers": [
@@ -278,7 +278,7 @@
             "summarizeBy": "serviceName",
             "type": "json",
             "uql": "parse-json\n",
-            "url": "http://localhost:8080/service-details",
+            "url": "http://orchestrator:8080/service-details",
             "url_options": {
               "data": "",
               "headers": [
@@ -347,7 +347,7 @@
             "summarizeBy": "componentName",
             "type": "json",
             "uql": "parse-json\n$.data.serviceDetails[env == '${env}' && serviceName == '${service_name}'].componentName",
-            "url": "http://localhost:8080/service-details",
+            "url": "http://orchestrator:8080/service-details",
             "url_options": {
               "data": "",
               "headers": [
