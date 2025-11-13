@@ -1,5 +1,5 @@
 # Log Central local stack: Vector → Kafka (KRaft) → Spark (to S3/Athena),
-# Spring Boot Orchestrator + MySQL, Grafana, and Cron jobs.
+# Vert.x Orchestrator + MySQL, Grafana, and Cron jobs.
 
 name: logwise
 
