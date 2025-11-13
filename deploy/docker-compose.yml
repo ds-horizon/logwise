@@ -129,7 +129,7 @@ services:
     # Uses existing Dockerfile in module: log-central-orchestror
     build:
       context: ../orchestrator
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     container_name: logwise_orchestrator
     env_file:
       - .env
@@ -167,7 +167,7 @@ services:
   spark-master:
     build:
       context: ../spark
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     image: logwise-spark:latest
     container_name: logwise_spark_master
     environment:

@@ -103,7 +103,7 @@ FROM maven:3.9-eclipse-temurin-11 AS spark-app-builder
 WORKDIR /app
 
 # Copy pom.xml first (for better layer caching)
-COPY pom.xml .
+COPY ./pom.xml .
 
 # Download dependencies with parallel downloads and cache mount for Maven repository
 # Using cache mount to persist Maven repository between builds for faster subsequent builds
@@ -111,7 +111,7 @@ RUN --mount=type=cache,target=/root/.m2 \
     mvn -B -T 4 dependency:go-offline -Dmaven.artifact.threads=10
 
 # Copy source code
-COPY src ./src
+COPY ./src ./src
 
 # Build the application JAR with the specified Maven command
 # Using cache mount to reuse Maven repository from dependency download step
