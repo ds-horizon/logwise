@@ -72,7 +72,7 @@ sinks:
     inputs:
       - my_transform_id
     bootstrap_servers: "${KAFKA_BROKERS}"
-    topic: "logs.{{.environment_name}}_{{.service_name}}"
+    topic: "logs.{{.environment_name}}_{{.component_type}}_{{.service_name}}"
     compression: zstd
     encoding:
       codec: protobuf
