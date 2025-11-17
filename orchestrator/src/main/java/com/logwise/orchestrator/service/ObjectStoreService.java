@@ -54,7 +54,8 @@ public class ObjectStoreService {
   private static Integer getEnvRetentionDays(TenantConfig config, ServiceDetails serviceDetails) {
     return config.getEnvLogsRetentionDays().stream()
         .filter(
-            retentionDaysConfig -> retentionDaysConfig.getEnvs().contains(serviceDetails.getEnvironmentName()))
+            retentionDaysConfig ->
+                retentionDaysConfig.getEnvs().contains(serviceDetails.getEnvironmentName()))
         .findFirst()
         .map(EnvLogsRetentionDaysConfig::getRetentionDays)
         .orElse(config.getDefaultLogsRetentionDays());

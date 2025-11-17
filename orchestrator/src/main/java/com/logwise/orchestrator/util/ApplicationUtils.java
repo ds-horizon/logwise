@@ -53,7 +53,8 @@ public class ApplicationUtils {
   }
 
   public ServiceDetails getServiceFromObjectKey(String logPath) {
-    Pattern pattern = Pattern.compile("environment_name=(.+?)/component_type=(.+?)/service_name=(.+?)/");
+    Pattern pattern =
+        Pattern.compile("environment_name=(.+?)/component_type=(.+?)/service_name=(.+?)/");
     Matcher matcher = pattern.matcher(logPath);
     if (matcher.find()) {
       return ServiceDetails.builder()

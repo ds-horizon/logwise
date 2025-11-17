@@ -17,6 +17,7 @@ public interface VectorLogsOrBuilder
    * @return The serviceName.
    */
   java.lang.String getServiceName();
+
   /**
    * <code>string service_name = 1;</code>
    *
@@ -30,6 +31,7 @@ public interface VectorLogsOrBuilder
    * @return The environmentName.
    */
   java.lang.String getEnvironmentName();
+
   /**
    * <code>string environment_name = 2;</code>
    *
@@ -43,6 +45,7 @@ public interface VectorLogsOrBuilder
    * @return The message.
    */
   java.lang.String getMessage();
+
   /**
    * <code>string message = 3;</code>
    *
@@ -56,6 +59,7 @@ public interface VectorLogsOrBuilder
    * @return The logLevel.
    */
   java.lang.String getLogLevel();
+
   /**
    * <code>string log_level = 4;</code>
    *
@@ -69,12 +73,14 @@ public interface VectorLogsOrBuilder
    * @return Whether the timestamp field is set.
    */
   boolean hasTimestamp();
+
   /**
    * <code>.google.protobuf.Timestamp timestamp = 5;</code>
    *
    * @return The timestamp.
    */
   com.google.protobuf.Timestamp getTimestamp();
+
   /** <code>.google.protobuf.Timestamp timestamp = 5;</code> */
   com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder();
 
@@ -84,6 +90,7 @@ public interface VectorLogsOrBuilder
    * @return The componentType.
    */
   java.lang.String getComponentType();
+
   /**
    * <code>string component_type = 6;</code>
    *
