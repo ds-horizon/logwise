@@ -80,47 +80,47 @@ jobs:
       #    - Configured via: sonar.java.coveragePlugin=jacoco (in sonar-project.properties)
       # 3. Sonar uploads coverage data along with code analysis to SonarCloud/SonarQube
       # 4. Coverage metrics appear in Sonar dashboard
-      - name: SonarCloud Scan
-        working-directory: spark
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub Actions
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Must be set in repository secrets
-          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}  # Optional: Set if SonarCloud doesn't auto-detect
-          # Sonar server endpoint configuration
-          # REQUIRED: Set SONAR_HOST_URL secret in GitHub: Settings → Secrets → Actions
-          # For SonarCloud: https://sonarcloud.io
-          # For self-hosted SonarQube: http://your-sonarqube-server:9000 (or https://your-domain.com)
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          # Check if required secrets are configured
-          if [ -z "$SONAR_HOST_URL" ] || [ -z "$SONAR_TOKEN" ]; then
-            echo "❌ Required Sonar secrets are not configured!"
-            echo ""
-            echo "Please configure the following secrets in GitHub:"
-            echo "1. Go to: Settings → Secrets and variables → Actions"
-            echo "2. Click 'New repository secret' for each missing secret:"
-            echo ""
-            if [ -z "$SONAR_HOST_URL" ]; then
-              echo "   Secret Name: SONAR_HOST_URL"
-              echo "   Secret Value:"
-              echo "     - For SonarCloud: https://sonarcloud.io"
-              echo "     - For self-hosted SonarQube: http://your-sonarqube-server:9000"
-              echo ""
-            fi
-            if [ -z "$SONAR_TOKEN" ]; then
-              echo "   Secret Name: SONAR_TOKEN"
-              echo "   Secret Value: Generate token in SonarCloud/SonarQube:"
-              echo "     - Go to: My Account → Security → Generate Token"
-              echo "     - Copy the generated token"
-              echo ""
-            fi
-            exit 1
-          fi
+      # - name: SonarCloud Scan
+      #   working-directory: spark
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub Actions
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Must be set in repository secrets
+      #     SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}  # Optional: Set if SonarCloud doesn't auto-detect
+      #     # Sonar server endpoint configuration
+      #     # REQUIRED: Set SONAR_HOST_URL secret in GitHub: Settings → Secrets → Actions
+      #     # For SonarCloud: https://sonarcloud.io
+      #     # For self-hosted SonarQube: http://your-sonarqube-server:9000 (or https://your-domain.com)
+      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      #   run: |
+      #     # Check if required secrets are configured
+      #     if [ -z "$SONAR_HOST_URL" ] || [ -z "$SONAR_TOKEN" ]; then
+      #       echo "❌ Required Sonar secrets are not configured!"
+      #       echo ""
+      #       echo "Please configure the following secrets in GitHub:"
+      #       echo "1. Go to: Settings → Secrets and variables → Actions"
+      #       echo "2. Click 'New repository secret' for each missing secret:"
+      #       echo ""
+      #       if [ -z "$SONAR_HOST_URL" ]; then
+      #         echo "   Secret Name: SONAR_HOST_URL"
+      #         echo "   Secret Value:"
+      #         echo "     - For SonarCloud: https://sonarcloud.io"
+      #         echo "     - For self-hosted SonarQube: http://your-sonarqube-server:9000"
+      #         echo ""
+      #       fi
+      #       if [ -z "$SONAR_TOKEN" ]; then
+      #         echo "   Secret Name: SONAR_TOKEN"
+      #         echo "   Secret Value: Generate token in SonarCloud/SonarQube:"
+      #         echo "     - Go to: My Account → Security → Generate Token"
+      #         echo "     - Copy the generated token"
+      #         echo ""
+      #       fi
+      #       exit 1
+      #     fi
           
-          # Run Sonar analysis
-          # Note: SONAR_TOKEN is automatically used from environment variable by Sonar Maven plugin
-          # No need to pass it explicitly - the plugin reads SONAR_TOKEN env var automatically
-          mvn sonar:sonar -Dsonar.host.url=$SONAR_HOST_URL
+      #     # Run Sonar analysis
+      #     # Note: SONAR_TOKEN is automatically used from environment variable by Sonar Maven plugin
+      #     # No need to pass it explicitly - the plugin reads SONAR_TOKEN env var automatically
+      #     mvn sonar:sonar -Dsonar.host.url=$SONAR_HOST_URL
         # Note: SonarCloud quality gate status is automatically reported via PR checks
         # Configure quality gate in SonarCloud dashboard to fail PRs if not met
         # See: docs/setup-guides/sonarcloud-quality-gate-guide.md

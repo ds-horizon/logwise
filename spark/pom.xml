@@ -505,6 +505,13 @@
                 <version>2.21.1</version>
             </plugin>
 
+            <!-- Versions Maven Plugin - Standard tool for version management -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.16.2</version>
+            </plugin>
+
             <!-- SonarQube Plugin -->
             <!-- 
                  IMPORTANT: This plugin REQUIRES a SonarQube server running.

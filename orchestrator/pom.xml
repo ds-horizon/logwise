@@ -6,7 +6,7 @@
 
   <groupId>com.logwise</groupId>
   <artifactId>orchestrator</artifactId>
-  <version>1.4.2-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>logwise-orchestrator</name>
 
@@ -735,6 +735,13 @@
         <groupId>com.spotify.fmt</groupId>
         <artifactId>fmt-maven-plugin</artifactId>
         <version>2.21.1</version>
+      </plugin>
+
+      <!-- Versions Maven Plugin - Standard tool for version management -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.16.2</version>
       </plugin>
     </plugins>
   </build>
