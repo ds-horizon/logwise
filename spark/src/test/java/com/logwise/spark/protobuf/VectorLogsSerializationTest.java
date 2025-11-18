@@ -8,9 +8,7 @@ import org.testng.annotations.Test;
 /**
  * Unit tests for VectorLogs Protobuf serialization and deserialization.
  *
- * <p>
- * Tests verify that Protobuf messages can be serialized and deserialized
- * correctly, preserving
+ * <p>Tests verify that Protobuf messages can be serialized and deserialized correctly, preserving
  * all data including timestamps and special characters.
  */
 public class VectorLogsSerializationTest {
@@ -19,16 +17,18 @@ public class VectorLogsSerializationTest {
   public void testSerializeDeserialize_WithAllFields_ReturnsIdenticalMessage()
       throws InvalidProtocolBufferException {
     // Arrange
-    Timestamp timestamp = Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
+    Timestamp timestamp =
+        Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
 
-    VectorLogs original = VectorLogs.newBuilder()
-        .setMessage("Test log message")
-        .setTimestamp(timestamp)
-        .setEnvironmentName("production")
-        .setServiceName("api-service")
-        .setComponentType("api-container")
-        .setLogLevel("info")
-        .build();
+    VectorLogs original =
+        VectorLogs.newBuilder()
+            .setMessage("Test log message")
+            .setTimestamp(timestamp)
+            .setEnvironmentName("production")
+            .setServiceName("api-service")
+            .setComponentType("api-container")
+            .setLogLevel("info")
+            .build();
 
     // Act
     byte[] serialized = original.toByteArray();
@@ -66,8 +66,10 @@ public class VectorLogsSerializationTest {
   public void testSerializeDeserialize_WithTimestamp_PreservesTimestamp()
       throws InvalidProtocolBufferException {
     // Arrange
-    Timestamp timestamp = Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
-    VectorLogs original = VectorLogs.newBuilder().setMessage("Test").setTimestamp(timestamp).build();
+    Timestamp timestamp =
+        Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
+    VectorLogs original =
+        VectorLogs.newBuilder().setMessage("Test").setTimestamp(timestamp).build();
 
     // Act
     byte[] serialized = original.toByteArray();
@@ -113,13 +115,14 @@ public class VectorLogsSerializationTest {
   public void testSerializeDeserialize_WithEmptyStrings_HandlesCorrectly()
       throws InvalidProtocolBufferException {
     // Arrange
-    VectorLogs original = VectorLogs.newBuilder()
-        .setMessage("")
-        .setEnvironmentName("")
-        .setServiceName("")
-        .setComponentType("")
-        .setLogLevel("")
-        .build();
+    VectorLogs original =
+        VectorLogs.newBuilder()
+            .setMessage("")
+            .setEnvironmentName("")
+            .setServiceName("")
+            .setComponentType("")
+            .setLogLevel("")
+            .build();
 
     // Act
     byte[] serialized = original.toByteArray();
@@ -172,7 +175,7 @@ public class VectorLogsSerializationTest {
   public void testDeserialize_WithInvalidBytes_ThrowsException()
       throws InvalidProtocolBufferException {
     // Arrange
-    byte[] invalidBytes = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
+    byte[] invalidBytes = new byte[] {0x00, 0x01, 0x02, 0x03, 0x04, 0x05};
 
     // Act - should throw InvalidProtocolBufferException
     VectorLogs.parseFrom(invalidBytes);
@@ -202,15 +205,17 @@ public class VectorLogsSerializationTest {
   public void testRoundTrip_WithAllFields_PreservesStructure()
       throws InvalidProtocolBufferException {
     // Arrange
-    Timestamp timestamp = Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
-    VectorLogs original = VectorLogs.newBuilder()
-        .setMessage("Test message")
-        .setServiceName("test-service")
-        .setEnvironmentName("test-env")
-        .setComponentType("test-component")
-        .setLogLevel("debug")
-        .setTimestamp(timestamp)
-        .build();
+    Timestamp timestamp =
+        Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
+    VectorLogs original =
+        VectorLogs.newBuilder()
+            .setMessage("Test message")
+            .setServiceName("test-service")
+            .setEnvironmentName("test-env")
+            .setComponentType("test-component")
+            .setLogLevel("debug")
+            .setTimestamp(timestamp)
+            .build();
 
     // Act
     byte[] serialized = original.toByteArray();

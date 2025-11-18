@@ -503,13 +503,14 @@ public class UtilTest extends BaseTest {
   public void testApplicationUtils_GetServiceFromObjectKey_WithValidPath_ReturnsServiceDetails() {
 
     String logPath =
-        "logs/env=prod/service_name=test-service/component_name=test-component/year=2024/";
+        "logs/environment_name=prod/component_type=test-component/service_name=test-service/year=2024/";
 
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey(logPath);
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getEnvironmentName(), "prod");
     Assert.assertEquals(result.getServiceName(), "test-service");
+    Assert.assertEquals(result.getComponentType(), "test-component");
   }
 
   @Test
@@ -541,13 +542,15 @@ public class UtilTest extends BaseTest {
   public void
       testApplicationUtils_GetServiceFromObjectKey_WithPartialMatch_ReturnsServiceDetails() {
 
-    String logPath = "prefix/env=staging/service_name=api/component_name=web/extra/path";
+    String logPath =
+        "prefix/environment_name=staging/component_type=web/service_name=api/extra/path";
 
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey(logPath);
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getEnvironmentName(), "staging");
     Assert.assertEquals(result.getServiceName(), "api");
+    Assert.assertEquals(result.getComponentType(), "web");
   }
 
   @Test
