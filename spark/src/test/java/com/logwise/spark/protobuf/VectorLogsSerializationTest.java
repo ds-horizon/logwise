@@ -2,16 +2,16 @@ package com.logwise.spark.protobuf;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
  * Unit tests for VectorLogs Protobuf serialization and deserialization.
  *
- * <p>Tests verify that Protobuf messages can be serialized and deserialized correctly, preserving
- * all data including maps, timestamps, and special characters.
+ * <p>
+ * Tests verify that Protobuf messages can be serialized and deserialized
+ * correctly, preserving
+ * all data including timestamps and special characters.
  */
 public class VectorLogsSerializationTest {
 
@@ -19,29 +19,16 @@ public class VectorLogsSerializationTest {
   public void testSerializeDeserialize_WithAllFields_ReturnsIdenticalMessage()
       throws InvalidProtocolBufferException {
     // Arrange
-    Timestamp timestamp =
-        Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
-    Map<String, String> ddtags = new HashMap<>();
-    ddtags.put("env", "prod");
-    ddtags.put("service", "api");
-    Map<String, String> extra = new HashMap<>();
-    extra.put("trace_id", "12345");
-    extra.put("span_id", "67890");
+    Timestamp timestamp = Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
 
-    VectorLogs original =
-        VectorLogs.newBuilder()
-            .setMessage("Test log message")
-            .putAllDdtags(ddtags)
-            .setTimestamp(timestamp)
-            .setEnv("production")
-            .setServiceName("api-service")
-            .setComponentName("api-container")
-            .setHostname("host-123")
-            .setDdsource("vector")
-            .setSourceType("application")
-            .setStatus("info")
-            .putAllExtra(extra)
-            .build();
+    VectorLogs original = VectorLogs.newBuilder()
+        .setMessage("Test log message")
+        .setTimestamp(timestamp)
+        .setEnvironmentName("production")
+        .setServiceName("api-service")
+        .setComponentType("api-container")
+        .setLogLevel("info")
+        .build();
 
     // Act
     byte[] serialized = original.toByteArray();
@@ -49,16 +36,11 @@ public class VectorLogsSerializationTest {
 
     // Assert
     Assert.assertEquals(deserialized.getMessage(), original.getMessage());
-    Assert.assertEquals(deserialized.getDdtagsMap(), original.getDdtagsMap());
     Assert.assertEquals(deserialized.getTimestamp(), original.getTimestamp());
-    Assert.assertEquals(deserialized.getEnv(), original.getEnv());
+    Assert.assertEquals(deserialized.getEnvironmentName(), original.getEnvironmentName());
     Assert.assertEquals(deserialized.getServiceName(), original.getServiceName());
-    Assert.assertEquals(deserialized.getComponentName(), original.getComponentName());
-    Assert.assertEquals(deserialized.getHostname(), original.getHostname());
-    Assert.assertEquals(deserialized.getDdsource(), original.getDdsource());
-    Assert.assertEquals(deserialized.getSourceType(), original.getSourceType());
-    Assert.assertEquals(deserialized.getStatus(), original.getStatus());
-    Assert.assertEquals(deserialized.getExtraMap(), original.getExtraMap());
+    Assert.assertEquals(deserialized.getComponentType(), original.getComponentType());
+    Assert.assertEquals(deserialized.getLogLevel(), original.getLogLevel());
   }
 
   @Test
@@ -73,54 +55,28 @@ public class VectorLogsSerializationTest {
 
     // Assert
     Assert.assertEquals(deserialized.getMessage(), "Minimal log");
-    Assert.assertTrue(deserialized.getDdtagsMap().isEmpty());
     Assert.assertFalse(deserialized.hasTimestamp());
-    Assert.assertEquals(deserialized.getEnv(), "");
+    Assert.assertEquals(deserialized.getEnvironmentName(), "");
     Assert.assertEquals(deserialized.getServiceName(), "");
+    Assert.assertEquals(deserialized.getComponentType(), "");
+    Assert.assertEquals(deserialized.getLogLevel(), "");
   }
 
   @Test
-  public void testSerializeDeserialize_WithDdtagsMap_PreservesMapStructure()
+  public void testSerializeDeserialize_WithTimestamp_PreservesTimestamp()
       throws InvalidProtocolBufferException {
     // Arrange
-    Map<String, String> ddtags = new HashMap<>();
-    ddtags.put("key1", "value1");
-    ddtags.put("key2", "value2");
-    ddtags.put("key3", "value3");
-
-    VectorLogs original = VectorLogs.newBuilder().setMessage("Test").putAllDdtags(ddtags).build();
+    Timestamp timestamp = Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
+    VectorLogs original = VectorLogs.newBuilder().setMessage("Test").setTimestamp(timestamp).build();
 
     // Act
     byte[] serialized = original.toByteArray();
     VectorLogs deserialized = VectorLogs.parseFrom(serialized);
 
     // Assert
-    Assert.assertEquals(deserialized.getDdtagsCount(), 3);
-    Assert.assertEquals(deserialized.getDdtagsMap(), ddtags);
-    Assert.assertEquals(deserialized.getDdtagsOrDefault("key1", "default"), "value1");
-    Assert.assertEquals(deserialized.getDdtagsOrDefault("key2", "default"), "value2");
-    Assert.assertEquals(deserialized.getDdtagsOrDefault("key3", "default"), "value3");
-  }
-
-  @Test
-  public void testSerializeDeserialize_WithExtraMap_PreservesMapStructure()
-      throws InvalidProtocolBufferException {
-    // Arrange
-    Map<String, String> extra = new HashMap<>();
-    extra.put("custom_field_1", "custom_value_1");
-    extra.put("custom_field_2", "custom_value_2");
-
-    VectorLogs original = VectorLogs.newBuilder().setMessage("Test").putAllExtra(extra).build();
-
-    // Act
-    byte[] serialized = original.toByteArray();
-    VectorLogs deserialized = VectorLogs.parseFrom(serialized);
-
-    // Assert
-    Assert.assertEquals(deserialized.getExtraCount(), 2);
-    Assert.assertEquals(deserialized.getExtraMap(), extra);
-    Assert.assertEquals(
-        deserialized.getExtraOrDefault("custom_field_1", "default"), "custom_value_1");
+    Assert.assertTrue(deserialized.hasTimestamp());
+    Assert.assertEquals(deserialized.getTimestamp().getSeconds(), 1609459200L);
+    Assert.assertEquals(deserialized.getTimestamp().getNanos(), 500000000);
   }
 
   @Test
@@ -157,13 +113,13 @@ public class VectorLogsSerializationTest {
   public void testSerializeDeserialize_WithEmptyStrings_HandlesCorrectly()
       throws InvalidProtocolBufferException {
     // Arrange
-    VectorLogs original =
-        VectorLogs.newBuilder()
-            .setMessage("")
-            .setEnv("")
-            .setServiceName("")
-            .setComponentName("")
-            .build();
+    VectorLogs original = VectorLogs.newBuilder()
+        .setMessage("")
+        .setEnvironmentName("")
+        .setServiceName("")
+        .setComponentType("")
+        .setLogLevel("")
+        .build();
 
     // Act
     byte[] serialized = original.toByteArray();
@@ -171,14 +127,16 @@ public class VectorLogsSerializationTest {
 
     // Assert
     Assert.assertEquals(deserialized.getMessage(), "");
-    Assert.assertEquals(deserialized.getEnv(), "");
+    Assert.assertEquals(deserialized.getEnvironmentName(), "");
     Assert.assertEquals(deserialized.getServiceName(), "");
+    Assert.assertEquals(deserialized.getComponentType(), "");
+    Assert.assertEquals(deserialized.getLogLevel(), "");
   }
 
   @Test
-  public void testSerializeDeserialize_WithNullOptionalFields_HandlesCorrectly()
+  public void testSerializeDeserialize_WithOptionalTimestamp_HandlesCorrectly()
       throws InvalidProtocolBufferException {
-    // Arrange - Optional fields (ddsource, sourceType, status) are not set
+    // Arrange - Optional timestamp field is not set
     VectorLogs original = VectorLogs.newBuilder().setMessage("Test").build();
 
     // Act
@@ -186,12 +144,9 @@ public class VectorLogsSerializationTest {
     VectorLogs deserialized = VectorLogs.parseFrom(serialized);
 
     // Assert
-    Assert.assertFalse(deserialized.hasDdsource());
-    Assert.assertFalse(deserialized.hasSourceType());
-    Assert.assertFalse(deserialized.hasStatus());
-    Assert.assertEquals(deserialized.getDdsource(), "");
-    Assert.assertEquals(deserialized.getSourceType(), "");
-    Assert.assertEquals(deserialized.getStatus(), "");
+    Assert.assertFalse(deserialized.hasTimestamp());
+    // getTimestamp() should return default instance when not set
+    Assert.assertNotNull(deserialized.getTimestamp());
   }
 
   @Test
@@ -217,7 +172,7 @@ public class VectorLogsSerializationTest {
   public void testDeserialize_WithInvalidBytes_ThrowsException()
       throws InvalidProtocolBufferException {
     // Arrange
-    byte[] invalidBytes = new byte[] {0x00, 0x01, 0x02, 0x03, 0x04, 0x05};
+    byte[] invalidBytes = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
 
     // Act - should throw InvalidProtocolBufferException
     VectorLogs.parseFrom(invalidBytes);
@@ -244,27 +199,31 @@ public class VectorLogsSerializationTest {
   }
 
   @Test
-  public void testRoundTrip_WithNestedMaps_PreservesStructure()
+  public void testRoundTrip_WithAllFields_PreservesStructure()
       throws InvalidProtocolBufferException {
     // Arrange
-    Map<String, String> ddtags = new HashMap<>();
-    ddtags.put("nested.key1", "value1");
-    ddtags.put("nested.key2", "value2");
-    Map<String, String> extra = new HashMap<>();
-    extra.put("metadata.trace", "trace-123");
-    extra.put("metadata.span", "span-456");
-
-    VectorLogs original =
-        VectorLogs.newBuilder().setMessage("Test").putAllDdtags(ddtags).putAllExtra(extra).build();
+    Timestamp timestamp = Timestamp.newBuilder().setSeconds(1609459200L).setNanos(500000000).build();
+    VectorLogs original = VectorLogs.newBuilder()
+        .setMessage("Test message")
+        .setServiceName("test-service")
+        .setEnvironmentName("test-env")
+        .setComponentType("test-component")
+        .setLogLevel("debug")
+        .setTimestamp(timestamp)
+        .build();
 
     // Act
     byte[] serialized = original.toByteArray();
     VectorLogs deserialized = VectorLogs.parseFrom(serialized);
 
     // Assert
-    Assert.assertEquals(deserialized.getDdtagsMap(), ddtags);
-    Assert.assertEquals(deserialized.getExtraMap(), extra);
-    Assert.assertEquals(deserialized.getDdtagsOrDefault("nested.key1", ""), "value1");
-    Assert.assertEquals(deserialized.getExtraOrDefault("metadata.trace", ""), "trace-123");
+    Assert.assertEquals(deserialized.getMessage(), "Test message");
+    Assert.assertEquals(deserialized.getServiceName(), "test-service");
+    Assert.assertEquals(deserialized.getEnvironmentName(), "test-env");
+    Assert.assertEquals(deserialized.getComponentType(), "test-component");
+    Assert.assertEquals(deserialized.getLogLevel(), "debug");
+    Assert.assertTrue(deserialized.hasTimestamp());
+    Assert.assertEquals(deserialized.getTimestamp().getSeconds(), timestamp.getSeconds());
+    Assert.assertEquals(deserialized.getTimestamp().getNanos(), timestamp.getNanos());
   }
 }
