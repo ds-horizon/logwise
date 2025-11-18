@@ -31,7 +31,9 @@ import org.testng.annotations.Test;
 /**
  * Unit tests for PushLogsToS3SparkJob.
  *
- * <p>Tests focus on public API behavior: job lifecycle, error handling, and observable outcomes.
+ * <p>
+ * Tests focus on public API behavior: job lifecycle, error handling, and
+ * observable outcomes.
  */
 public class PushLogsToS3SparkJobTest {
 
@@ -92,17 +94,18 @@ public class PushLogsToS3SparkJobTest {
   }
 
   /**
-   * Creates a mock StreamingQuery that signals via CountDownLatch when awaitTermination is called.
+   * Creates a mock StreamingQuery that signals via CountDownLatch when
+   * awaitTermination is called.
    */
   private StreamingQuery createSignalableMockQuery(CountDownLatch signalLatch) {
     StreamingQuery mockQuery = mock(StreamingQuery.class);
     when(mockQuery.name()).thenReturn("test-query");
     try {
       doAnswer(
-              invocation -> {
-                signalLatch.countDown();
-                return null;
-              })
+          invocation -> {
+            signalLatch.countDown();
+            return null;
+          })
           .when(mockQuery)
           .awaitTermination();
       doNothing().when(mockQuery).stop();
@@ -114,21 +117,23 @@ public class PushLogsToS3SparkJobTest {
 
   /** Starts the job in a daemon thread and returns the thread. */
   private Thread startJobAsync() {
-    Thread thread =
-        new Thread(
-            () -> {
-              try {
-                job.start();
-              } catch (Exception e) {
-                // Expected - monitorJob blocks indefinitely
-              }
-            });
+    Thread thread = new Thread(
+        () -> {
+          try {
+            job.start();
+          } catch (Exception e) {
+            // Expected - monitorJob blocks indefinitely
+          }
+        });
     thread.setDaemon(true);
     thread.start();
     return thread;
   }
 
-  /** Waits for the streaming query count to be set, indicating streams have started. */
+  /**
+   * Waits for the streaming query count to be set, indicating streams have
+   * started.
+   */
   private boolean waitForStreamsToStart(int timeoutSeconds) throws InterruptedException {
     long deadline = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSeconds);
     while (System.currentTimeMillis() < deadline) {
@@ -307,15 +312,15 @@ public class PushLogsToS3SparkJobTest {
     when(mockQuery.name()).thenReturn("test-query");
     try {
       doThrow(
-              new StreamingQueryException(
-                  "Test exception", "test", new RuntimeException(), "start", "end"))
+          new StreamingQueryException(
+              "Test exception", "test", new RuntimeException(), "start", "end"))
           .when(mockQuery)
           .awaitTermination();
       doAnswer(
-              invocation -> {
-                stopCalledLatch.countDown();
-                return null;
-              })
+          invocation -> {
+            stopCalledLatch.countDown();
+            return null;
+          })
           .when(mockQuery)
           .stop();
     } catch (StreamingQueryException | TimeoutException e) {
@@ -349,10 +354,10 @@ public class PushLogsToS3SparkJobTest {
     when(mockQuery.name()).thenReturn("test-query");
     try {
       doAnswer(
-              invocation -> {
-                awaitCalledLatch.countDown();
-                return null;
-              })
+          invocation -> {
+            awaitCalledLatch.countDown();
+            return null;
+          })
           .when(mockQuery)
           .awaitTermination();
       doThrow(new TimeoutException("Test timeout")).when(mockQuery).stop();
@@ -399,15 +404,14 @@ public class PushLogsToS3SparkJobTest {
     Thread startThread = null;
     try (MockedStatic<StreamFactory> mockedFactory = setupMockStreamFactory(mockStream)) {
       // Start the job - this calls monitorJob() which checks timeout in a loop
-      startThread =
-          new Thread(
-              () -> {
-                try {
-                  job.start(); // Calls monitorJob() which checks timeout every 100ms
-                } catch (Exception e) {
-                  // Expected - monitorJob() blocks indefinitely or may throw in test environment
-                }
-              });
+      startThread = new Thread(
+          () -> {
+            try {
+              job.start(); // Calls monitorJob() which checks timeout every 100ms
+            } catch (Exception e) {
+              // Expected - monitorJob() blocks indefinitely or may throw in test environment
+            }
+          });
       startThread.setDaemon(true);
       startThread.start();
 
@@ -505,15 +509,14 @@ public class PushLogsToS3SparkJobTest {
     Thread startThread = null;
     try (MockedStatic<StreamFactory> mockedFactory = setupMockStreamFactory(mockStream)) {
       // Start the job with default config (1 minute timeout)
-      startThread =
-          new Thread(
-              () -> {
-                try {
-                  job.start(); // Calls monitorJob() which checks timeout every 100ms
-                } catch (Exception e) {
-                  // Expected - monitorJob() blocks indefinitely
-                }
-              });
+      startThread = new Thread(
+          () -> {
+            try {
+              job.start(); // Calls monitorJob() which checks timeout every 100ms
+            } catch (Exception e) {
+              // Expected - monitorJob() blocks indefinitely
+            }
+          });
       startThread.setDaemon(true);
       startThread.start();
 
@@ -584,10 +587,8 @@ public class PushLogsToS3SparkJobTest {
   public void testMonitoringLoop_WhenTimeoutExceeded_CallsStop() throws Exception {
     // Test the branch: if (isJobTimeOut(timeOutInMillis)) in monitorJob()
     // Arrange - Create a job with a very short timeout
-    Config shortTimeoutConfig =
-        createTestConfigWithTimeout(1); // 1 minute timeout, but we'll simulate past time
-    PushLogsToS3SparkJob shortTimeoutJob =
-        spy(new PushLogsToS3SparkJob(shortTimeoutConfig, mockSparkSession));
+    Config shortTimeoutConfig = createTestConfigWithTimeout(1); // 1 minute timeout, but we'll simulate past time
+    PushLogsToS3SparkJob shortTimeoutJob = spy(new PushLogsToS3SparkJob(shortTimeoutConfig, mockSparkSession));
 
     Stream mockStream = mock(Stream.class);
     StreamingQuery mockQuery = mock(StreamingQuery.class);
@@ -597,21 +598,22 @@ public class PushLogsToS3SparkJobTest {
     Thread startThread = null;
     try (MockedStatic<StreamFactory> mockedFactory = setupMockStreamFactory(mockStream)) {
       // Start the job
-      startThread =
-          new Thread(
-              () -> {
-                try {
-                  shortTimeoutJob.start();
-                } catch (Exception e) {
-                  // Expected - monitorJob blocks indefinitely
-                }
-              });
+      startThread = new Thread(
+          () -> {
+            try {
+              shortTimeoutJob.start();
+            } catch (Exception e) {
+              // Expected - monitorJob blocks indefinitely
+            }
+          });
       startThread.setDaemon(true);
       startThread.start();
 
       // Wait for the runnable to start and set the start time
-      // The startGetPushLogsToS3Runnable() method sets the start time when the thread starts
-      // Wait for the job to be added to running jobs, which indicates startGetPushLogsToS3Runnable
+      // The startGetPushLogsToS3Runnable() method sets the start time when the thread
+      // starts
+      // Wait for the job to be added to running jobs, which indicates
+      // startGetPushLogsToS3Runnable
       // was called
       int waitCount = 0;
       while (!StaticFieldHelper.getRunningJobs().contains(shortTimeoutJob) && waitCount < 50) {
@@ -620,8 +622,7 @@ public class PushLogsToS3SparkJobTest {
       }
 
       // Verify the start time was set
-      Field startTimeField =
-          PushLogsToS3SparkJob.class.getDeclaredField("pushLogsToS3ThreadStartTime");
+      Field startTimeField = PushLogsToS3SparkJob.class.getDeclaredField("pushLogsToS3ThreadStartTime");
       startTimeField.setAccessible(true);
       Long startTime = (Long) startTimeField.get(shortTimeoutJob);
 
@@ -632,7 +633,8 @@ public class PushLogsToS3SparkJobTest {
         startTime = (Long) startTimeField.get(shortTimeoutJob);
       }
 
-      // Use reflection to set the start time to a time in the past (simulating timeout)
+      // Use reflection to set the start time to a time in the past (simulating
+      // timeout)
       // Set it to 2 minutes ago (exceeding 1 minute timeout)
       if (startTime != null) {
         long pastTime = System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(2);
@@ -643,7 +645,8 @@ public class PushLogsToS3SparkJobTest {
         Thread.sleep(1000);
 
         // Verify that stop() was called
-        // The timeout branch should be executed: if (isJobTimeOut(timeOutInMillis)) { stop(); }
+        // The timeout branch should be executed: if (isJobTimeOut(timeOutInMillis)) {
+        // stop(); }
         verify(shortTimeoutJob, atLeastOnce()).stop();
       } else {
         // If we couldn't set the start time, the test can't verify the timeout branch
@@ -743,7 +746,8 @@ public class PushLogsToS3SparkJobTest {
     try {
       Field threadField = PushLogsToS3SparkJob.class.getDeclaredField("pushLogsToS3Thread");
       threadField.setAccessible(true);
-      Thread deadThread = new Thread(() -> {});
+      Thread deadThread = new Thread(() -> {
+      });
       deadThread.start();
       deadThread.join(100); // Wait for thread to finish
       threadField.set(newJob, deadThread);
@@ -806,8 +810,7 @@ public class PushLogsToS3SparkJobTest {
 
     // Use reflection to test isJobTimeOut directly
     try {
-      java.lang.reflect.Method method =
-          PushLogsToS3SparkJob.class.getDeclaredMethod("isJobTimeOut", long.class);
+      java.lang.reflect.Method method = PushLogsToS3SparkJob.class.getDeclaredMethod("isJobTimeOut", long.class);
       method.setAccessible(true);
 
       // Act - Call isJobTimeOut when startTime is null
@@ -913,8 +916,10 @@ public class PushLogsToS3SparkJobTest {
   // ========== Helper Class for Static Field Operations ==========
 
   /**
-   * Helper class to encapsulate operations on static fields. Uses reflection only for test
-   * setup/teardown, not for testing functionality. Test functionality is verified through public
+   * Helper class to encapsulate operations on static fields. Uses reflection only
+   * for test
+   * setup/teardown, not for testing functionality. Test functionality is verified
+   * through public
    * APIs.
    */
   private static class StaticFieldHelper {
