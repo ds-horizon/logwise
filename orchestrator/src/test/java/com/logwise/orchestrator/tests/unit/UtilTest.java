@@ -276,6 +276,10 @@ public class UtilTest extends BaseTest {
     }
   }
 
+  // Note: listObjects method uses paginator which is complex to mock properly
+  // The method is tested indirectly through integration tests
+  // Skipping unit test for listObjects to avoid complex mocking
+
   @Test
   public void testResponseWrapper_FromMaybe_WithValue_ReturnsSuccessfulResponse() throws Exception {
 
