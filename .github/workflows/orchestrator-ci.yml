@@ -60,6 +60,88 @@ jobs:
         #   * Branch coverage: 75%
         #   * Method coverage: 80%
 
+      - name: Print coverage summary
+        working-directory: orchestrator
+        if: always()
+        run: |
+          echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "target/site/jacoco/jacoco.csv" ]; then
+            # Parse jacoco.csv to extract coverage metrics
+            # Format: GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,METHOD_MISSED,METHOD_COVERED
+            awk -F',' '
+              NR==1 { next }  # Skip header
+              {
+                # Sum up all metrics
+                inst_missed += $4; inst_covered += $5;
+                branch_missed += $6; branch_covered += $7;
+                line_missed += $8; line_covered += $9;
+                method_missed += $10; method_covered += $11;
+              }
+              END {
+                # Calculate percentages
+                inst_total = inst_missed + inst_covered;
+                branch_total = branch_missed + branch_covered;
+                line_total = line_missed + line_covered;
+                method_total = method_missed + method_covered;
+                
+                if (inst_total > 0) inst_pct = (inst_covered / inst_total) * 100;
+                if (branch_total > 0) branch_pct = (branch_covered / branch_total) * 100;
+                if (line_total > 0) line_pct = (line_covered / line_total) * 100;
+                if (method_total > 0) method_pct = (method_covered / method_total) * 100;
+                
+                # Print formatted output
+                printf "| Metric | Covered | Missed | Total | Coverage |\n";
+                printf "|--------|---------|--------|-------|----------|\n";
+                printf "| **Instructions** | %d | %d | %d | %.2f%% |\n", inst_covered, inst_missed, inst_total, inst_pct;
+                printf "| **Branches** | %d | %d | %d | %.2f%% |\n", branch_covered, branch_missed, branch_total, branch_pct;
+                printf "| **Lines** | %d | %d | %d | %.2f%% |\n", line_covered, line_missed, line_total, line_pct;
+                printf "| **Methods** | %d | %d | %d | %.2f%% |\n", method_covered, method_missed, method_total, method_pct;
+              }
+            ' target/site/jacoco/jacoco.csv >> $GITHUB_STEP_SUMMARY
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Coverage Details" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📁 Full coverage report: \`target/site/jacoco/index.html\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Also print to console
+            echo "=========================================="
+            echo "📊 Test Coverage Summary"
+            echo "=========================================="
+            awk -F',' '
+              NR==1 { next }
+              {
+                inst_missed += $4; inst_covered += $5;
+                branch_missed += $6; branch_covered += $7;
+                line_missed += $8; line_covered += $9;
+                method_missed += $10; method_covered += $11;
+              }
+              END {
+                inst_total = inst_missed + inst_covered;
+                branch_total = branch_missed + branch_covered;
+                line_total = line_missed + line_covered;
+                method_total = method_missed + method_covered;
+                
+                if (inst_total > 0) inst_pct = (inst_covered / inst_total) * 100;
+                if (branch_total > 0) branch_pct = (branch_covered / branch_total) * 100;
+                if (line_total > 0) line_pct = (line_covered / line_total) * 100;
+                if (method_total > 0) method_pct = (method_covered / method_total) * 100;
+                
+                printf "Instructions: %d/%d (%.2f%%)\n", inst_covered, inst_total, inst_pct;
+                printf "Branches:     %d/%d (%.2f%%)\n", branch_covered, branch_total, branch_pct;
+                printf "Lines:        %d/%d (%.2f%%)\n", line_covered, line_total, line_pct;
+                printf "Methods:      %d/%d (%.2f%%)\n", method_covered, method_total, method_pct;
+              }
+            ' target/site/jacoco/jacoco.csv
+            echo "=========================================="
+          else
+            echo "⚠️ Coverage report not found at target/site/jacoco/jacoco.csv" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ Coverage report not found. Tests may have failed before coverage generation."
+          fi
+
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         if: always()
