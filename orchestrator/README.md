@@ -1,5 +1,6 @@
-# log-central-orchestrator
+For setup instructions, see the [Orchestrator Service Setup Guide](https://ds-horizon.github.io/logwise/setup-guides/self-host/orchestrator-service-setup.html).
 
+<<<<<<< HEAD
 ## Prerequisites
 
 - Java 11 or higher
@@ -50,3 +51,5 @@ Health check: `curl http://localhost:8080/healthcheck`
 
 * Run `mvn com.spotify.fmt:fmt-maven-plugin:2.20:format` to auto format the code
 
+=======
+>>>>>>> main
