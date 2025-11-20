@@ -56,7 +56,8 @@ public class MainApplicationTest extends BaseTest {
       Vertx vertx = BaseTest.getReactiveVertx();
 
       // Use reflection to access protected method
-      java.lang.reflect.Method method = MainApplication.class.getDeclaredMethod("getGoogleGuiceModules", Vertx.class);
+      java.lang.reflect.Method method =
+          MainApplication.class.getDeclaredMethod("getGoogleGuiceModules", Vertx.class);
       method.setAccessible(true);
       Module[] modules = (Module[]) method.invoke(app, vertx);
 
@@ -79,7 +80,8 @@ public class MainApplicationTest extends BaseTest {
       Vertx vertx = BaseTest.getReactiveVertx();
 
       // Use reflection to access protected method
-      java.lang.reflect.Method method = MainApplication.class.getDeclaredMethod("getVerticlesToDeploy", Vertx.class);
+      java.lang.reflect.Method method =
+          MainApplication.class.getDeclaredMethod("getVerticlesToDeploy", Vertx.class);
       method.setAccessible(true);
       Deployable[] deployables = (Deployable[]) method.invoke(app, vertx);
 
@@ -107,4 +109,3 @@ public class MainApplicationTest extends BaseTest {
     }
   }
 }
-

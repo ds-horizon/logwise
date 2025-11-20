@@ -1,7 +1,6 @@
 package com.logwise.orchestrator.tests.unit.common;
 
 import com.logwise.orchestrator.common.util.MaybeUtils;
-import com.logwise.orchestrator.common.util.StackUtils;
 import com.logwise.orchestrator.setup.BaseTest;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -31,7 +30,8 @@ public class MaybeUtilsTest extends BaseTest {
   public void testReadThroughCache_WithCacheHit_ReturnsCachedValue() {
     Maybe<String> getFromCache = Maybe.just("cached-value");
     Maybe<String> getFromSource = Maybe.just("source-value");
-    io.reactivex.functions.Function<String, Completable> saveToCache = value -> Completable.complete();
+    io.reactivex.functions.Function<String, Completable> saveToCache =
+        value -> Completable.complete();
 
     Maybe<String> result = MaybeUtils.readThroughCache(getFromCache, getFromSource, saveToCache);
 
@@ -44,7 +44,8 @@ public class MaybeUtilsTest extends BaseTest {
   public void testReadThroughCache_WithCacheMiss_ReturnsSourceValue() {
     Maybe<String> getFromCache = Maybe.empty();
     Maybe<String> getFromSource = Maybe.just("source-value");
-    io.reactivex.functions.Function<String, Completable> saveToCache = value -> Completable.complete();
+    io.reactivex.functions.Function<String, Completable> saveToCache =
+        value -> Completable.complete();
 
     Maybe<String> result = MaybeUtils.readThroughCache(getFromCache, getFromSource, saveToCache);
 
@@ -57,7 +58,8 @@ public class MaybeUtilsTest extends BaseTest {
   public void testReadThroughCache_WithBothEmpty_ReturnsEmpty() {
     Maybe<String> getFromCache = Maybe.empty();
     Maybe<String> getFromSource = Maybe.empty();
-    io.reactivex.functions.Function<String, Completable> saveToCache = value -> Completable.complete();
+    io.reactivex.functions.Function<String, Completable> saveToCache =
+        value -> Completable.complete();
 
     Maybe<String> result = MaybeUtils.readThroughCache(getFromCache, getFromSource, saveToCache);
 
@@ -105,4 +107,3 @@ public class MaybeUtilsTest extends BaseTest {
     }
   }
 }
-

@@ -160,10 +160,10 @@ public class JsonUtilsTest extends BaseTest {
 
   @Test
   public void testJsonMerge_WithArrayOfObjects_MergesCorrectly() {
-    Object[] objects = new Object[] {
-        new JsonObject().put("key1", "value1"),
-        new JsonObject().put("key2", "value2")
-    };
+    Object[] objects =
+        new Object[] {
+          new JsonObject().put("key1", "value1"), new JsonObject().put("key2", "value2")
+        };
 
     JsonObject result = JsonUtils.jsonMerge(objects);
 
@@ -186,10 +186,9 @@ public class JsonUtilsTest extends BaseTest {
 
   @Test
   public void testGetValueFromNestedJson_WithValidPath_ReturnsValue() {
-    JsonObject json = new JsonObject()
-        .put("level1", new JsonObject()
-            .put("level2", new JsonObject()
-                .put("key", "value")));
+    JsonObject json =
+        new JsonObject()
+            .put("level1", new JsonObject().put("level2", new JsonObject().put("key", "value")));
 
     Object result = JsonUtils.getValueFromNestedJson(json, "level1.level2.key");
 
@@ -253,4 +252,3 @@ public class JsonUtilsTest extends BaseTest {
     }
   }
 }
-

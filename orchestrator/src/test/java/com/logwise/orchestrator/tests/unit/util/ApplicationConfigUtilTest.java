@@ -33,7 +33,8 @@ public class ApplicationConfigUtilTest extends BaseTest {
     try (MockedStatic<ApplicationConfigProvider> mockedProvider =
         Mockito.mockStatic(ApplicationConfigProvider.class)) {
       ApplicationConfig mockConfig = new ApplicationConfig();
-      ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+      ApplicationConfig.TenantConfig tenantConfig =
+          ApplicationTestConfig.createMockTenantConfig("ABC");
       mockConfig.setTenants(java.util.Arrays.asList(tenantConfig));
       mockedProvider.when(ApplicationConfigProvider::getApplicationConfig).thenReturn(mockConfig);
 
@@ -83,4 +84,3 @@ public class ApplicationConfigUtilTest extends BaseTest {
     Assert.assertFalse(result);
   }
 }
-

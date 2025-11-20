@@ -18,9 +18,9 @@ public class ObjectStoreFactoryTest {
     Tenant tenant = Tenant.ABC;
     ObjectStoreClient mockClient = Mockito.mock(ObjectStoreClient.class);
 
-    try (MockedStatic<ApplicationUtils> mockedUtils =
-        Mockito.mockStatic(ApplicationUtils.class)) {
-      String injectorName = ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply(tenant.getValue());
+    try (MockedStatic<ApplicationUtils> mockedUtils = Mockito.mockStatic(ApplicationUtils.class)) {
+      String injectorName =
+          ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply(tenant.getValue());
       mockedUtils
           .when(() -> ApplicationUtils.getGuiceInstance(ObjectStoreClient.class, injectorName))
           .thenReturn(mockClient);
@@ -47,10 +47,10 @@ public class ObjectStoreFactoryTest {
     Tenant tenant = Tenant.ABC;
     ObjectStoreClient mockClient = Mockito.mock(ObjectStoreClient.class);
 
-    try (MockedStatic<ApplicationUtils> mockedUtils =
-        Mockito.mockStatic(ApplicationUtils.class)) {
-      String injectorName = ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply(tenant.getValue());
-      
+    try (MockedStatic<ApplicationUtils> mockedUtils = Mockito.mockStatic(ApplicationUtils.class)) {
+      String injectorName =
+          ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply(tenant.getValue());
+
       mockedUtils
           .when(() -> ApplicationUtils.getGuiceInstance(ObjectStoreClient.class, injectorName))
           .thenReturn(mockClient);
@@ -69,9 +69,9 @@ public class ObjectStoreFactoryTest {
   public void testGetClient_WithNonExistentClient_ReturnsNull() {
     Tenant tenant = Tenant.ABC;
 
-    try (MockedStatic<ApplicationUtils> mockedUtils =
-        Mockito.mockStatic(ApplicationUtils.class)) {
-      String injectorName = ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply(tenant.getValue());
+    try (MockedStatic<ApplicationUtils> mockedUtils = Mockito.mockStatic(ApplicationUtils.class)) {
+      String injectorName =
+          ApplicationConstants.OBJECT_STORE_INJECTOR_NAME.apply(tenant.getValue());
       mockedUtils
           .when(() -> ApplicationUtils.getGuiceInstance(ObjectStoreClient.class, injectorName))
           .thenReturn(null);
@@ -82,4 +82,3 @@ public class ObjectStoreFactoryTest {
     }
   }
 }
-

@@ -27,7 +27,8 @@ public class StackUtilsTest extends BaseTest {
     Assert.assertNotNull(callerName);
     // StackUtils.getCallerName() returns the method name at stack index 3
     // which could be the test method or the helper method depending on JVM
-    Assert.assertTrue(callerName.contains("getCallerName") || callerName.contains("testGetCallerName"));
+    Assert.assertTrue(
+        callerName.contains("getCallerName") || callerName.contains("testGetCallerName"));
   }
 
   @Test
@@ -51,4 +52,3 @@ public class StackUtilsTest extends BaseTest {
     return StackUtils.getCallerName();
   }
 }
-

@@ -41,8 +41,7 @@ public class MonitorSparkJobEndpointTest extends BaseTest {
   public void testHandle_WithValidRequest_ReturnsSuccessResponse() throws Exception {
     Tenant tenant = Tenant.ABC;
     String tenantName = tenant.getValue();
-    MonitorSparkJobRequest request =
-        new MonitorSparkJobRequest();
+    MonitorSparkJobRequest request = new MonitorSparkJobRequest();
     request.setDriverCores(2);
     request.setDriverMemoryInGb(4);
 
@@ -59,8 +58,7 @@ public class MonitorSparkJobEndpointTest extends BaseTest {
     Assert.assertNotNull(response.getData().getMessage());
     Assert.assertTrue(response.getData().getMessage().contains(tenantName));
     Assert.assertEquals(response.getHttpStatusCode(), 200);
-    verify(mockSparkService, times(1))
-        .monitorSparkJob(eq(tenant), eq(2), eq(4));
+    verify(mockSparkService, times(1)).monitorSparkJob(eq(tenant), eq(2), eq(4));
   }
 
   @Test
@@ -78,8 +76,7 @@ public class MonitorSparkJobEndpointTest extends BaseTest {
 
     Assert.assertNotNull(response);
     Assert.assertEquals(response.getHttpStatusCode(), 200);
-    verify(mockSparkService, times(1))
-        .monitorSparkJob(eq(tenant), any(), any());
+    verify(mockSparkService, times(1)).monitorSparkJob(eq(tenant), any(), any());
   }
 
   @Test
@@ -99,16 +96,14 @@ public class MonitorSparkJobEndpointTest extends BaseTest {
     Response<DefaultSuccessResponse> response = future.toCompletableFuture().get();
 
     Assert.assertNotNull(response);
-    verify(mockSparkService, times(1))
-        .monitorSparkJob(eq(tenant), eq(4), eq(8));
+    verify(mockSparkService, times(1)).monitorSparkJob(eq(tenant), eq(4), eq(8));
   }
 
   @Test
   public void testHandle_WithServiceError_StillReturnsSuccess() throws Exception {
     Tenant tenant = Tenant.ABC;
     String tenantName = tenant.getValue();
-    MonitorSparkJobRequest request =
-        new MonitorSparkJobRequest();
+    MonitorSparkJobRequest request = new MonitorSparkJobRequest();
     request.setDriverCores(2);
     request.setDriverMemoryInGb(4);
     RuntimeException error = new RuntimeException("Service error");
@@ -127,4 +122,3 @@ public class MonitorSparkJobEndpointTest extends BaseTest {
     Assert.assertEquals(response.getHttpStatusCode(), 200);
   }
 }
-

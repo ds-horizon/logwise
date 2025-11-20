@@ -113,8 +113,7 @@ public class MetricSyncDelayTest extends BaseTest {
     String tenantName = tenant.getValue();
     RuntimeException error = new RuntimeException("Service error");
 
-    when(mockMetricsService.computeLogSyncDelay(any(Tenant.class)))
-        .thenReturn(Single.error(error));
+    when(mockMetricsService.computeLogSyncDelay(any(Tenant.class))).thenReturn(Single.error(error));
 
     try (MockedStatic<ResponseWrapper> mockedResponseWrapper =
         Mockito.mockStatic(ResponseWrapper.class)) {
@@ -139,4 +138,3 @@ public class MetricSyncDelayTest extends BaseTest {
     }
   }
 }
-

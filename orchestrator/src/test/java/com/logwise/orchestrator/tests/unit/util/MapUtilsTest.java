@@ -213,8 +213,7 @@ public class MapUtilsTest extends BaseTest {
     map.put("c", 3);
     map.put("a", 1);
     map.put("b", 2);
-    Comparator<Map.Entry<String, Integer>> comparator =
-        Comparator.comparing(Map.Entry::getValue);
+    Comparator<Map.Entry<String, Integer>> comparator = Comparator.comparing(Map.Entry::getValue);
 
     LinkedHashMap<String, Integer> result = MapUtils.sort(comparator, map);
 
@@ -226,4 +225,3 @@ public class MapUtilsTest extends BaseTest {
     Assert.assertEquals(result.get(keys.get(2)), Integer.valueOf(3));
   }
 }
-

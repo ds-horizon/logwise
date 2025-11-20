@@ -95,4 +95,3 @@ public class HealthCheckEndpointTest extends BaseTest {
     }
   }
 }
-

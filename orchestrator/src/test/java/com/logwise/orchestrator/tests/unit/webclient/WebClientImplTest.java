@@ -146,4 +146,3 @@ public class WebClientImplTest extends BaseTest {
     Assert.assertNull(webClientImpl.getWebClient());
   }
 }
-

@@ -227,4 +227,3 @@ public class CollectionUtilsTest extends BaseTest {
     Assert.assertTrue(result.isEmpty());
   }
 }
-

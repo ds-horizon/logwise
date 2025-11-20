@@ -19,7 +19,6 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -475,7 +474,6 @@ public class UtilTest extends BaseTest {
               || (e.getCause() != null && e.getCause() instanceof RuntimeException));
     }
   }
-
 
   @Test
   public void testApplicationUtils_GetServiceFromObjectKey_WithValidPath_ReturnsServiceDetails() {

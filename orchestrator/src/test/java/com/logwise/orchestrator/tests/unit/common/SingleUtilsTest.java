@@ -31,7 +31,8 @@ public class SingleUtilsTest extends BaseTest {
   public void testReadThroughCache_WithCacheHit_ReturnsCachedValue() {
     Maybe<String> getFromCache = Maybe.just("cached-value");
     Single<String> getFromSource = Single.just("source-value");
-    io.reactivex.functions.Function<String, Completable> saveToCache = value -> Completable.complete();
+    io.reactivex.functions.Function<String, Completable> saveToCache =
+        value -> Completable.complete();
 
     Single<String> result = SingleUtils.readThroughCache(getFromCache, getFromSource, saveToCache);
 
@@ -44,7 +45,8 @@ public class SingleUtilsTest extends BaseTest {
   public void testReadThroughCache_WithCacheMiss_ReturnsSourceValue() {
     Maybe<String> getFromCache = Maybe.empty();
     Single<String> getFromSource = Single.just("source-value");
-    io.reactivex.functions.Function<String, Completable> saveToCache = value -> Completable.complete();
+    io.reactivex.functions.Function<String, Completable> saveToCache =
+        value -> Completable.complete();
 
     Single<String> result = SingleUtils.readThroughCache(getFromCache, getFromSource, saveToCache);
 
@@ -57,7 +59,8 @@ public class SingleUtilsTest extends BaseTest {
   public void testReadThroughCache_WithSourceError_PropagatesError() {
     Maybe<String> getFromCache = Maybe.empty();
     Single<String> getFromSource = Single.error(new RuntimeException("Source error"));
-    io.reactivex.functions.Function<String, Completable> saveToCache = value -> Completable.complete();
+    io.reactivex.functions.Function<String, Completable> saveToCache =
+        value -> Completable.complete();
 
     Single<String> result = SingleUtils.readThroughCache(getFromCache, getFromSource, saveToCache);
 
@@ -110,4 +113,3 @@ public class SingleUtilsTest extends BaseTest {
     }
   }
 }
-

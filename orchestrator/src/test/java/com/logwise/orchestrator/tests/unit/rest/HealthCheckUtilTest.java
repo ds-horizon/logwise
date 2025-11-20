@@ -85,8 +85,9 @@ public class HealthCheckUtilTest extends BaseTest {
     } catch (Exception e) {
       // If Single.zip fails with empty list, that's expected behavior
       // The method might not handle empty maps gracefully
-      Assert.assertTrue(e instanceof java.util.NoSuchElementException || 
-                        e.getCause() instanceof java.util.NoSuchElementException);
+      Assert.assertTrue(
+          e instanceof java.util.NoSuchElementException
+              || e.getCause() instanceof java.util.NoSuchElementException);
     }
   }
 
@@ -136,4 +137,3 @@ public class HealthCheckUtilTest extends BaseTest {
     }
   }
 }
-

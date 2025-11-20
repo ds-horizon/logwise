@@ -257,8 +257,7 @@ public class ObjectStoreServiceTest extends BaseTest {
           .thenReturn(tenantConfig);
 
       // Mock nested listCommonPrefix calls
-      when(mockObjectStoreClient.listCommonPrefix(
-              contains("environment_name="), eq("/")))
+      when(mockObjectStoreClient.listCommonPrefix(contains("environment_name="), eq("/")))
           .thenReturn(Single.just(Arrays.asList(envPrefix)));
       when(mockObjectStoreClient.listCommonPrefix(contains("component_type="), eq("/")))
           .thenReturn(

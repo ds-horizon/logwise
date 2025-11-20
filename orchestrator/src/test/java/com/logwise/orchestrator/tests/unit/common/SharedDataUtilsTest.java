@@ -57,7 +57,8 @@ public class SharedDataUtilsTest extends BaseTest {
   @Test
   public void testSetInstance_WithInstance_StoresInstance() {
     // Use a unique wrapper class to avoid conflicts with other tests
-    SetInstanceTestWrapper testInstance = new SetInstanceTestWrapper("test-value-" + UUID.randomUUID());
+    SetInstanceTestWrapper testInstance =
+        new SetInstanceTestWrapper("test-value-" + UUID.randomUUID());
     Vertx vertx = BaseTest.getReactiveVertx();
 
     SetInstanceTestWrapper result = SharedDataUtils.setInstance(vertx, testInstance);
@@ -69,11 +70,13 @@ public class SharedDataUtilsTest extends BaseTest {
   @Test
   public void testGetInstance_WithExistingInstance_ReturnsInstance() {
     // Use a unique wrapper class to avoid conflicts with other tests
-    GetInstanceTestWrapper testInstance = new GetInstanceTestWrapper("test-value-" + UUID.randomUUID());
+    GetInstanceTestWrapper testInstance =
+        new GetInstanceTestWrapper("test-value-" + UUID.randomUUID());
     Vertx vertx = BaseTest.getReactiveVertx();
 
     SharedDataUtils.setInstance(vertx, testInstance);
-    GetInstanceTestWrapper result = SharedDataUtils.getInstance(vertx, GetInstanceTestWrapper.class);
+    GetInstanceTestWrapper result =
+        SharedDataUtils.getInstance(vertx, GetInstanceTestWrapper.class);
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getValue(), testInstance.getValue());

@@ -3,7 +3,6 @@ package com.logwise.orchestrator.tests.unit.common;
 import com.logwise.orchestrator.common.util.StreamUtils;
 import com.logwise.orchestrator.setup.BaseTest;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -46,8 +45,7 @@ public class StreamUtilsTest extends BaseTest {
     List<String> items = Arrays.asList("apple", "banana", "cherry");
 
     LinkedHashMap<Character, String> result =
-        items.stream()
-            .collect(StreamUtils.toLinkedHashMap(s -> s.charAt(0), s -> s.toUpperCase()));
+        items.stream().collect(StreamUtils.toLinkedHashMap(s -> s.charAt(0), s -> s.toUpperCase()));
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.size(), 3);
@@ -61,8 +59,7 @@ public class StreamUtilsTest extends BaseTest {
     List<String> items = Arrays.asList("apple", "apricot", "banana");
 
     try {
-      items.stream()
-          .collect(StreamUtils.toLinkedHashMap(s -> s.charAt(0), s -> s));
+      items.stream().collect(StreamUtils.toLinkedHashMap(s -> s.charAt(0), s -> s));
       Assert.fail("Should have thrown IllegalStateException");
     } catch (IllegalStateException e) {
       Assert.assertNotNull(e);
@@ -85,8 +82,7 @@ public class StreamUtilsTest extends BaseTest {
     List<String> items = Arrays.asList("zebra", "apple", "banana", "cherry");
 
     LinkedHashMap<Character, String> result =
-        items.stream()
-            .collect(StreamUtils.toLinkedHashMap(s -> s.charAt(0), String::toUpperCase));
+        items.stream().collect(StreamUtils.toLinkedHashMap(s -> s.charAt(0), String::toUpperCase));
 
     Assert.assertNotNull(result);
     List<Character> keys = new ArrayList<>(result.keySet());
@@ -96,4 +92,3 @@ public class StreamUtilsTest extends BaseTest {
     Assert.assertEquals(keys.get(3), Character.valueOf('c'));
   }
 }
-

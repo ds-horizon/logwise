@@ -11,7 +11,6 @@ import com.logwise.orchestrator.util.S3Utils;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -41,7 +40,8 @@ public class ObjectStoreAwsImplTest extends BaseTest {
 
   @Test
   public void testRxConnect_WithValidConfig_CompletesSuccessfully() {
-    ApplicationConfig.ObjectStoreConfig config = ApplicationTestConfig.createMockObjectStoreConfig();
+    ApplicationConfig.ObjectStoreConfig config =
+        ApplicationTestConfig.createMockObjectStoreConfig();
 
     Completable result = objectStoreAwsImpl.rxConnect(config);
 
@@ -62,7 +62,8 @@ public class ObjectStoreAwsImplTest extends BaseTest {
 
   @Test
   public void testListCommonPrefix_WithValidPrefix_ReturnsPrefixes() {
-    ApplicationConfig.ObjectStoreConfig config = ApplicationTestConfig.createMockObjectStoreConfig();
+    ApplicationConfig.ObjectStoreConfig config =
+        ApplicationTestConfig.createMockObjectStoreConfig();
     objectStoreAwsImpl.rxConnect(config).blockingAwait();
 
     String prefix = "logs/";
@@ -84,7 +85,8 @@ public class ObjectStoreAwsImplTest extends BaseTest {
 
   @Test
   public void testListObjects_WithValidPrefix_ReturnsObjects() {
-    ApplicationConfig.ObjectStoreConfig config = ApplicationTestConfig.createMockObjectStoreConfig();
+    ApplicationConfig.ObjectStoreConfig config =
+        ApplicationTestConfig.createMockObjectStoreConfig();
     objectStoreAwsImpl.rxConnect(config).blockingAwait();
 
     String prefix = "logs/";
@@ -105,7 +107,8 @@ public class ObjectStoreAwsImplTest extends BaseTest {
 
   @Test
   public void testDeleteFile_WithValidObjectKey_CompletesSuccessfully() {
-    ApplicationConfig.ObjectStoreConfig config = ApplicationTestConfig.createMockObjectStoreConfig();
+    ApplicationConfig.ObjectStoreConfig config =
+        ApplicationTestConfig.createMockObjectStoreConfig();
     objectStoreAwsImpl.rxConnect(config).blockingAwait();
 
     String objectKey = "logs/file.log";
@@ -122,4 +125,3 @@ public class ObjectStoreAwsImplTest extends BaseTest {
     }
   }
 }
-
