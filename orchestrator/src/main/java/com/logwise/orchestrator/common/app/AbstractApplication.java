@@ -204,8 +204,7 @@ public abstract class AbstractApplication {
   }
 
   protected String getConsulKey() {
-    return
-         Constants.NAMESPACE
+    return Constants.NAMESPACE
         + "/"
         + Constants.SERVICE_NAME
         + "/"

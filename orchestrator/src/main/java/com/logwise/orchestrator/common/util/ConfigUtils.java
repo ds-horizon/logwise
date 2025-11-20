@@ -30,10 +30,7 @@ public final class ConfigUtils {
                 new JsonObject()
                     .put("path", String.format(confFilePathFormat, getAppEnvironment())));
     return ConfigRetriever.create(
-        vertx,
-        new ConfigRetrieverOptions()
-            .addStore(defaultStore)
-            .addStore(environmentStore));
+        vertx, new ConfigRetrieverOptions().addStore(defaultStore).addStore(environmentStore));
   }
 
   public static Config fromConfigFile(@NonNull String confFilePathFormat) {
