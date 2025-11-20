@@ -113,4 +113,3 @@ public class SingleUtilsTest extends BaseTest {
     }
   }
 }
-

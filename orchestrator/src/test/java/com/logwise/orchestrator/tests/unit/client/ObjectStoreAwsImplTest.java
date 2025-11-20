@@ -125,4 +125,3 @@ public class ObjectStoreAwsImplTest extends BaseTest {
     }
   }
 }
-
