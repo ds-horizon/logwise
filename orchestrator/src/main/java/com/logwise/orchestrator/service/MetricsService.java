@@ -74,10 +74,7 @@ public class MetricsService {
         .toSingle();
   }
 
-  private static List<String> getPrefixList(
-      LocalDateTime nowTime,
-      String dir,
-      String serviceName) {
+  private static List<String> getPrefixList(LocalDateTime nowTime, String dir, String serviceName) {
     List<String> dirPrefixList = new ArrayList<>();
     for (int deltaHours = 0;
         deltaHours <= ApplicationConstants.MAX_LOGS_SYNC_DELAY_HOURS;

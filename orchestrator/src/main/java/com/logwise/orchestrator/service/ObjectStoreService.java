@@ -35,8 +35,7 @@ public class ObjectStoreService {
                     .map(ApplicationUtils::getServiceFromObjectKey)
                     .peek(
                         serviceDetails -> {
-                          serviceDetails.setRetentionDays(
-                              getDefaultRetentionDays(tenantConfig));
+                          serviceDetails.setRetentionDays(getDefaultRetentionDays(tenantConfig));
                           serviceDetails.setTenant(tenant.getValue());
                         })
                     .collect(Collectors.toList()));

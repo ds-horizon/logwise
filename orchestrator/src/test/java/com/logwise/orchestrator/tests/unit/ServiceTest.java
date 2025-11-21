@@ -146,18 +146,10 @@ public class ServiceTest extends BaseTest {
 
     Tenant tenant = TestConstants.VALID_TENANT;
     List<String> servicePrefixes =
-        Arrays.asList(
-            "logs/service_name=service1/",
-            "logs/service_name=service2/");
+        Arrays.asList("logs/service_name=service1/", "logs/service_name=service2/");
 
-    ServiceDetails service1 =
-        ServiceDetails.builder()
-            .serviceName("service1")
-            .build();
-    ServiceDetails service2 =
-        ServiceDetails.builder()
-            .serviceName("service2")
-            .build();
+    ServiceDetails service1 = ServiceDetails.builder().serviceName("service1").build();
+    ServiceDetails service2 = ServiceDetails.builder().serviceName("service2").build();
 
     try (MockedStatic<ObjectStoreFactory> mockedFactory =
             Mockito.mockStatic(ObjectStoreFactory.class);
@@ -419,10 +411,7 @@ public class ServiceTest extends BaseTest {
 
     Tenant tenant = TestConstants.VALID_TENANT;
     List<ServiceDetails> serviceDetailsList = new ArrayList<>();
-    serviceDetailsList.add(
-        ServiceDetails.builder()
-            .serviceName("test-service")
-            .build());
+    serviceDetailsList.add(ServiceDetails.builder().serviceName("test-service").build());
 
     when(mockServicesDaoForManager.getAllServiceDetails(tenant))
         .thenReturn(Single.just(serviceDetailsList));
@@ -445,10 +434,7 @@ public class ServiceTest extends BaseTest {
     List<ServiceDetails> dbServices = new ArrayList<>();
 
     List<ServiceDetails> objectStoreServices = new ArrayList<>();
-    ServiceDetails newService =
-        ServiceDetails.builder()
-            .serviceName("new-service")
-            .build();
+    ServiceDetails newService = ServiceDetails.builder().serviceName("new-service").build();
     objectStoreServices.add(newService);
 
     when(mockServicesDaoForManager.getAllServiceDetails(tenant))
@@ -470,10 +456,7 @@ public class ServiceTest extends BaseTest {
 
     Tenant tenant = TestConstants.VALID_TENANT;
 
-    ServiceDetails service =
-        ServiceDetails.builder()
-            .serviceName("test-service")
-            .build();
+    ServiceDetails service = ServiceDetails.builder().serviceName("test-service").build();
 
     List<ServiceDetails> services = Collections.singletonList(service);
 

@@ -202,10 +202,7 @@ public class DtoTest {
   public void testGetServiceDetailsResponse_Builder_CreatesInstance() {
 
     List<ServiceDetails> details =
-        Arrays.asList(
-            ServiceDetails.builder()
-                .serviceName("service2")
-                .build());
+        Arrays.asList(ServiceDetails.builder().serviceName("service2").build());
 
     GetServiceDetailsResponse response =
         GetServiceDetailsResponse.builder().serviceDetails(details).build();

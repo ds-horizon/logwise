@@ -52,13 +52,10 @@ public class ApplicationUtils {
   }
 
   public ServiceDetails getServiceFromObjectKey(String logPath) {
-    Pattern pattern =
-        Pattern.compile("service_name=(.+?)/");
+    Pattern pattern = Pattern.compile("service_name=(.+?)/");
     Matcher matcher = pattern.matcher(logPath);
     if (matcher.find()) {
-      return ServiceDetails.builder()
-          .serviceName(matcher.group(1))
-          .build();
+      return ServiceDetails.builder().serviceName(matcher.group(1)).build();
     }
     log.error("Error in getting service details from object key: {}", logPath);
     return null;

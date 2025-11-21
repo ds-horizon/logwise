@@ -478,14 +478,12 @@ public class UtilTest extends BaseTest {
   @Test
   public void testApplicationUtils_GetServiceFromObjectKey_WithValidPath_ReturnsServiceDetails() {
 
-    String logPath =
-        "logs/service_name=test-service/year=2024/";
+    String logPath = "logs/service_name=test-service/year=2024/";
 
     ServiceDetails result = ApplicationUtils.getServiceFromObjectKey(logPath);
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getServiceName(), "test-service");
-    Assert.assertEquals(result.getComponentType(), "test-component");
   }
 
   @Test
@@ -523,7 +521,6 @@ public class UtilTest extends BaseTest {
 
     Assert.assertNotNull(result);
     Assert.assertEquals(result.getServiceName(), "api");
-    Assert.assertEquals(result.getComponentType(), "web");
   }
 
   @Test

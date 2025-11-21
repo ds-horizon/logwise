@@ -44,12 +44,7 @@ public class ServicesDao {
     log.info("Inserting service details in DB: {}", serviceDetails);
     List<Tuple> tuples =
         serviceDetails.stream()
-            .map(
-                s ->
-                    Tuple.of(
-                        s.getServiceName(),
-                        s.getRetentionDays(),
-                        s.getTenant()))
+            .map(s -> Tuple.of(s.getServiceName(), s.getRetentionDays(), s.getTenant()))
             .collect(Collectors.toList());
     String query = Query.INSERT_SERVICE_DETAILS;
     return mysqlClient
