@@ -104,7 +104,9 @@ public class SchemaTest {
         Constants.APPLICATION_LOG_COLUMN_SERVICE_NAME,
         "Field name should match constant");
     assertEquals(
-        serviceNameField.dataType(), DataTypes.StringType, "Service name field should be StringType");
+        serviceNameField.dataType(),
+        DataTypes.StringType,
+        "Service name field should be StringType");
   }
 
   @Test

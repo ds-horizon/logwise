@@ -5,53 +5,57 @@
 
 package com.logwise.spark.protobuf;
 
-/**
- * Protobuf type {@code logwise.vector.logs.VectorLogs}
- */
+/** Protobuf type {@code logwise.vector.logs.VectorLogs} */
 @com.google.protobuf.Generated
-public final class VectorLogs extends
-    com.google.protobuf.GeneratedMessage implements
+public final class VectorLogs extends com.google.protobuf.GeneratedMessage
+    implements
     // @@protoc_insertion_point(message_implements:logwise.vector.logs.VectorLogs)
     VectorLogsOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
+
   static {
     com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
-      com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
-      /* major= */ 4,
-      /* minor= */ 33,
-      /* patch= */ 0,
-      /* suffix= */ "",
-      "VectorLogs");
+        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
+        /* major= */ 4,
+        /* minor= */ 33,
+        /* patch= */ 0,
+        /* suffix= */ "",
+        "VectorLogs");
   }
   // Use VectorLogs.newBuilder() to construct.
   private VectorLogs(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
     super(builder);
   }
+
   private VectorLogs() {
     serviceName_ = "";
     message_ = "";
     logLevel_ = "";
   }
 
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.logwise.spark.protobuf.LogwiseVector.internal_static_logwise_vector_logs_VectorLogs_descriptor;
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.logwise.spark.protobuf.LogwiseVector
+        .internal_static_logwise_vector_logs_VectorLogs_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.logwise.spark.protobuf.LogwiseVector.internal_static_logwise_vector_logs_VectorLogs_fieldAccessorTable
+    return com.logwise.spark.protobuf.LogwiseVector
+        .internal_static_logwise_vector_logs_VectorLogs_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.logwise.spark.protobuf.VectorLogs.class, com.logwise.spark.protobuf.VectorLogs.Builder.class);
+            com.logwise.spark.protobuf.VectorLogs.class,
+            com.logwise.spark.protobuf.VectorLogs.Builder.class);
   }
 
   private int bitField0_;
   public static final int SERVICE_NAME_FIELD_NUMBER = 1;
+
   @SuppressWarnings("serial")
   private volatile java.lang.Object serviceName_ = "";
   /**
    * <code>string service_name = 1;</code>
+   *
    * @return The serviceName.
    */
   @java.lang.Override
@@ -60,8 +64,7 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       serviceName_ = s;
       return s;
@@ -69,16 +72,15 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>string service_name = 1;</code>
+   *
    * @return The bytes for serviceName.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getServiceNameBytes() {
+  public com.google.protobuf.ByteString getServiceNameBytes() {
     java.lang.Object ref = serviceName_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       serviceName_ = b;
       return b;
     } else {
@@ -87,10 +89,12 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int MESSAGE_FIELD_NUMBER = 2;
+
   @SuppressWarnings("serial")
   private volatile java.lang.Object message_ = "";
   /**
    * <code>string message = 2;</code>
+   *
    * @return The message.
    */
   @java.lang.Override
@@ -99,8 +103,7 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       message_ = s;
       return s;
@@ -108,16 +111,15 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>string message = 2;</code>
+   *
    * @return The bytes for message.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getMessageBytes() {
+  public com.google.protobuf.ByteString getMessageBytes() {
     java.lang.Object ref = message_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       message_ = b;
       return b;
     } else {
@@ -126,10 +128,12 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int LOG_LEVEL_FIELD_NUMBER = 3;
+
   @SuppressWarnings("serial")
   private volatile java.lang.Object logLevel_ = "";
   /**
    * <code>string log_level = 3;</code>
+   *
    * @return The logLevel.
    */
   @java.lang.Override
@@ -138,8 +142,7 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       logLevel_ = s;
       return s;
@@ -147,16 +150,15 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>string log_level = 3;</code>
+   *
    * @return The bytes for logLevel.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getLogLevelBytes() {
+  public com.google.protobuf.ByteString getLogLevelBytes() {
     java.lang.Object ref = logLevel_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       logLevel_ = b;
       return b;
     } else {
@@ -168,6 +170,7 @@ private static final long serialVersionUID = 0L;
   private com.google.protobuf.Timestamp timestamp_;
   /**
    * <code>.google.protobuf.Timestamp timestamp = 4;</code>
+   *
    * @return Whether the timestamp field is set.
    */
   @java.lang.Override
@@ -176,21 +179,21 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>.google.protobuf.Timestamp timestamp = 4;</code>
+   *
    * @return The timestamp.
    */
   @java.lang.Override
   public com.google.protobuf.Timestamp getTimestamp() {
     return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
   }
-  /**
-   * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-   */
+  /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder() {
     return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -202,8 +205,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(serviceName_)) {
       com.google.protobuf.GeneratedMessage.writeString(output, 1, serviceName_);
     }
@@ -235,8 +237,7 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessage.computeStringSize(3, logLevel_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, getTimestamp());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(4, getTimestamp());
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -246,23 +247,19 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.logwise.spark.protobuf.VectorLogs)) {
       return super.equals(obj);
     }
     com.logwise.spark.protobuf.VectorLogs other = (com.logwise.spark.protobuf.VectorLogs) obj;
 
-    if (!getServiceName()
-        .equals(other.getServiceName())) return false;
-    if (!getMessage()
-        .equals(other.getMessage())) return false;
-    if (!getLogLevel()
-        .equals(other.getLogLevel())) return false;
+    if (!getServiceName().equals(other.getServiceName())) return false;
+    if (!getMessage().equals(other.getMessage())) return false;
+    if (!getLogLevel().equals(other.getLogLevel())) return false;
     if (hasTimestamp() != other.hasTimestamp()) return false;
     if (hasTimestamp()) {
-      if (!getTimestamp()
-          .equals(other.getTimestamp())) return false;
+      if (!getTimestamp().equals(other.getTimestamp())) return false;
     }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
@@ -290,116 +287,118 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.logwise.spark.protobuf.VectorLogs parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.logwise.spark.protobuf.VectorLogs parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.logwise.spark.protobuf.VectorLogs parseFrom(
-      com.google.protobuf.ByteString data)
+
+  public static com.logwise.spark.protobuf.VectorLogs parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessage
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessage.parseWithIOException(PARSER, input);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessage
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessage.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   public static com.logwise.spark.protobuf.VectorLogs parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessage
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessage.parseDelimitedWithIOException(PARSER, input);
   }
 
   public static com.logwise.spark.protobuf.VectorLogs parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessage
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessage.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessage
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessage.parseWithIOException(PARSER, input);
   }
+
   public static com.logwise.spark.protobuf.VectorLogs parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessage
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessage.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.logwise.spark.protobuf.VectorLogs prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessage.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
-  /**
-   * Protobuf type {@code logwise.vector.logs.VectorLogs}
-   */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+  /** Protobuf type {@code logwise.vector.logs.VectorLogs} */
+  public static final class Builder extends com.google.protobuf.GeneratedMessage.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:logwise.vector.logs.VectorLogs)
       com.logwise.spark.protobuf.VectorLogsOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.logwise.spark.protobuf.LogwiseVector.internal_static_logwise_vector_logs_VectorLogs_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.logwise.spark.protobuf.LogwiseVector
+          .internal_static_logwise_vector_logs_VectorLogs_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.logwise.spark.protobuf.LogwiseVector.internal_static_logwise_vector_logs_VectorLogs_fieldAccessorTable
+      return com.logwise.spark.protobuf.LogwiseVector
+          .internal_static_logwise_vector_logs_VectorLogs_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.logwise.spark.protobuf.VectorLogs.class, com.logwise.spark.protobuf.VectorLogs.Builder.class);
+              com.logwise.spark.protobuf.VectorLogs.class,
+              com.logwise.spark.protobuf.VectorLogs.Builder.class);
     }
 
     // Construct using com.logwise.spark.protobuf.VectorLogs.newBuilder()
@@ -407,17 +406,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessage
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
         internalGetTimestampFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -434,9 +433,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.logwise.spark.protobuf.LogwiseVector.internal_static_logwise_vector_logs_VectorLogs_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.logwise.spark.protobuf.LogwiseVector
+          .internal_static_logwise_vector_logs_VectorLogs_descriptor;
     }
 
     @java.lang.Override
@@ -455,8 +454,11 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.logwise.spark.protobuf.VectorLogs buildPartial() {
-      com.logwise.spark.protobuf.VectorLogs result = new com.logwise.spark.protobuf.VectorLogs(this);
-      if (bitField0_ != 0) { buildPartial0(result); }
+      com.logwise.spark.protobuf.VectorLogs result =
+          new com.logwise.spark.protobuf.VectorLogs(this);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
     }
@@ -474,9 +476,7 @@ private static final long serialVersionUID = 0L;
       }
       int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.timestamp_ = timestampBuilder_ == null
-            ? timestamp_
-            : timestampBuilder_.build();
+        result.timestamp_ = timestampBuilder_ == null ? timestamp_ : timestampBuilder_.build();
         to_bitField0_ |= 0x00000001;
       }
       result.bitField0_ |= to_bitField0_;
@@ -485,7 +485,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.logwise.spark.protobuf.VectorLogs) {
-        return mergeFrom((com.logwise.spark.protobuf.VectorLogs)other);
+        return mergeFrom((com.logwise.spark.protobuf.VectorLogs) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -538,34 +538,38 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              serviceName_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000001;
-              break;
-            } // case 10
-            case 18: {
-              message_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000002;
-              break;
-            } // case 18
-            case 26: {
-              logLevel_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000004;
-              break;
-            } // case 26
-            case 34: {
-              input.readMessage(
-                  internalGetTimestampFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              bitField0_ |= 0x00000008;
-              break;
-            } // case 34
-            default: {
-              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                done = true; // was an endgroup tag
-              }
-              break;
-            } // default:
+            case 10:
+              {
+                serviceName_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+            case 18:
+              {
+                message_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+            case 26:
+              {
+                logLevel_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+            case 34:
+              {
+                input.readMessage(
+                    internalGetTimestampFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
           } // switch (tag)
         } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -575,18 +579,19 @@ private static final long serialVersionUID = 0L;
       } // finally
       return this;
     }
+
     private int bitField0_;
 
     private java.lang.Object serviceName_ = "";
     /**
      * <code>string service_name = 1;</code>
+     *
      * @return The serviceName.
      */
     public java.lang.String getServiceName() {
       java.lang.Object ref = serviceName_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         serviceName_ = s;
         return s;
@@ -596,15 +601,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string service_name = 1;</code>
+     *
      * @return The bytes for serviceName.
      */
-    public com.google.protobuf.ByteString
-        getServiceNameBytes() {
+    public com.google.protobuf.ByteString getServiceNameBytes() {
       java.lang.Object ref = serviceName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         serviceName_ = b;
         return b;
       } else {
@@ -613,12 +617,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string service_name = 1;</code>
+     *
      * @param value The serviceName to set.
      * @return This builder for chaining.
      */
-    public Builder setServiceName(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
+    public Builder setServiceName(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
       serviceName_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
@@ -626,6 +632,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string service_name = 1;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearServiceName() {
@@ -636,12 +643,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string service_name = 1;</code>
+     *
      * @param value The bytes for serviceName to set.
      * @return This builder for chaining.
      */
-    public Builder setServiceNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
+    public Builder setServiceNameBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
       checkByteStringIsUtf8(value);
       serviceName_ = value;
       bitField0_ |= 0x00000001;
@@ -652,13 +661,13 @@ private static final long serialVersionUID = 0L;
     private java.lang.Object message_ = "";
     /**
      * <code>string message = 2;</code>
+     *
      * @return The message.
      */
     public java.lang.String getMessage() {
       java.lang.Object ref = message_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
         return s;
@@ -668,15 +677,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string message = 2;</code>
+     *
      * @return The bytes for message.
      */
-    public com.google.protobuf.ByteString
-        getMessageBytes() {
+    public com.google.protobuf.ByteString getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         message_ = b;
         return b;
       } else {
@@ -685,12 +693,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string message = 2;</code>
+     *
      * @param value The message to set.
      * @return This builder for chaining.
      */
-    public Builder setMessage(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
+    public Builder setMessage(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
       message_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
@@ -698,6 +708,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string message = 2;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearMessage() {
@@ -708,12 +719,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string message = 2;</code>
+     *
      * @param value The bytes for message to set.
      * @return This builder for chaining.
      */
-    public Builder setMessageBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
+    public Builder setMessageBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
       checkByteStringIsUtf8(value);
       message_ = value;
       bitField0_ |= 0x00000002;
@@ -724,13 +737,13 @@ private static final long serialVersionUID = 0L;
     private java.lang.Object logLevel_ = "";
     /**
      * <code>string log_level = 3;</code>
+     *
      * @return The logLevel.
      */
     public java.lang.String getLogLevel() {
       java.lang.Object ref = logLevel_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         logLevel_ = s;
         return s;
@@ -740,15 +753,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string log_level = 3;</code>
+     *
      * @return The bytes for logLevel.
      */
-    public com.google.protobuf.ByteString
-        getLogLevelBytes() {
+    public com.google.protobuf.ByteString getLogLevelBytes() {
       java.lang.Object ref = logLevel_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         logLevel_ = b;
         return b;
       } else {
@@ -757,12 +769,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string log_level = 3;</code>
+     *
      * @param value The logLevel to set.
      * @return This builder for chaining.
      */
-    public Builder setLogLevel(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
+    public Builder setLogLevel(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
       logLevel_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
@@ -770,6 +784,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string log_level = 3;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearLogLevel() {
@@ -780,12 +795,14 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>string log_level = 3;</code>
+     *
      * @param value The bytes for logLevel to set.
      * @return This builder for chaining.
      */
-    public Builder setLogLevelBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
+    public Builder setLogLevelBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
       checkByteStringIsUtf8(value);
       logLevel_ = value;
       bitField0_ |= 0x00000004;
@@ -795,9 +812,13 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.Timestamp timestamp_;
     private com.google.protobuf.SingleFieldBuilder<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> timestampBuilder_;
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        timestampBuilder_;
     /**
      * <code>.google.protobuf.Timestamp timestamp = 4;</code>
+     *
      * @return Whether the timestamp field is set.
      */
     public boolean hasTimestamp() {
@@ -805,6 +826,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>.google.protobuf.Timestamp timestamp = 4;</code>
+     *
      * @return The timestamp.
      */
     public com.google.protobuf.Timestamp getTimestamp() {
@@ -814,9 +836,7 @@ private static final long serialVersionUID = 0L;
         return timestampBuilder_.getMessage();
       }
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder setTimestamp(com.google.protobuf.Timestamp value) {
       if (timestampBuilder_ == null) {
         if (value == null) {
@@ -830,11 +850,8 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
-    public Builder setTimestamp(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
+    public Builder setTimestamp(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (timestampBuilder_ == null) {
         timestamp_ = builderForValue.build();
       } else {
@@ -844,14 +861,12 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder mergeTimestamp(com.google.protobuf.Timestamp value) {
       if (timestampBuilder_ == null) {
-        if (((bitField0_ & 0x00000008) != 0) &&
-          timestamp_ != null &&
-          timestamp_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+        if (((bitField0_ & 0x00000008) != 0)
+            && timestamp_ != null
+            && timestamp_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
           getTimestampBuilder().mergeFrom(value);
         } else {
           timestamp_ = value;
@@ -865,9 +880,7 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder clearTimestamp() {
       bitField0_ = (bitField0_ & ~0x00000008);
       timestamp_ = null;
@@ -878,37 +891,33 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public com.google.protobuf.Timestamp.Builder getTimestampBuilder() {
       bitField0_ |= 0x00000008;
       onChanged();
       return internalGetTimestampFieldBuilder().getBuilder();
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder() {
       if (timestampBuilder_ != null) {
         return timestampBuilder_.getMessageOrBuilder();
       } else {
-        return timestamp_ == null ?
-            com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
+        return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
       }
     }
-    /**
-     * <code>.google.protobuf.Timestamp timestamp = 4;</code>
-     */
+    /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     private com.google.protobuf.SingleFieldBuilder<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
         internalGetTimestampFieldBuilder() {
       if (timestampBuilder_ == null) {
-        timestampBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                getTimestamp(),
-                getParentForChildren(),
-                isClean());
+        timestampBuilder_ =
+            new com.google.protobuf.SingleFieldBuilder<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getTimestamp(), getParentForChildren(), isClean());
         timestamp_ = null;
       }
       return timestampBuilder_;
@@ -919,6 +928,7 @@ private static final long serialVersionUID = 0L;
 
   // @@protoc_insertion_point(class_scope:logwise.vector.logs.VectorLogs)
   private static final com.logwise.spark.protobuf.VectorLogs DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.logwise.spark.protobuf.VectorLogs();
   }
@@ -927,27 +937,27 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<VectorLogs>
-      PARSER = new com.google.protobuf.AbstractParser<VectorLogs>() {
-    @java.lang.Override
-    public VectorLogs parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      Builder builder = newBuilder();
-      try {
-        builder.mergeFrom(input, extensionRegistry);
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(builder.buildPartial());
-      } catch (com.google.protobuf.UninitializedMessageException e) {
-        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e)
-            .setUnfinishedMessage(builder.buildPartial());
-      }
-      return builder.buildPartial();
-    }
-  };
+  private static final com.google.protobuf.Parser<VectorLogs> PARSER =
+      new com.google.protobuf.AbstractParser<VectorLogs>() {
+        @java.lang.Override
+        public VectorLogs parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
+        }
+      };
 
   public static com.google.protobuf.Parser<VectorLogs> parser() {
     return PARSER;
@@ -962,6 +972,4 @@ private static final long serialVersionUID = 0L;
   public com.logwise.spark.protobuf.VectorLogs getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

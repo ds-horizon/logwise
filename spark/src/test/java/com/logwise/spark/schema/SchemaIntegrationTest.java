@@ -46,11 +46,7 @@ public class SchemaIntegrationTest {
   public void testCreateDataFrame_WithValidSchema_ReturnsDataFrame() {
     // Arrange
     StructType schema = Schema.getVectorApplicationLogsSchema();
-    Row row =
-        RowFactory.create(
-            "Test log message",
-            "2021-01-01T00:00:00Z",
-            "api-service");
+    Row row = RowFactory.create("Test log message", "2021-01-01T00:00:00Z", "api-service");
 
     // Act
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(row), schema);
@@ -65,11 +61,7 @@ public class SchemaIntegrationTest {
   public void testCreateDataFrame_WithAllRequiredFields_Succeeds() {
     // Arrange
     StructType schema = Schema.getVectorApplicationLogsSchema();
-    Row row =
-        RowFactory.create(
-            "Message",
-            "2021-01-01T00:00:00Z",
-            "ServiceName");
+    Row row = RowFactory.create("Message", "2021-01-01T00:00:00Z", "ServiceName");
 
     // Act
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(row), schema);
@@ -123,16 +115,8 @@ public class SchemaIntegrationTest {
   public void testQueryDataFrame_WithSchema_ExecutesSuccessfully() {
     // Arrange
     StructType schema = Schema.getVectorApplicationLogsSchema();
-    Row row1 =
-        RowFactory.create(
-            "Error occurred",
-            "2021-01-01T00:00:00Z",
-            "api-service");
-    Row row2 =
-        RowFactory.create(
-            "Info message",
-            "2021-01-01T00:01:00Z",
-            "api-service");
+    Row row1 = RowFactory.create("Error occurred", "2021-01-01T00:00:00Z", "api-service");
+    Row row2 = RowFactory.create("Info message", "2021-01-01T00:01:00Z", "api-service");
 
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(row1, row2), schema);
 
@@ -149,16 +133,8 @@ public class SchemaIntegrationTest {
   public void testFilterDataFrame_ByMessageField_ReturnsFilteredResults() {
     // Arrange
     StructType schema = Schema.getVectorApplicationLogsSchema();
-    Row row1 =
-        RowFactory.create(
-            "Error occurred",
-            "2021-01-01T00:00:00Z",
-            "api-service");
-    Row row2 =
-        RowFactory.create(
-            "Info message",
-            "2021-01-01T00:01:00Z",
-            "api-service");
+    Row row1 = RowFactory.create("Error occurred", "2021-01-01T00:00:00Z", "api-service");
+    Row row2 = RowFactory.create("Info message", "2021-01-01T00:01:00Z", "api-service");
 
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(row1, row2), schema);
 
@@ -182,11 +158,7 @@ public class SchemaIntegrationTest {
   public void testSelectColumns_WithSchema_ReturnsCorrectColumns() {
     // Arrange
     StructType schema = Schema.getVectorApplicationLogsSchema();
-    Row row =
-        RowFactory.create(
-            "Test message",
-            "2021-01-01T00:00:00Z",
-            "api-service");
+    Row row = RowFactory.create("Test message", "2021-01-01T00:00:00Z", "api-service");
 
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(row), schema);
 
@@ -226,11 +198,7 @@ public class SchemaIntegrationTest {
   public void testWriteDataFrame_WithSchema_ValidatesBeforeWrite() {
     // Arrange
     StructType schema = Schema.getVectorApplicationLogsSchema();
-    Row row =
-        RowFactory.create(
-            "Test message",
-            "2021-01-01T00:00:00Z",
-            "api-service");
+    Row row = RowFactory.create("Test message", "2021-01-01T00:00:00Z", "api-service");
 
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(row), schema);
 
@@ -250,11 +218,7 @@ public class SchemaIntegrationTest {
     // Arrange
     StructType originalSchema = Schema.getVectorApplicationLogsSchema();
 
-    Row originalRow =
-        RowFactory.create(
-            "Test message",
-            "2021-01-01T00:00:00Z",
-            "api-service");
+    Row originalRow = RowFactory.create("Test message", "2021-01-01T00:00:00Z", "api-service");
 
     // Act - Create DataFrame with original schema
     Dataset<Row> df = spark.createDataFrame(java.util.Arrays.asList(originalRow), originalSchema);
