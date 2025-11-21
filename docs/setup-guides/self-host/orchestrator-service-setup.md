@@ -56,7 +56,7 @@ mvn clean package
 
 The fat JAR will be created at `target/log-central-orchestrator-<version>-all.jar`.
 
-For example: `target/log-central-orchestrator-1.4.2-SNAPSHOT-all.jar`
+For example: `target/log-central-orchestrator-0.0.1-SNAPSHOT-all.jar`
 
 Verify the JAR exists:
 
@@ -79,19 +79,10 @@ export DB_SLAVE_HOST=localhost  # Optional, same as master if not using replicat
 # Set as system property: -Dapp.environment=local
 # Or export: export app.environment=local
 
-# Encryption Configuration (Required)
-export ENCRYPTION_KEY=your_encryption_key
-export ENCRYPTION_IV=your_encryption_iv
-
-# Kafka Configuration (Required if using Kafka features)
-export D11_PROD_AWS_KAFKA_MANAGER_URL=your_kafka_manager_url
-export D11_PROD_AWS_KAFKA_BROKERS_HOST=your_kafka_brokers
-export D11_PROD_AWS_ASG_KAFKA_BROKERS_HOST=your_asg_kafka_brokers  # Optional
-
 # Spark Configuration (Required if using Spark features)
-export D11_PROD_AWS_SPARK_MASTER_HOST=your_spark_master_host
-export D11_PROD_AWS_SPARK_JAR_PATH=your_spark_jar_path
-export D11_PROD_AWS_LOG4J_PROPERTIES_FILE_PATH=your_log4j_path
+export SPARK_MASTER_HOST=your_spark_master_host
+export SPARK_JAR_PATH=your_spark_jar_path
+export LOG4J_PROPERTIES_FILE_PATH=your_log4j_path
 
 # AWS Configuration (Required if using AWS services like S3, Athena)
 export AWS_REGION=us-east-1
@@ -123,7 +114,7 @@ java -jar target/log-central-orchestrator-<version>-all.jar
 For example:
 
 ```bash
-java -jar target/log-central-orchestrator-1.4.2-SNAPSHOT-all.jar
+java -jar target/log-central-orchestrator-0.0.1-SNAPSHOT-all.jar
 ```
 
 To specify the application environment explicitly:
