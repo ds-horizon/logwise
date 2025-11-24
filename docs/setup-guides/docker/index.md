@@ -121,7 +121,7 @@ AWS_SESSION_TOKEN=                      # Optional: for temporary credentials
 ### S3 Configuration (Required)
 
 ```bash
-S3_BUCKET=your-bucket-name              # S3 bucket for storing processed logs
+S3_BUCKET_NAME=your-bucket-name              # S3 bucket for storing processed logs
 S3_PREFIX=logs/                         # Prefix/path within the bucket
 ```
 
@@ -167,7 +167,7 @@ MYSQL_ROOT_PASSWORD=root_pass              # MySQL root password
 
 ```bash
 ORCH_PORT=8080                             # Orchestrator service port
-TENANT_VALUE=D11-Prod-AWS                  # Tenant identifier
+TENANT_VALUE=ABC               # Tenant identifier
 ```
 
 For a complete list of all environment variables, see `.env.example` in the deploy directory.
