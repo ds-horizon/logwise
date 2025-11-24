@@ -135,24 +135,15 @@ public class MetricsServiceTest extends BaseTest {
   public void testGetPrefixList_WithValidInputs_ReturnsPrefixList() throws Exception {
     Method method =
         MetricsService.class.getDeclaredMethod(
-            "getPrefixList",
-            LocalDateTime.class,
-            String.class,
-            String.class,
-            String.class,
-            String.class);
+            "getPrefixList", LocalDateTime.class, String.class, String.class);
     method.setAccessible(true);
 
     LocalDateTime nowTime = LocalDateTime.of(2024, 1, 15, 12, 0);
     String dir = "logs";
-    String environmentName = "prod";
-    String componentType = "web";
     String serviceName = "api";
 
     @SuppressWarnings("unchecked")
-    List<String> result =
-        (List<String>)
-            method.invoke(null, nowTime, dir, environmentName, componentType, serviceName);
+    List<String> result = (List<String>) method.invoke(null, nowTime, dir, serviceName);
 
     Assert.assertNotNull(result);
     Assert.assertFalse(result.isEmpty());
@@ -161,8 +152,6 @@ public class MetricsServiceTest extends BaseTest {
     // All prefixes should contain the expected pattern
     result.forEach(
         prefix -> {
-          Assert.assertTrue(prefix.contains(environmentName));
-          Assert.assertTrue(prefix.contains(componentType));
           Assert.assertTrue(prefix.contains(serviceName));
         });
   }
@@ -171,21 +160,16 @@ public class MetricsServiceTest extends BaseTest {
   public void testGetPrefixList_WithDifferentTimes_GeneratesDifferentPrefixes() throws Exception {
     Method method =
         MetricsService.class.getDeclaredMethod(
-            "getPrefixList",
-            LocalDateTime.class,
-            String.class,
-            String.class,
-            String.class,
-            String.class);
+            "getPrefixList", LocalDateTime.class, String.class, String.class);
     method.setAccessible(true);
 
     LocalDateTime time1 = LocalDateTime.of(2024, 1, 15, 12, 0);
     LocalDateTime time2 = LocalDateTime.of(2024, 2, 20, 15, 30);
 
     @SuppressWarnings("unchecked")
-    List<String> result1 = (List<String>) method.invoke(null, time1, "logs", "prod", "web", "api");
+    List<String> result1 = (List<String>) method.invoke(null, time1, "logs", "api");
     @SuppressWarnings("unchecked")
-    List<String> result2 = (List<String>) method.invoke(null, time2, "logs", "prod", "web", "api");
+    List<String> result2 = (List<String>) method.invoke(null, time2, "logs", "api");
 
     Assert.assertNotNull(result1);
     Assert.assertNotNull(result2);
