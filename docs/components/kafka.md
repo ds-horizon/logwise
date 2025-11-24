@@ -29,7 +29,7 @@ Kafka enables:
 
 ## Topic Management
 
-Vector dynamically creates Kafka topics using tags: `type`, `env`, and `service_name`. Topics follow the naming convention: `{type}_{env}_{service_name}`.
+Vector dynamically creates Kafka topics using tags: `environment_name`, `component_type`, and `service_name`. Topics follow the naming convention: `{environment_name}_{component_type}_{service_name}`.
 
 **Format:**
 - `environment_name` - Environment identifier (e.g., `prod`, `staging`, `dev`, `test`)
