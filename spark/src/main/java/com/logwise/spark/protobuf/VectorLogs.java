@@ -22,6 +22,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         /* suffix= */ "",
         "VectorLogs");
   }
+
   // Use VectorLogs.newBuilder() to construct.
   private VectorLogs(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
     super(builder);
@@ -53,6 +54,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object serviceName_ = "";
+
   /**
    * <code>string service_name = 1;</code>
    *
@@ -70,6 +72,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       return s;
     }
   }
+
   /**
    * <code>string service_name = 1;</code>
    *
@@ -92,6 +95,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object message_ = "";
+
   /**
    * <code>string message = 2;</code>
    *
@@ -109,6 +113,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       return s;
     }
   }
+
   /**
    * <code>string message = 2;</code>
    *
@@ -131,6 +136,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object logLevel_ = "";
+
   /**
    * <code>string log_level = 3;</code>
    *
@@ -148,6 +154,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       return s;
     }
   }
+
   /**
    * <code>string log_level = 3;</code>
    *
@@ -168,6 +175,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
 
   public static final int TIMESTAMP_FIELD_NUMBER = 4;
   private com.google.protobuf.Timestamp timestamp_;
+
   /**
    * <code>.google.protobuf.Timestamp timestamp = 4;</code>
    *
@@ -177,6 +185,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
   public boolean hasTimestamp() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    * <code>.google.protobuf.Timestamp timestamp = 4;</code>
    *
@@ -186,6 +195,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
   public com.google.protobuf.Timestamp getTimestamp() {
     return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
   }
+
   /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder() {
@@ -381,6 +391,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /** Protobuf type {@code logwise.vector.logs.VectorLogs} */
   public static final class Builder extends com.google.protobuf.GeneratedMessage.Builder<Builder>
       implements
@@ -583,6 +594,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
     private int bitField0_;
 
     private java.lang.Object serviceName_ = "";
+
     /**
      * <code>string service_name = 1;</code>
      *
@@ -599,6 +611,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return (java.lang.String) ref;
       }
     }
+
     /**
      * <code>string service_name = 1;</code>
      *
@@ -615,6 +628,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      * <code>string service_name = 1;</code>
      *
@@ -630,6 +644,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /**
      * <code>string service_name = 1;</code>
      *
@@ -641,6 +656,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /**
      * <code>string service_name = 1;</code>
      *
@@ -659,6 +675,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
     }
 
     private java.lang.Object message_ = "";
+
     /**
      * <code>string message = 2;</code>
      *
@@ -675,6 +692,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return (java.lang.String) ref;
       }
     }
+
     /**
      * <code>string message = 2;</code>
      *
@@ -691,6 +709,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      * <code>string message = 2;</code>
      *
@@ -706,6 +725,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /**
      * <code>string message = 2;</code>
      *
@@ -717,6 +737,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /**
      * <code>string message = 2;</code>
      *
@@ -735,6 +756,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
     }
 
     private java.lang.Object logLevel_ = "";
+
     /**
      * <code>string log_level = 3;</code>
      *
@@ -751,6 +773,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return (java.lang.String) ref;
       }
     }
+
     /**
      * <code>string log_level = 3;</code>
      *
@@ -767,6 +790,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      * <code>string log_level = 3;</code>
      *
@@ -782,6 +806,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /**
      * <code>string log_level = 3;</code>
      *
@@ -793,6 +818,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /**
      * <code>string log_level = 3;</code>
      *
@@ -816,6 +842,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
             com.google.protobuf.Timestamp.Builder,
             com.google.protobuf.TimestampOrBuilder>
         timestampBuilder_;
+
     /**
      * <code>.google.protobuf.Timestamp timestamp = 4;</code>
      *
@@ -824,6 +851,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
     public boolean hasTimestamp() {
       return ((bitField0_ & 0x00000008) != 0);
     }
+
     /**
      * <code>.google.protobuf.Timestamp timestamp = 4;</code>
      *
@@ -836,6 +864,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return timestampBuilder_.getMessage();
       }
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder setTimestamp(com.google.protobuf.Timestamp value) {
       if (timestampBuilder_ == null) {
@@ -850,6 +879,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder setTimestamp(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (timestampBuilder_ == null) {
@@ -861,6 +891,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder mergeTimestamp(com.google.protobuf.Timestamp value) {
       if (timestampBuilder_ == null) {
@@ -880,6 +911,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       }
       return this;
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public Builder clearTimestamp() {
       bitField0_ = (bitField0_ & ~0x00000008);
@@ -891,12 +923,14 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
       onChanged();
       return this;
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public com.google.protobuf.Timestamp.Builder getTimestampBuilder() {
       bitField0_ |= 0x00000008;
       onChanged();
       return internalGetTimestampFieldBuilder().getBuilder();
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     public com.google.protobuf.TimestampOrBuilder getTimestampOrBuilder() {
       if (timestampBuilder_ != null) {
@@ -905,6 +939,7 @@ public final class VectorLogs extends com.google.protobuf.GeneratedMessage
         return timestamp_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : timestamp_;
       }
     }
+
     /** <code>.google.protobuf.Timestamp timestamp = 4;</code> */
     private com.google.protobuf.SingleFieldBuilder<
             com.google.protobuf.Timestamp,
