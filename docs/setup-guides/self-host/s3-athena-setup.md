@@ -71,9 +71,7 @@ LOCATION
 TBLPROPERTIES (
   'compressionType'='gzip', 
   'parquet.ignore.statistics'='true', 
-  'projection.component_type.type'='injected', 
   'projection.enabled'='true', 
-  'projection.environment_name.type'='injected', 
   'projection.service_name.type'='injected', 
   'projection.time.format'='\'year=\'yyyy\'/month=\'MM\'/day=\'dd\'/hour=\'HH\'/minute=\'mm', 
   'projection.time.interval'='1', 
