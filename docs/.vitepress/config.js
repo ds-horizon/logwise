@@ -30,11 +30,23 @@ const releaseVersion = version.replace('-SNAPSHOT', '')
 
 export default defineConfig({
     title: 'Logwise',
-    description: 'Open-source end-to-end logging system capable of handling 15+ Gbps log throughput',
+    description: 'Open-source, cost-effective end-to-end logging system featuring full architecture, deployment automation, dashboards, and production-ready scaling guides',
     site: 'https://ds-horizon.github.io/logwise/',
     // GitHub Pages config
     base: '/logwise/',
     head: [
+        [
+            'script',
+            { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-R20W1243YJ' }
+        ],
+        [
+            'script',
+            {},
+            `window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-R20W1243YJ');`
+        ],
         ['style', {}, `
             :root {
                 --vp-c-brand-1: #5FD3E0;
