@@ -54,9 +54,12 @@ export default defineConfig({
                 --vp-c-brand-3: #1A6A74;
             }
         `],
+        ['script', { src: '/theme/index.js' }],
+        ['link', { rel: 'stylesheet', href: '/theme/custom.css' }],
         ['link', { rel: 'icon', href: '/logwise/logo1.png' }]
     ],
     themeConfig: {
+        theme: 'dark',
         logo: '/logo1.png',
         nav: [
             { text: 'Home', link: '/' },
