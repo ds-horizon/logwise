@@ -90,19 +90,19 @@ public class PipelineHealthCheckService {
     // For production, consider using Kafka Admin Client to check topics and message
     // counts
     return Single.fromCallable(
-        () -> {
-          // Basic connectivity check - Kafka broker should be reachable
-          // In a real implementation, you might want to use Kafka Admin Client
-          // to verify topics exist and have messages
-          JsonObject result = new JsonObject();
-          result.put("status", "UP");
-          result.put("message", "Kafka broker is reachable");
-          result.put("host", kafkaHost);
-          if (kafkaPort != null) {
-            result.put("port", kafkaPort);
-          }
-          return result;
-        })
+            () -> {
+              // Basic connectivity check - Kafka broker should be reachable
+              // In a real implementation, you might want to use Kafka Admin Client
+              // to verify topics exist and have messages
+              JsonObject result = new JsonObject();
+              result.put("status", "UP");
+              result.put("message", "Kafka broker is reachable");
+              result.put("host", kafkaHost);
+              if (kafkaPort != null) {
+                result.put("port", kafkaPort);
+              }
+              return result;
+            })
         .onErrorReturn(
             error -> {
               log.error("Error checking Kafka health", error);
@@ -143,11 +143,12 @@ public class PipelineHealthCheckService {
         .map(
             response -> {
               try {
-                SparkMasterJsonResponse sparkResponse = objectMapper.readValue(response.bodyAsString(),
-                    SparkMasterJsonResponse.class);
+                SparkMasterJsonResponse sparkResponse =
+                    objectMapper.readValue(response.bodyAsString(), SparkMasterJsonResponse.class);
 
-                boolean hasRunningDriver = sparkResponse.getActivedrivers().stream()
-                    .anyMatch(driver -> "RUNNING".equals(driver.getState()));
+                boolean hasRunningDriver =
+                    sparkResponse.getActivedrivers().stream()
+                        .anyMatch(driver -> "RUNNING".equals(driver.getState()));
 
                 if (hasRunningDriver) {
                   JsonObject result = new JsonObject();
@@ -216,21 +217,22 @@ public class PipelineHealthCheckService {
                   .map(
                       objects -> {
                         int currentHour = LocalDateTime.now().getHour();
-                        long recentCount = objects.stream()
-                            .filter(
-                                key -> {
-                                  // Check
-                                  // if
-                                  // object
-                                  // key
-                                  // contains
-                                  // recent
-                                  // timestamp
-                                  // Format:
-                                  // logs/service_name=xxx/env=xxx/hour=HH/minute=MM/...
-                                  return key.contains(String.format("hour=%02d", currentHour));
-                                })
-                            .count();
+                        long recentCount =
+                            objects.stream()
+                                .filter(
+                                    key -> {
+                                      // Check
+                                      // if
+                                      // object
+                                      // key
+                                      // contains
+                                      // recent
+                                      // timestamp
+                                      // Format:
+                                      // logs/service_name=xxx/env=xxx/hour=HH/minute=MM/...
+                                      return key.contains(String.format("hour=%02d", currentHour));
+                                    })
+                                .count();
 
                         if (recentCount > 0) {
                           JsonObject result = new JsonObject();
@@ -272,51 +274,57 @@ public class PipelineHealthCheckService {
     log.info("Checking complete pipeline health for tenant: {}", tenant.getValue());
     return Single.fromCallable(() -> ApplicationConfigUtil.getTenantConfig(tenant))
         .flatMap(
-            tenantConfig -> Single.zip(
-                checkVectorHealth(tenantConfig),
-                checkKafkaHealth(tenantConfig),
-                checkSparkHealth(tenantConfig),
-                checkS3Logs(tenant, tenantConfig),
-                (vector, kafka, spark, s3) -> {
-                  List<JsonObject> checks = new ArrayList<>();
-                  checks.add(
-                      JsonUtils.jsonMerge(
-                          ImmutableList.of(
-                              JsonUtils.jsonFrom("component", "vector"),
-                              JsonUtils.jsonFrom("check", vector))));
-                  checks.add(
-                      JsonUtils.jsonMerge(
-                          ImmutableList.of(
-                              JsonUtils.jsonFrom("component", "kafka"),
-                              JsonUtils.jsonFrom("check", kafka))));
-                  checks.add(
-                      JsonUtils.jsonMerge(
-                          ImmutableList.of(
-                              JsonUtils.jsonFrom("component", "spark"),
-                              JsonUtils.jsonFrom("check", spark))));
-                  checks.add(
-                      JsonUtils.jsonMerge(
-                          ImmutableList.of(
-                              JsonUtils.jsonFrom("component", "s3"),
-                              JsonUtils.jsonFrom("check", s3))));
+            tenantConfig ->
+                Single.zip(
+                    checkVectorHealth(tenantConfig),
+                    checkKafkaHealth(tenantConfig),
+                    checkSparkHealth(tenantConfig),
+                    checkS3Logs(tenant, tenantConfig),
+                    (vector, kafka, spark, s3) -> {
+                      List<JsonObject> checks = new ArrayList<>();
+                      checks.add(
+                          JsonUtils.jsonMerge(
+                              ImmutableList.of(
+                                  JsonUtils.jsonFrom("component", "vector"),
+                                  JsonUtils.jsonFrom("check", vector))));
+                      checks.add(
+                          JsonUtils.jsonMerge(
+                              ImmutableList.of(
+                                  JsonUtils.jsonFrom("component", "kafka"),
+                                  JsonUtils.jsonFrom("check", kafka))));
+                      checks.add(
+                          JsonUtils.jsonMerge(
+                              ImmutableList.of(
+                                  JsonUtils.jsonFrom("component", "spark"),
+                                  JsonUtils.jsonFrom("check", spark))));
+                      checks.add(
+                          JsonUtils.jsonMerge(
+                              ImmutableList.of(
+                                  JsonUtils.jsonFrom("component", "s3"),
+                                  JsonUtils.jsonFrom("check", s3))));
 
-                  // Determine overall status
-                  boolean allUp = checks.stream()
-                      .allMatch(
-                          check -> "UP".equals(check.getJsonObject("check").getString("status")));
+                      // Determine overall status
+                      boolean allUp =
+                          checks.stream()
+                              .allMatch(
+                                  check ->
+                                      "UP"
+                                          .equals(
+                                              check.getJsonObject("check").getString("status")));
 
-                  String overallStatus = allUp ? "UP" : "DOWN";
-                  String message = allUp
-                      ? "All pipeline components are healthy"
-                      : "One or more pipeline components have issues";
+                      String overallStatus = allUp ? "UP" : "DOWN";
+                      String message =
+                          allUp
+                              ? "All pipeline components are healthy"
+                              : "One or more pipeline components have issues";
 
-                  JsonObject result = new JsonObject();
-                  result.put("status", overallStatus);
-                  result.put("message", message);
-                  result.put("tenant", tenant.getValue());
-                  result.put("checks", new io.vertx.core.json.JsonArray(checks));
-                  return result;
-                }))
+                      JsonObject result = new JsonObject();
+                      result.put("status", overallStatus);
+                      result.put("message", message);
+                      result.put("tenant", tenant.getValue());
+                      result.put("checks", new io.vertx.core.json.JsonArray(checks));
+                      return result;
+                    }))
         .onErrorReturn(
             error -> {
               log.error("Error checking pipeline health", error);

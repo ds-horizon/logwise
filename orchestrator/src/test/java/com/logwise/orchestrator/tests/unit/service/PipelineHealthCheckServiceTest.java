@@ -55,7 +55,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckVectorHealth_WithHealthyResponse_ReturnsUp() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.VectorConfig vectorConfig = new ApplicationConfig.VectorConfig();
     vectorConfig.setHost("vector.example.com");
     vectorConfig.setApiPort(8686);
@@ -80,7 +81,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckVectorHealth_WithUnhealthyResponse_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.VectorConfig vectorConfig = new ApplicationConfig.VectorConfig();
     vectorConfig.setHost("vector.example.com");
     vectorConfig.setApiPort(8686);
@@ -105,7 +107,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckVectorHealth_WithError_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.VectorConfig vectorConfig = new ApplicationConfig.VectorConfig();
     vectorConfig.setHost("vector.example.com");
     vectorConfig.setApiPort(8686);
@@ -128,7 +131,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckVectorHealth_WithTimeout_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.VectorConfig vectorConfig = new ApplicationConfig.VectorConfig();
     vectorConfig.setHost("vector.example.com");
     vectorConfig.setApiPort(8686);
@@ -142,7 +146,10 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
         mockHttpResponse = mock(io.vertx.reactivex.ext.web.client.HttpResponse.class);
     when(mockHttpRequest.rxSend())
         .thenReturn(
-            Single.<io.vertx.reactivex.ext.web.client.HttpResponse<io.vertx.reactivex.core.buffer.Buffer>>just(mockHttpResponse)
+            Single
+                .<io.vertx.reactivex.ext.web.client.HttpResponse<
+                        io.vertx.reactivex.core.buffer.Buffer>>
+                    just(mockHttpResponse)
                 .delay(10, java.util.concurrent.TimeUnit.SECONDS));
 
     JsonObject result = pipelineHealthCheckService.checkVectorHealth(tenantConfig).blockingGet();
@@ -156,7 +163,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckKafkaHealth_WithValidConfig_ReturnsUp() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.KafkaConfig kafkaConfig = new ApplicationConfig.KafkaConfig();
     kafkaConfig.setKafkaBrokersHost("kafka.example.com");
     kafkaConfig.setKafkaBrokerPort(9092);
@@ -173,7 +181,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckKafkaHealth_WithNullPort_ReturnsUp() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.KafkaConfig kafkaConfig = new ApplicationConfig.KafkaConfig();
     kafkaConfig.setKafkaBrokersHost("kafka.example.com");
     kafkaConfig.setKafkaBrokerPort(null);
@@ -190,7 +199,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckKafkaTopics_ReturnsUnknownStatus() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSubscribePattern("test-topic-*");
 
@@ -206,7 +216,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckSparkHealth_WithRunningDriver_ReturnsUp() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSparkMasterHost("spark-master.example.com");
 
@@ -224,8 +235,7 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
     try {
       when(mockHttpResponse.bodyAsString())
-          .thenReturn(
-              objectMapper.writeValueAsString(sparkResponse));
+          .thenReturn(objectMapper.writeValueAsString(sparkResponse));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -242,7 +252,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckSparkHealth_WithNoRunningDriver_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSparkMasterHost("spark-master.example.com");
 
@@ -263,8 +274,7 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
     try {
       when(mockHttpResponse.bodyAsString())
-          .thenReturn(
-              objectMapper.writeValueAsString(sparkResponse));
+          .thenReturn(objectMapper.writeValueAsString(sparkResponse));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -281,7 +291,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckSparkHealth_WithEmptyDrivers_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSparkMasterHost("spark-master.example.com");
 
@@ -295,8 +306,7 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
     try {
       when(mockHttpResponse.bodyAsString())
-          .thenReturn(
-              objectMapper.writeValueAsString(sparkResponse));
+          .thenReturn(objectMapper.writeValueAsString(sparkResponse));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -313,7 +323,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckSparkHealth_WithParseError_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSparkMasterHost("spark-master.example.com");
 
@@ -335,7 +346,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckSparkHealth_WithError_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSparkMasterHost("spark-master.example.com");
 
@@ -355,7 +367,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
 
   @Test
   public void testCheckSparkHealth_WithTimeout_ReturnsDown() {
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setSparkMasterHost("spark-master.example.com");
 
@@ -367,7 +380,10 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
         mockHttpResponse = mock(io.vertx.reactivex.ext.web.client.HttpResponse.class);
     when(mockHttpRequest.rxSend())
         .thenReturn(
-            Single.<io.vertx.reactivex.ext.web.client.HttpResponse<io.vertx.reactivex.core.buffer.Buffer>>just(mockHttpResponse)
+            Single
+                .<io.vertx.reactivex.ext.web.client.HttpResponse<
+                        io.vertx.reactivex.core.buffer.Buffer>>
+                    just(mockHttpResponse)
                 .delay(10, java.util.concurrent.TimeUnit.SECONDS));
 
     JsonObject result = pipelineHealthCheckService.checkSparkHealth(tenantConfig).blockingGet();
@@ -382,7 +398,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
   @Test
   public void testCheckS3Logs_WithRecentLogs_ReturnsUp() {
     Tenant tenant = Tenant.ABC;
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setLogsDir("logs");
 
@@ -403,7 +420,9 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
               String.format("logs/service2/env=dev/hour=%02d/minute=30/file2.log", currentHour));
       when(mockObjectStoreClient.listObjects(anyString())).thenReturn(Single.just(objects));
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       JsonObject result =
           pipelineHealthCheckService.checkS3Logs(tenant, tenantConfig).blockingGet();
@@ -419,7 +438,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
   @Test
   public void testCheckS3Logs_WithNoRecentLogs_ReturnsWarning() {
     Tenant tenant = Tenant.ABC;
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setLogsDir("logs");
 
@@ -440,7 +460,9 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
               String.format("logs/service2/env=dev/hour=%02d/minute=30/file2.log", previousHour));
       when(mockObjectStoreClient.listObjects(anyString())).thenReturn(Single.just(objects));
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       JsonObject result =
           pipelineHealthCheckService.checkS3Logs(tenant, tenantConfig).blockingGet();
@@ -455,7 +477,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
   @Test
   public void testCheckS3Logs_WithNoPrefixes_ReturnsWarning() {
     Tenant tenant = Tenant.ABC;
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setLogsDir("logs");
 
@@ -467,7 +490,9 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
       when(mockObjectStoreClient.listCommonPrefix(anyString(), anyString()))
           .thenReturn(Single.just(Collections.emptyList()));
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       JsonObject result =
           pipelineHealthCheckService.checkS3Logs(tenant, tenantConfig).blockingGet();
@@ -482,7 +507,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
   @Test
   public void testCheckS3Logs_WithError_ReturnsDown() {
     Tenant tenant = Tenant.ABC;
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setLogsDir("logs");
 
@@ -493,7 +519,9 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
       when(mockObjectStoreClient.listCommonPrefix(anyString(), anyString()))
           .thenReturn(Single.error(new RuntimeException("S3 access denied")));
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       JsonObject result =
           pipelineHealthCheckService.checkS3Logs(tenant, tenantConfig).blockingGet();
@@ -507,7 +535,8 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
   @Test
   public void testCheckS3Logs_WithTimeout_ReturnsDown() {
     Tenant tenant = Tenant.ABC;
-    ApplicationConfig.TenantConfig tenantConfig = ApplicationTestConfig.createMockTenantConfig("ABC");
+    ApplicationConfig.TenantConfig tenantConfig =
+        ApplicationTestConfig.createMockTenantConfig("ABC");
     ApplicationConfig.SparkConfig sparkConfig = tenantConfig.getSpark();
     sparkConfig.setLogsDir("logs");
 
@@ -520,7 +549,9 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
               Single.<List<String>>just(Collections.emptyList())
                   .delay(15, java.util.concurrent.TimeUnit.SECONDS));
 
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
       JsonObject result =
           pipelineHealthCheckService.checkS3Logs(tenant, tenantConfig).blockingGet();
@@ -591,10 +622,11 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
           Arrays.asList(
               String.format("logs/service1/env=prod/hour=%02d/minute=00/file1.log", currentHour));
       when(mockObjectStoreClient.listObjects(anyString())).thenReturn(Single.just(objects));
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
-      JsonObject result =
-          pipelineHealthCheckService.checkCompletePipeline(tenant).blockingGet();
+      JsonObject result = pipelineHealthCheckService.checkCompletePipeline(tenant).blockingGet();
 
       Assert.assertNotNull(result);
       Assert.assertEquals(result.getString("status"), "UP");
@@ -661,10 +693,11 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
           Arrays.asList(
               String.format("logs/service1/env=prod/hour=%02d/minute=00/file1.log", currentHour));
       when(mockObjectStoreClient.listObjects(anyString())).thenReturn(Single.just(objects));
-      mockedFactory.when(() -> ObjectStoreFactory.getClient(tenant)).thenReturn(mockObjectStoreClient);
+      mockedFactory
+          .when(() -> ObjectStoreFactory.getClient(tenant))
+          .thenReturn(mockObjectStoreClient);
 
-      JsonObject result =
-          pipelineHealthCheckService.checkCompletePipeline(tenant).blockingGet();
+      JsonObject result = pipelineHealthCheckService.checkCompletePipeline(tenant).blockingGet();
 
       Assert.assertNotNull(result);
       Assert.assertEquals(result.getString("status"), "DOWN");
@@ -684,8 +717,7 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenThrow(new RuntimeException("Config error"));
 
-      JsonObject result =
-          pipelineHealthCheckService.checkCompletePipeline(tenant).blockingGet();
+      JsonObject result = pipelineHealthCheckService.checkCompletePipeline(tenant).blockingGet();
 
       Assert.assertNotNull(result);
       Assert.assertEquals(result.getString("status"), "DOWN");
@@ -694,4 +726,3 @@ public class PipelineHealthCheckServiceTest extends BaseTest {
     }
   }
 }
-
