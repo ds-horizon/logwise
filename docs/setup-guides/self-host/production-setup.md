@@ -55,9 +55,7 @@ Logwise is split into two planes:
 6. Grafana ASG + Load Balancer + Grafana DB (RDS) – UI & dashboards backed by Athena.
 
 # Scaling Strategies
-
 ## Vector Scaling Strategies
-
 ### Reactive Scaling: High CPU Utilization
 
 **When to Scale**:
