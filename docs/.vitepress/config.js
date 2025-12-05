@@ -112,6 +112,7 @@ export default defineConfig({
                             text: 'Self-Host Logwise',
                             collapsed: true,
                             items: [
+                                { text: 'Production Setup Guide', link: '/setup-guides/self-host/production-setup' },
                                 { text: 'Kafka', link: '/setup-guides/self-host/kafka-setup' },
                                 { text: 'Vector', link: '/setup-guides/self-host/vector-setup' },
                                 { text: 'S3 + Athena', link: '/setup-guides/self-host/s3-athena-setup' },
