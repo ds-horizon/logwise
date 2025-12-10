@@ -113,7 +113,6 @@ export default defineConfig({
                         {
                             text: 'Self-Host Logwise',
                             items: [
-                                { text: 'Production Setup Guide', link: '/setup-guides/self-host/production-setup' },
                                 { text: 'Kafka', link: '/setup-guides/self-host/kafka-setup' },
                                 { text: 'Vector', link: '/setup-guides/self-host/vector-setup' },
                                 { text: 'S3 + Athena', link: '/setup-guides/self-host/s3-athena-setup' },
@@ -121,7 +120,8 @@ export default defineConfig({
                                 { text: 'Grafana', link: '/setup-guides/self-host/grafana-setup' },
                                 { text: 'Orchestrator Service', link: '/setup-guides/self-host/orchestrator-service-setup' },
                             ]
-                        }
+                        },
+                        { text: 'Production Setup Guide', link: '/setup-guides/production-setup' },
                     ]
                 },
                 {
