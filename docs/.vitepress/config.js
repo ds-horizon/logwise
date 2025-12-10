@@ -33,6 +33,7 @@ export default defineConfig({
     description: 'Open-source, cost-effective end-to-end logging system featuring full architecture, deployment automation, dashboards, and production-ready scaling guides',
     site: 'https://dream-horizon-org.github.io/logwise/',
     // GitHub Pages config
+    appearance: 'force-dark',
     base: '/logwise/',
     head: [
         [
@@ -54,12 +55,14 @@ export default defineConfig({
                 --vp-c-brand-3: #1A6A74;
             }
         `],
+        ['script', { src: '/theme/index.js' }],
+        ['link', { rel: 'stylesheet', href: '/theme/custom.css' }],
         ['link', { rel: 'icon', href: '/logwise/logwise.png' }]
     ],
     themeConfig: {
+        theme: 'dark',
         logo: '/logwise.png',
         nav: [
-            { text: 'Home', link: '/' },
             { text: 'Overview', link: '/what-is-logwise' },
             { text: 'Roadmap', link: '/roadmap' },
             { text: 'Setup', link: '/setup-guides/docker' },
@@ -103,14 +106,12 @@ export default defineConfig({
                     items: [
                         {
                             text: 'Docker Logwise',
-                            collapsed: true,
                             items: [
                                 { text: 'Docker Setup Guide', link: '/setup-guides/docker/index' }
                             ]
                         },
                         {
                             text: 'Self-Host Logwise',
-                            collapsed: true,
                             items: [
                                 { text: 'Production Setup Guide', link: '/setup-guides/self-host/production-setup' },
                                 { text: 'Kafka', link: '/setup-guides/self-host/kafka-setup' },
@@ -126,8 +127,26 @@ export default defineConfig({
                 {
                     text: 'Send Logs',
                     items: [
-                        { text: 'OpenTelemetry - EC2', link: '/send-logs/ec2/opentelemetry' },
-                        { text: 'OpenTelemetry - Kubernetes', link: '/send-logs/kubernetes/opentelemetry' }
+                        {
+                            text: 'Log collectors',
+                            link: '/send-logs/collectors/index',
+                            collapsed: false,
+                            items: [
+                                {
+                                    text: 'OpenTelemetry',
+                                    link: '/send-logs/collectors/otel/index',
+                                    collapsed: true,
+                                    items: [
+                                        { text: 'EC2', link: '/send-logs/collectors/otel/ec2/opentelemetry' },
+                                        { text: 'Kubernetes', link: '/send-logs/collectors/otel/kubernetes/opentelemetry' }
+                                    ]
+                                },
+                                { text: 'Fluent Bit', link: '/send-logs/collectors/fluent-bit' },
+                                { text: 'Fluentd', link: '/send-logs/collectors/fluentd' },
+                                { text: 'Logstash', link: '/send-logs/collectors/logstash' },
+                                { text: 'Syslog (syslog-ng / rsyslog)', link: '/send-logs/collectors/syslog' }
+                            ]
+                        },
                     ]
                 },
             ]
@@ -138,7 +157,7 @@ export default defineConfig({
         ],
 
         footer: {
-            message: `Released under the MIT License. Version ${version}`,
+            message: `Released under the LGPL-3.0 License. Version ${version}`,
             copyright: 'Copyright © 2025 Logwise'
         },
 
