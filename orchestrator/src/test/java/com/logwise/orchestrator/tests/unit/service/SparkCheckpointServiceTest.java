@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logwise.orchestrator.config.ApplicationConfig;
 import com.logwise.orchestrator.dto.kafka.SparkCheckpointOffsets;
 import com.logwise.orchestrator.enums.Tenant;
@@ -16,52 +15,50 @@ import com.logwise.orchestrator.util.S3Utils;
 import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.common.TopicPartition;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /** Unit tests for SparkCheckpointService. */
 public class SparkCheckpointServiceTest extends BaseTest {
 
   private SparkCheckpointService sparkCheckpointService;
-  private S3AsyncClient mockS3Client;
 
   @BeforeMethod
   public void setUp() throws Exception {
     super.setUp();
     sparkCheckpointService = new SparkCheckpointService();
-    mockS3Client = mock(S3AsyncClient.class);
   }
 
   @Test
   public void testGetSparkCheckpointOffsets_WithValidCheckpoint_ReturnsOffsets() {
     Tenant tenant = Tenant.ABC;
-    String checkpointJson =
-        "{\"batchId\":123,\"partitions\":{\"topic-0\":{\"0\":100,\"1\":200},\"topic-1\":{\"0\":50}}}";
+    // Spark checkpoint format: v1\n{config}\n{offsets}
+    String checkpointContent =
+        "v1\n"
+            + "{\"batchWatermarkMs\":0,\"batchTimestampMs\":1234567890,\"conf\":{}}\n"
+            + "{\"topic-0\":{\"0\":100,\"1\":200},\"topic-1\":{\"0\":50}}";
 
     try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
-            Mockito.mockStatic(ApplicationConfigUtil.class);
-        MockedStatic<S3Utils> mockedS3Utils = Mockito.mockStatic(S3Utils.class)) {
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
       ApplicationConfig.TenantConfig tenantConfig =
           ApplicationTestConfig.createMockTenantConfig("ABC");
       mockedConfigUtil
           .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
           .thenReturn(tenantConfig);
 
-      // Mock listObjects to return offset files
+      // Mock listObjects to return offset files (numeric filenames: 0, 1, 2, etc.)
       mockedS3Utils
           .when(() -> S3Utils.listObjects(any(), any(), anyString()))
-          .thenReturn(Single.just(Arrays.asList("checkpoint/application/sources/0/offsets/1.json")));
+          .thenReturn(Single.just(Arrays.asList("checkpoint/application/offsets/1")));
 
-      // Mock readFileContent to return checkpoint JSON
+      // Mock readFileContent to return checkpoint content
       mockedS3Utils
           .when(() -> S3Utils.readFileContent(any(), any(), anyString()))
-          .thenReturn(Single.just(checkpointJson));
+          .thenReturn(Single.just(checkpointContent));
 
       SparkCheckpointOffsets result =
           sparkCheckpointService.getSparkCheckpointOffsets(tenant).blockingGet();
@@ -81,8 +78,8 @@ public class SparkCheckpointServiceTest extends BaseTest {
     Tenant tenant = Tenant.ABC;
 
     try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
-            Mockito.mockStatic(ApplicationConfigUtil.class);
-        MockedStatic<S3Utils> mockedS3Utils = Mockito.mockStatic(S3Utils.class)) {
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
       ApplicationConfig.TenantConfig tenantConfig =
           ApplicationTestConfig.createMockTenantConfig("ABC");
       mockedConfigUtil
@@ -109,8 +106,8 @@ public class SparkCheckpointServiceTest extends BaseTest {
     String invalidJson = "invalid json";
 
     try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
-            Mockito.mockStatic(ApplicationConfigUtil.class);
-        MockedStatic<S3Utils> mockedS3Utils = Mockito.mockStatic(S3Utils.class)) {
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
       ApplicationConfig.TenantConfig tenantConfig =
           ApplicationTestConfig.createMockTenantConfig("ABC");
       mockedConfigUtil
@@ -119,7 +116,7 @@ public class SparkCheckpointServiceTest extends BaseTest {
 
       mockedS3Utils
           .when(() -> S3Utils.listObjects(any(), any(), anyString()))
-          .thenReturn(Single.just(Arrays.asList("checkpoint/application/sources/0/offsets/1.json")));
+          .thenReturn(Single.just(Arrays.asList("checkpoint/application/offsets/1")));
 
       mockedS3Utils
           .when(() -> S3Utils.readFileContent(any(), any(), anyString()))
@@ -139,8 +136,8 @@ public class SparkCheckpointServiceTest extends BaseTest {
     Tenant tenant = Tenant.ABC;
 
     try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
-            Mockito.mockStatic(ApplicationConfigUtil.class);
-        MockedStatic<S3Utils> mockedS3Utils = Mockito.mockStatic(S3Utils.class)) {
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
       ApplicationConfig.TenantConfig tenantConfig =
           ApplicationTestConfig.createMockTenantConfig("ABC");
       mockedConfigUtil
@@ -164,11 +161,12 @@ public class SparkCheckpointServiceTest extends BaseTest {
   @Test
   public void testGetSparkCheckpointOffsets_WithNoPartitionsNode_ReturnsEmptyOffsets() {
     Tenant tenant = Tenant.ABC;
-    String jsonWithoutPartitions = "{\"batchId\":123}";
+    // Checkpoint with config but no offsets
+    String checkpointWithoutOffsets = "v1\n{\"batchWatermarkMs\":0,\"conf\":{}}\n";
 
     try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
-            Mockito.mockStatic(ApplicationConfigUtil.class);
-        MockedStatic<S3Utils> mockedS3Utils = Mockito.mockStatic(S3Utils.class)) {
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
       ApplicationConfig.TenantConfig tenantConfig =
           ApplicationTestConfig.createMockTenantConfig("ABC");
       mockedConfigUtil
@@ -177,11 +175,11 @@ public class SparkCheckpointServiceTest extends BaseTest {
 
       mockedS3Utils
           .when(() -> S3Utils.listObjects(any(), any(), anyString()))
-          .thenReturn(Single.just(Arrays.asList("checkpoint/application/sources/0/offsets/1.json")));
+          .thenReturn(Single.just(Arrays.asList("checkpoint/application/offsets/1")));
 
       mockedS3Utils
           .when(() -> S3Utils.readFileContent(any(), any(), anyString()))
-          .thenReturn(Single.just(jsonWithoutPartitions));
+          .thenReturn(Single.just(checkpointWithoutOffsets));
 
       SparkCheckpointOffsets result =
           sparkCheckpointService.getSparkCheckpointOffsets(tenant).blockingGet();
@@ -189,6 +187,94 @@ public class SparkCheckpointServiceTest extends BaseTest {
       assertNotNull(result);
       assertFalse(result.isAvailable());
       assertTrue(result.getOffsets().isEmpty());
+    }
+  }
+
+  @Test
+  public void testGetSparkCheckpointOffsets_WithMultipleFiles_SelectsLatest() {
+    Tenant tenant = Tenant.ABC;
+    // Spark checkpoint format: v1\n{config}\n{offsets}
+    String checkpointContent =
+        "v1\n"
+            + "{\"batchWatermarkMs\":0,\"batchTimestampMs\":1234567890,\"conf\":{}}\n"
+            + "{\"topic-0\":{\"0\":100,\"1\":200}}";
+
+    try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
+      ApplicationConfig.TenantConfig tenantConfig =
+          ApplicationTestConfig.createMockTenantConfig("ABC");
+      mockedConfigUtil
+          .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
+          .thenReturn(tenantConfig);
+
+      // Mock listObjects to return multiple offset files (0, 1, 2, 5, 10)
+      // Should select file "10" as it's the highest number
+      mockedS3Utils
+          .when(() -> S3Utils.listObjects(any(), any(), anyString()))
+          .thenReturn(
+              Single.just(
+                  Arrays.asList(
+                      "checkpoint/application/offsets/0",
+                      "checkpoint/application/offsets/1",
+                      "checkpoint/application/offsets/2",
+                      "checkpoint/application/offsets/5",
+                      "checkpoint/application/offsets/10")));
+
+      // Mock readFileContent to return checkpoint content when reading file "10"
+      mockedS3Utils
+          .when(
+              () ->
+                  S3Utils.readFileContent(
+                      any(), any(), eq("checkpoint/application/offsets/10")))
+          .thenReturn(Single.just(checkpointContent));
+
+      SparkCheckpointOffsets result =
+          sparkCheckpointService.getSparkCheckpointOffsets(tenant).blockingGet();
+
+      assertNotNull(result);
+      assertTrue(result.isAvailable());
+      Map<TopicPartition, Long> offsets = result.getOffsets();
+      assertEquals(offsets.size(), 2);
+      assertEquals(offsets.get(new TopicPartition("topic-0", 0)), Long.valueOf(100));
+      assertEquals(offsets.get(new TopicPartition("topic-0", 1)), Long.valueOf(200));
+    }
+  }
+
+  @Test
+  public void testGetSparkCheckpointOffsets_WithActualFormat_ReturnsOffsets() {
+    Tenant tenant = Tenant.ABC;
+    // Test with the actual format from production
+    String checkpointContent =
+        "v1\n"
+            + "{\"batchWatermarkMs\":0,\"batchTimestampMs\":1765526672198,\"conf\":{\"spark.sql.streaming.stateStore.providerClass\":\"org.apache.spark.sql.execution.streaming.state.HDFSBackedStateStoreProvider\"}}\n"
+            + "{\"logs.healthcheck-dummy\":{\"0\":79}}";
+
+    try (MockedStatic<ApplicationConfigUtil> mockedConfigUtil =
+            mockStatic(ApplicationConfigUtil.class);
+        MockedStatic<S3Utils> mockedS3Utils = mockStatic(S3Utils.class)) {
+      ApplicationConfig.TenantConfig tenantConfig =
+          ApplicationTestConfig.createMockTenantConfig("ABC");
+      mockedConfigUtil
+          .when(() -> ApplicationConfigUtil.getTenantConfig(tenant))
+          .thenReturn(tenantConfig);
+
+      mockedS3Utils
+          .when(() -> S3Utils.listObjects(any(), any(), anyString()))
+          .thenReturn(Single.just(Arrays.asList("checkpoint/application/offsets/1")));
+
+      mockedS3Utils
+          .when(() -> S3Utils.readFileContent(any(), any(), anyString()))
+          .thenReturn(Single.just(checkpointContent));
+
+      SparkCheckpointOffsets result =
+          sparkCheckpointService.getSparkCheckpointOffsets(tenant).blockingGet();
+
+      assertNotNull(result);
+      assertTrue(result.isAvailable());
+      Map<TopicPartition, Long> offsets = result.getOffsets();
+      assertEquals(offsets.size(), 1);
+      assertEquals(offsets.get(new TopicPartition("logs.healthcheck-dummy", 0)), Long.valueOf(79));
     }
   }
 }

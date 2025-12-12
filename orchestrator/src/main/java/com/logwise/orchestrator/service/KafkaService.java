@@ -9,7 +9,6 @@ import com.logwise.orchestrator.dto.kafka.TopicPartitionMetrics;
 import com.logwise.orchestrator.enums.Tenant;
 import com.logwise.orchestrator.factory.KafkaClientFactory;
 import com.logwise.orchestrator.util.ApplicationConfigUtil;
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,9 +33,9 @@ public class KafkaService {
    * Scale Kafka partitions for a tenant based on metrics and lag.
    *
    * @param tenant Tenant to scale partitions for
-   * @return Completable that completes when scaling is done
+   * @return Single that emits the list of scaling decisions made
    */
-  public Completable scaleKafkaPartitions(Tenant tenant) {
+  public Single<List<ScalingDecision>> scaleKafkaPartitions(Tenant tenant) {
     log.info("Starting Kafka partition scaling for tenant: {}", tenant);
 
     try {
@@ -46,7 +45,7 @@ public class KafkaService {
       // Check feature flag
       if (kafkaConfig.getEnablePartitionScaling() == null || !kafkaConfig.getEnablePartitionScaling()) {
         log.info("Partition scaling is disabled for tenant: {}", tenant);
-        return Completable.complete();
+        return Single.just(Collections.emptyList());
       }
 
       SparkConfig sparkConfig = tenantConfig.getSpark();
@@ -64,15 +63,15 @@ public class KafkaService {
       } catch (Exception e) {
         kafkaClient.close();
         log.error("Error during scaling for tenant: {}", tenant, e);
-        return Completable.error(e);
+        return Single.error(e);
       }
     } catch (Exception e) {
       log.error("Error creating Kafka client for tenant: {}", tenant, e);
-      return Completable.error(e);
+      return Single.error(e);
     }
   }
 
-  private Completable performScaling(
+  private Single<List<ScalingDecision>> performScaling(
       KafkaClient kafkaClient, KafkaConfig kafkaConfig, SparkConfig sparkConfig, Tenant tenant) {
 
     long startTime = System.currentTimeMillis();
@@ -92,7 +91,7 @@ public class KafkaService {
                     "No topics found matching pattern: {} for tenant: {}",
                     sparkConfig.getSubscribePattern(),
                     tenant);
-                return Single.just(new ArrayList<String>());
+                return Single.just(Collections.<ScalingDecision>emptyList());
               }
 
               List<String> topicList = new ArrayList<>(topics);
@@ -225,7 +224,6 @@ public class KafkaService {
                                           });
                                 });
                       });
-            })
-        .ignoreElement();
+            });
   }
 }

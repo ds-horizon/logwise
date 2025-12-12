@@ -103,7 +103,8 @@ public class KafkaServiceTest extends BaseTest {
       when(mockKafkaClient.getPartitionMetrics(anyList())).thenReturn(Single.just(metricsMap));
       when(mockKafkaClient.getEndOffsets(anyList())).thenReturn(Single.just(endOffsets));
       when(mockKafkaClient.calculateLag(any(), any())).thenReturn(Single.just(lagMap));
-      when(mockKafkaClient.increasePartitions(anyMap())).thenReturn(Completable.complete());
+      when(mockKafkaClient.increasePartitions(anyMap()))
+          .thenReturn(Completable.complete());
 
       SparkCheckpointOffsets checkpointOffsetsObj =
           SparkCheckpointOffsets.builder()
@@ -117,8 +118,11 @@ public class KafkaServiceTest extends BaseTest {
       when(mockKafkaScalingService.identifyTopicsNeedingScaling(any(), any(), any()))
           .thenReturn(List.of(decision));
 
-      Completable result = kafkaService.scaleKafkaPartitions(tenant);
-      result.blockingAwait();
+      Single<List<ScalingDecision>> result = kafkaService.scaleKafkaPartitions(tenant);
+      List<ScalingDecision> decisions = result.blockingGet();
+      assertNotNull(decisions);
+      assertEquals(decisions.size(), 1);
+      assertEquals(decisions.get(0).getTopic(), topic);
 
       verify(mockKafkaClient, times(1)).listTopics(anyString());
       verify(mockKafkaClient, times(1)).getPartitionMetrics(anyList());
@@ -145,8 +149,10 @@ public class KafkaServiceTest extends BaseTest {
       when(mockKafkaClientFactory.createKafkaClient(any())).thenReturn(mockKafkaClient);
       when(mockKafkaClient.listTopics(anyString())).thenReturn(Single.just(topics));
 
-      Completable result = kafkaService.scaleKafkaPartitions(tenant);
-      result.blockingAwait();
+      Single<List<ScalingDecision>> result = kafkaService.scaleKafkaPartitions(tenant);
+      List<ScalingDecision> decisions = result.blockingGet();
+      assertNotNull(decisions);
+      assertTrue(decisions.isEmpty());
 
       verify(mockKafkaClient, times(1)).listTopics(anyString());
       verify(mockKafkaClient, never()).getPartitionMetrics(anyList());
@@ -212,8 +218,10 @@ public class KafkaServiceTest extends BaseTest {
       when(mockKafkaScalingService.identifyTopicsNeedingScaling(any(), any(), any()))
           .thenReturn(Collections.emptyList());
 
-      Completable result = kafkaService.scaleKafkaPartitions(tenant);
-      result.blockingAwait();
+      Single<List<ScalingDecision>> result = kafkaService.scaleKafkaPartitions(tenant);
+      List<ScalingDecision> decisions = result.blockingGet();
+      assertNotNull(decisions);
+      assertTrue(decisions.isEmpty());
 
       verify(mockKafkaClient, times(1)).listTopics(anyString());
       verify(mockKafkaClient, times(1)).getPartitionMetrics(anyList());
@@ -269,8 +277,11 @@ public class KafkaServiceTest extends BaseTest {
       when(mockKafkaScalingService.identifyTopicsNeedingScaling(any(), any(), any()))
           .thenReturn(Collections.emptyList());
 
-      Completable result = kafkaService.scaleKafkaPartitions(tenant);
-      result.blockingAwait();
+      Single<List<ScalingDecision>> result = kafkaService.scaleKafkaPartitions(tenant);
+      List<ScalingDecision> decisions = result.blockingGet();
+      assertNotNull(decisions);
+      assertEquals(decisions.size(), 1);
+      assertEquals(decisions.get(0).getTopic(), topic);
 
       verify(mockKafkaClient, times(1)).listTopics(anyString());
       verify(mockKafkaClient, never()).calculateLag(any(), any());
@@ -295,8 +306,8 @@ public class KafkaServiceTest extends BaseTest {
           .thenReturn(Single.error(new RuntimeException("Kafka error")));
 
       try {
-        Completable result = kafkaService.scaleKafkaPartitions(tenant);
-        result.blockingAwait();
+        Single<List<ScalingDecision>> result = kafkaService.scaleKafkaPartitions(tenant);
+        result.blockingGet();
         fail("Should have thrown exception");
       } catch (Exception e) {
         // Expected

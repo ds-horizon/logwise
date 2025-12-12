@@ -20,8 +20,10 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
 
 /**
- * Service for reading and parsing Spark Structured Streaming checkpoint offsets from S3. Spark
- * stores checkpoint offsets in JSON format at: checkpoint/sources/0/offsets/
+ * Service for reading and parsing Spark Structured Streaming checkpoint offsets
+ * from S3. Spark
+ * stores checkpoint offsets in JSON format at: checkpoint/application/offsets/
+ * Files are named with numeric batch IDs: 0, 1, 2, etc.
  */
 @Slf4j
 public class SparkCheckpointService {
@@ -29,10 +31,12 @@ public class SparkCheckpointService {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Inject
-  public SparkCheckpointService() {}
+  public SparkCheckpointService() {
+  }
 
   /**
-   * Get Spark checkpoint offsets for a tenant. Parses the latest offset file from Spark checkpoint
+   * Get Spark checkpoint offsets for a tenant. Parses the latest offset file from
+   * Spark checkpoint
    * directory.
    *
    * @param tenant Tenant
@@ -89,8 +93,9 @@ public class SparkCheckpointService {
 
   private Single<SparkCheckpointOffsets> parseCheckpointOffsets(
       S3AsyncClient s3Client, S3Config s3Config, String checkpointPath) {
-    // Spark stores offsets at: checkpoint/application/sources/0/offsets/
-    String offsetsPath = checkpointPath + "/sources/0/offsets";
+    // Spark stores offsets at: checkpoint/application/offsets/
+    // Files are named with numeric batch IDs: 0, 1, 2, etc.
+    String offsetsPath = checkpointPath + "/offsets";
 
     return S3Utils.listObjects(s3Client, s3Config, offsetsPath)
         .flatMap(
@@ -100,16 +105,44 @@ public class SparkCheckpointService {
                 return Single.just(createEmptyCheckpointOffsets(checkpointPath));
               }
 
-              // Get the latest offset file (sorted by name, highest number is latest)
-              String latestOffsetFile =
-                  offsetFiles.stream()
-                      .filter(file -> file.endsWith(".json"))
-                      .sorted(Collections.reverseOrder())
-                      .findFirst()
-                      .orElse(null);
+              // Get the latest offset file by parsing numeric filenames
+              // Files are named: 0, 1, 2, etc. (highest number is latest)
+              String latestOffsetFile = offsetFiles.stream()
+                  .filter(
+                      file -> {
+                        // Extract filename from path (handle both full paths and just filenames)
+                        String filename = file.contains("/")
+                            ? file.substring(file.lastIndexOf("/") + 1)
+                            : file;
+                        // Check if filename is a numeric string
+                        try {
+                          Integer.parseInt(filename);
+                          return true;
+                        } catch (NumberFormatException e) {
+                          return false;
+                        }
+                      })
+                  .max(
+                      (file1, file2) -> {
+                        // Compare numeric values of filenames
+                        String filename1 = file1.contains("/")
+                            ? file1.substring(file1.lastIndexOf("/") + 1)
+                            : file1;
+                        String filename2 = file2.contains("/")
+                            ? file2.substring(file2.lastIndexOf("/") + 1)
+                            : file2;
+                        try {
+                          int num1 = Integer.parseInt(filename1);
+                          int num2 = Integer.parseInt(filename2);
+                          return Integer.compare(num1, num2);
+                        } catch (NumberFormatException e) {
+                          return 0;
+                        }
+                      })
+                  .orElse(null);
 
               if (latestOffsetFile == null) {
-                log.warn("No JSON offset files found in checkpoint path: {}", offsetsPath);
+                log.warn("No numeric offset files found in checkpoint path: {}", offsetsPath);
                 return Single.just(createEmptyCheckpointOffsets(checkpointPath));
               }
 
@@ -132,28 +165,56 @@ public class SparkCheckpointService {
 
   private SparkCheckpointOffsets parseOffsetFile(String content, String checkpointPath) {
     try {
-      JsonNode rootNode = objectMapper.readTree(content);
+      // Spark checkpoint file format:
+      // v1
+      // {config JSON}
+      // {offsets JSON}
+      //
+      // We need to skip the version header and config, then parse the offsets JSON
+      // Handle both \n and \r\n line endings
+      String normalizedContent = content.replace("\r\n", "\n").replace("\r", "\n");
+      String[] lines = normalizedContent.split("\n");
+
+      if (lines.length < 2) {
+        log.warn("Checkpoint file has unexpected format, expected at least 2 lines");
+        return createEmptyCheckpointOffsets(checkpointPath);
+      }
+
+      // Find the last non-empty line which should contain the offsets JSON
+      // Skip version header (starts with "v") and parse the last JSON object
+      String offsetsJson = null;
+      for (int i = lines.length - 1; i >= 0; i--) {
+        String line = lines[i].trim();
+        if (!line.isEmpty() && !line.startsWith("v") && line.startsWith("{")) {
+          offsetsJson = line;
+          break;
+        }
+      }
+
+      if (offsetsJson == null) {
+        log.warn("No offsets JSON found in checkpoint file");
+        return createEmptyCheckpointOffsets(checkpointPath);
+      }
+
+      // Parse the offsets JSON: {"topic-name": {"partition": offset}}
+      JsonNode offsetsNode = objectMapper.readTree(offsetsJson);
       Map<TopicPartition, Long> offsets = new HashMap<>();
 
-      // Spark checkpoint format: {"batchId": 123, "partitions": {"topic-0": {"0": 100, "1": 200}}}
-      if (rootNode.has("partitions")) {
-        JsonNode partitionsNode = rootNode.get("partitions");
-        partitionsNode
-            .fields()
-            .forEachRemaining(
-                topicEntry -> {
-                  String topic = topicEntry.getKey();
-                  JsonNode partitionOffsets = topicEntry.getValue();
-                  partitionOffsets
-                      .fields()
-                      .forEachRemaining(
-                          partitionEntry -> {
-                            int partition = Integer.parseInt(partitionEntry.getKey());
-                            long offset = partitionEntry.getValue().asLong();
-                            offsets.put(new TopicPartition(topic, partition), offset);
-                          });
-                });
-      }
+      offsetsNode
+          .fields()
+          .forEachRemaining(
+              topicEntry -> {
+                String topic = topicEntry.getKey();
+                JsonNode partitionOffsets = topicEntry.getValue();
+                partitionOffsets
+                    .fields()
+                    .forEachRemaining(
+                        partitionEntry -> {
+                          int partition = Integer.parseInt(partitionEntry.getKey());
+                          long offset = partitionEntry.getValue().asLong();
+                          offsets.put(new TopicPartition(topic, partition), offset);
+                        });
+              });
 
       log.info("Parsed {} partition offsets from checkpoint", offsets.size());
       return SparkCheckpointOffsets.builder()

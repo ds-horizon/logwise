@@ -65,12 +65,12 @@ public class ScaleKafkaPartitions {
       kafkaService
           .scaleKafkaPartitions(tenant)
           .subscribe(
-              () -> {
+              scalingDecisions -> {
                 ScaleKafkaPartitionsResponse response = ScaleKafkaPartitionsResponse.builder()
                     .success(true)
                     .message("Successfully scaled Kafka partitions for tenant: " + tenantName)
-                    .topicsScaled(0) // TODO: Return actual count from service
-                    .scalingDecisions(Collections.emptyList())
+                    .topicsScaled(scalingDecisions.size())
+                    .scalingDecisions(scalingDecisions != null ? scalingDecisions : Collections.emptyList())
                     .warnings(warnings)
                     .errors(errors)
                     .build();
