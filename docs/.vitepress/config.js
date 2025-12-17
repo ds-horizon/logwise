@@ -122,6 +122,7 @@ export default defineConfig({
                             ]
                         },
                         { text: 'Production Setup Guide', link: '/setup-guides/production-setup' },
+                        { text: 'Architecture Sizing Calculator', link: '/sizing-calculator' },
                     ]
                 },
                 {

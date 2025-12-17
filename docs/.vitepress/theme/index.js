@@ -1,10 +1,14 @@
 import DefaultTheme from 'vitepress/theme'
 import { onMounted, onUpdated, watch } from 'vue'
 import { useRoute } from 'vitepress'
+import ArchitectureCalculator from '../components/ArchitectureCalculator.vue'
 import './custom.css'   // <-- your CSS file
 
 export default {
     ...DefaultTheme,
+    enhanceApp({ app }) {
+        app.component('ArchitectureCalculator', ArchitectureCalculator)
+    },
     setup() {
         const route = useRoute()
 

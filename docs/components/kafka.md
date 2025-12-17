@@ -45,6 +45,10 @@ This automatic topic creation enables organized log routing and processing.
 - Partitions can be manually adjusted if needed based on your throughput requirements
 - **Automatic Partition Scaling** - The orchestrator service can automatically scale partitions based on consumer lag
 
+::: tip Configuration Help
+Use the [Architecture Sizing Calculator](/sizing-calculator) to determine the optimal `maxLagPerPartition` threshold and initial partition count based on your log generation rate and message size.
+:::
+
 ## Message Retention
 
 By default, topics have **1 hour retention**. Messages are automatically deleted after 1 hour.

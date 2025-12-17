@@ -42,6 +42,10 @@ This structure allows fast filtering based on environment, service, or time rang
 - Supports automatic topic discovery using regular expressions
 - Tracks Kafka offsets for reliable exactly-once processing
 
+::: tip Configuration Help
+Use the [Architecture Sizing Calculator](/sizing-calculator) to determine the optimal `kafkaMaxRatePerPartition` value and executor configuration (instance type, cores, memory) based on your workload characteristics.
+:::
+
 ## Integration with Other Components
 
 - **Kafka** - Consumes logs from topics

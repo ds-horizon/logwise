@@ -6,6 +6,10 @@ title: Production-Ready Self-Hosted Setup
 
 This guide provides comprehensive instructions for deploying Logwise in a production environment with enterprise-grade non-functional requirements. The architecture is designed to be horizontally scalable, highly available, fault-tolerant, and performant.
 
+::: tip Before You Begin
+Use the [Architecture Sizing Calculator](/sizing-calculator) to determine optimal configuration values (Kafka partitions, Spark executors, rate limits, scaling thresholds) based on your workload characteristics.
+:::
+
 ![Logwise Architecture](../production-setup.png)
 
 # Architecture Overview
